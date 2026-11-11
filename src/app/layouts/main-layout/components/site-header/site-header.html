@@ -1,0 +1,81 @@
+<header class="site-header">
+  <div class="page-container site-header__inner">
+    <a class="brand" routerLink="/" (click)="closeMobileMenu()">
+      <svg class="brand__icon" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <path d="M14 5L3 10.5L14 16L25 10.5L14 5Z" fill="currentColor" />
+        <path
+          d="M7 13.5V19.2C7 20.6 10.1 22.5 14 22.5C17.9 22.5 21 20.6 21 19.2V13.5L14 17L7 13.5Z"
+          fill="currentColor"
+          opacity="0.85"
+        />
+        <path d="M24 11.5V17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      <span>FindnSeekh</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <a
+        class="site-nav__link"
+        routerLink="/"
+        routerLinkActive="site-nav__link--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Home
+      </a>
+      <a class="site-nav__link" href="#explore-skills">Explore Skills</a>
+      <a class="site-nav__link" href="#how-it-works">How It Works</a>
+      <a class="site-nav__link" href="#become-a-teacher">Become a Teacher</a>
+    </nav>
+
+    <div class="site-actions">
+      <a class="site-actions__login" routerLink="/auth/login">Log In</a>
+      <a class="btn-pill btn-pill--primary site-actions__signup" routerLink="/auth/login">Sign Up</a>
+    </div>
+
+    <button
+      type="button"
+      class="mobile-toggle"
+      [attr.aria-expanded]="isMobileMenuOpen()"
+      aria-label="Toggle navigation menu"
+      (click)="toggleMobileMenu()"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        @if (isMobileMenuOpen()) {
+          <path d="M6 6L18 18M18 6L6 18" stroke-linecap="round" />
+        } @else {
+          <path d="M4 7H20M4 12H20M4 17H20" stroke-linecap="round" />
+        }
+      </svg>
+    </button>
+  </div>
+
+  @if (isMobileMenuOpen()) {
+    <div class="mobile-menu">
+      <div class="page-container mobile-menu__inner">
+        <a class="mobile-menu__link" routerLink="/" (click)="closeMobileMenu()">Home</a>
+        <a class="mobile-menu__link" href="#explore-skills" (click)="closeMobileMenu()">
+          Explore Skills
+        </a>
+        <a class="mobile-menu__link" href="#how-it-works" (click)="closeMobileMenu()">
+          How It Works
+        </a>
+        <a class="mobile-menu__link" href="#become-a-teacher" (click)="closeMobileMenu()">
+          Become a Teacher
+        </a>
+        <div class="mobile-menu__actions">
+          <a class="site-actions__login" routerLink="/auth/login" (click)="closeMobileMenu()">
+            Log In
+          </a>
+          <a
+            class="btn-pill btn-pill--primary site-actions__signup"
+            routerLink="/auth/login"
+            (click)="closeMobileMenu()"
+          >
+            Sign Up
+          </a>
+        </div>
+      </div>
+    </div>
+  }
+</header>
+

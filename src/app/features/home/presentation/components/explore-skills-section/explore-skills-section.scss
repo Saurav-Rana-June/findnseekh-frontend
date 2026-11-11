@@ -1,0 +1,139 @@
+@use 'mixins';
+
+.skills-section {
+  background-color: var(--color-bg);
+  padding-block: 5rem;
+}
+
+.section-header--centered {
+  text-align: center;
+  max-width: 34rem;
+  margin-inline: auto;
+
+  h2 {
+    font-size: clamp(1.75rem, 3.2vw, 2.35rem);
+    color: var(--color-text-primary);
+  }
+
+  p {
+    margin-top: var(--space-3);
+    color: var(--color-text-secondary);
+    font-size: 0.96875rem;
+  }
+}
+
+.skills-grid {
+  margin-top: var(--space-12);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+
+  @include mixins.respond-to(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mixins.respond-to(lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.skill-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: #ffffff;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(22, 78, 51, 0.28);
+  }
+}
+
+.skill-card__media {
+  position: relative;
+  height: 8.75rem;
+  background-color: var(--color-mint-tint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.skill-card__arc {
+  position: absolute;
+  border-radius: 9999px;
+}
+
+.skill-card__arc--tl {
+  top: -2.25rem;
+  left: -2.25rem;
+  width: 7.5rem;
+  height: 7.5rem;
+  border: 1px solid rgba(22, 78, 51, 0.12);
+}
+
+.skill-card__arc--br {
+  bottom: -2rem;
+  right: -2rem;
+  width: 6.5rem;
+  height: 6.5rem;
+  background-color: rgba(22, 78, 51, 0.08);
+}
+
+.skill-card__icon-box {
+  position: relative;
+  z-index: 1;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.9rem;
+  background-color: #ffffff;
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.skill-card__body {
+  padding: 1.25rem;
+}
+
+.skill-card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+
+  h3 {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+  }
+}
+
+.skill-card__body p {
+  margin-top: 0.45rem;
+  font-size: 0.84375rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+

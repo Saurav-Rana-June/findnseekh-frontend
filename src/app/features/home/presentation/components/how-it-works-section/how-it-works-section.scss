@@ -1,0 +1,107 @@
+@use 'mixins';
+
+.how-section {
+  background-color: var(--color-bg);
+  padding-block: 5rem;
+}
+
+.how-section__header {
+  text-align: center;
+  max-width: 32rem;
+  margin-inline: auto;
+
+  h2 {
+    font-size: clamp(1.75rem, 3.2vw, 2.35rem);
+    color: var(--color-text-primary);
+  }
+
+  p {
+    margin-top: var(--space-3);
+    color: var(--color-text-secondary);
+    font-size: 0.96875rem;
+  }
+}
+
+.steps-grid {
+  position: relative;
+  margin-top: 3.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+
+  @include mixins.respond-to(md) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+}
+
+.step-card {
+  position: relative;
+  text-align: center;
+  padding-inline: var(--space-4);
+
+  @include mixins.respond-to(md) {
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 2.375rem;
+      left: calc(50% + 3.5rem);
+      width: calc(100% - 7rem);
+      border-top: 1.5px dashed rgba(22, 78, 51, 0.25);
+    }
+  }
+
+  h3 {
+    margin-top: var(--space-4);
+    font-size: 1.125rem;
+    color: var(--color-text-primary);
+  }
+
+  p {
+    margin-top: 0.45rem;
+    max-width: 17rem;
+    margin-inline: auto;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+  }
+}
+
+.step-card__icon-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.step-card__icon {
+  width: 4.75rem;
+  height: 4.75rem;
+  border-radius: 1.25rem;
+  background-color: var(--color-mint-tint);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 1.65rem;
+    height: 1.65rem;
+  }
+}
+
+.step-card__badge {
+  position: absolute;
+  top: -0.45rem;
+  right: -0.45rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 0.78125rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+

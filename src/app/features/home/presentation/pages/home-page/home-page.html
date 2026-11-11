@@ -1,4 +1,22 @@
-<section class="home-page" aria-labelledby="home-heading">
-  <h1 id="home-heading">Findnseekh</h1>
-</section>
+<app-home-hero
+  [popularSkills]="store.popularSkills()"
+  [initialQuery]="store.searchQuery()"
+  (searchSubmitted)="onSearchSubmitted($event)"
+  (popularSkillSelected)="onPopularSkillSelected($event)"
+/>
 
+<app-explore-skills-section
+  [categories]="store.categories()"
+  (categorySelected)="onCategorySelected($event)"
+/>
+
+<app-featured-teachers-section
+  [teachers]="store.featuredTeachers()"
+  [hasActiveFilter]="hasActiveFilter()"
+  (browseAllClicked)="onBrowseAllClicked()"
+  (viewProfileClicked)="onViewProfileClicked($event)"
+/>
+
+<app-how-it-works-section [steps]="store.steps()" />
+
+<app-become-teacher-cta />

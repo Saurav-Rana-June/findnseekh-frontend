@@ -1,0 +1,169 @@
+<section id="featured-teachers" class="teachers-section">
+  <div class="page-container">
+    <div class="teachers-section__header">
+      <div>
+        <h2>Learn From Talented Teachers</h2>
+        <p>Featured teachers and instructors near you.</p>
+      </div>
+
+      <button type="button" class="btn-pill btn-pill--outline browse-btn" (click)="browseAllClicked.emit()">
+        <span>{{ hasActiveFilter() ? 'Show all teachers' : 'Browse all teachers' }}</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+          <path d="M3.5 8H12.5M9 4.5L12.5 8L9 11.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
+    @if (teachers().length > 0) {
+      <div class="teachers-grid">
+        @for (teacher of teachers(); track teacher.id) {
+          <article class="teacher-card">
+            <div class="teacher-card__media" [attr.data-avatar]="teacher.avatarVariant">
+              <span class="teacher-card__category">{{ teacher.category }}</span>
+
+              <svg class="teacher-avatar" viewBox="0 0 240 200" aria-hidden="true">
+                @switch (teacher.avatarVariant) {
+                  @case ('ananya') {
+                    <circle cx="120" cy="86" r="54" fill="#1b2638" />
+                    <path d="M74 96C74 60 95 40 120 40C145 40 166 60 166 96V138H74V96Z" fill="#1b2638" />
+                    <path d="M62 200C68 158 92 146 120 146C148 146 172 158 178 200H62Z" fill="#1b5135" />
+                    <rect x="108" y="128" width="24" height="24" rx="10" fill="#c78a65" />
+                    <circle cx="80" cy="96" r="9" fill="#c78a65" />
+                    <circle cx="160" cy="96" r="9" fill="#c78a65" />
+                    <ellipse cx="120" cy="92" rx="38" ry="42" fill="#d39670" />
+                    <path d="M84 82C90 56 106 48 120 48C134 48 150 56 156 82C142 74 130 68 120 68C110 68 98 74 84 82Z" fill="#1b2638" />
+                    <circle cx="105" cy="94" r="3.2" fill="#1f2937" />
+                    <circle cx="135" cy="94" r="3.2" fill="#1f2937" />
+                    <path d="M108 112C114 119 126 119 132 112" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
+                  }
+                  @case ('rohan') {
+                    <path d="M60 200C66 158 92 146 120 146C148 146 174 158 180 200H60Z" fill="#63967d" />
+                    <rect x="108" y="128" width="24" height="24" rx="10" fill="#a86d4c" />
+                    <circle cx="80" cy="94" r="9" fill="#a86d4c" />
+                    <circle cx="160" cy="94" r="9" fill="#a86d4c" />
+                    <ellipse cx="120" cy="90" rx="38" ry="42" fill="#b47855" />
+                    <path d="M82 80C82 48 98 34 120 34C142 34 158 48 158 80C146 66 134 62 120 62C106 62 94 66 82 80Z" fill="#2c201d" />
+                    <circle cx="105" cy="92" r="3.2" fill="#1f2937" />
+                    <circle cx="135" cy="92" r="3.2" fill="#1f2937" />
+                    <path d="M108 110C114 117 126 117 132 110" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
+                  }
+                  @case ('kavya') {
+                    <circle cx="120" cy="24" r="22" fill="#2e201d" />
+                    <path d="M62 200C68 158 92 146 120 146C148 146 172 158 178 200H62Z" fill="#1b5135" />
+                    <rect x="108" y="128" width="24" height="24" rx="10" fill="#c78b68" />
+                    <circle cx="80" cy="94" r="9" fill="#c78b68" />
+                    <circle cx="160" cy="94" r="9" fill="#c78b68" />
+                    <ellipse cx="120" cy="90" rx="38" ry="42" fill="#d39874" />
+                    <path d="M82 82C84 52 100 40 120 40C140 40 156 52 158 82C145 70 132 64 120 64C108 64 95 70 82 82Z" fill="#2e201d" />
+                    <circle cx="105" cy="92" r="3.2" fill="#1f2937" />
+                    <circle cx="135" cy="92" r="3.2" fill="#1f2937" />
+                    <path d="M108 110C114 117 126 117 132 110" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
+                  }
+                  @case ('imran') {
+                    <path d="M62 200C68 158 92 146 120 146C148 146 172 158 178 200H62Z" fill="#214634" />
+                    <rect x="108" y="128" width="24" height="24" rx="10" fill="#be8360" />
+                    <circle cx="80" cy="94" r="9" fill="#be8360" />
+                    <circle cx="160" cy="94" r="9" fill="#be8360" />
+                    <ellipse cx="120" cy="90" rx="38" ry="42" fill="#c98e6a" />
+                    <circle cx="94" cy="48" r="14" fill="#1b2638" />
+                    <circle cx="120" cy="36" r="17" fill="#1b2638" />
+                    <circle cx="146" cy="48" r="14" fill="#1b2638" />
+                    <circle cx="84" cy="68" r="11" fill="#1b2638" />
+                    <circle cx="156" cy="68" r="11" fill="#1b2638" />
+                    <path d="M84 74C92 52 106 46 120 46C134 46 148 52 156 74C142 64 130 60 120 60C110 60 98 64 84 74Z" fill="#1b2638" />
+                    <circle cx="105" cy="92" r="3.2" fill="#1f2937" />
+                    <circle cx="135" cy="92" r="3.2" fill="#1f2937" />
+                    <path d="M108 110C114 117 126 117 132 110" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
+                  }
+                  @case ('simran') {
+                    <path d="M72 92C72 52 94 34 120 34C146 34 168 52 168 92V146H72V92Z" fill="#3a2822" />
+                    <path d="M62 200C68 158 92 146 120 146C148 146 172 158 178 200H62Z" fill="#6ca088" />
+                    <rect x="108" y="128" width="24" height="24" rx="10" fill="#cf9570" />
+                    <circle cx="80" cy="94" r="9" fill="#cf9570" />
+                    <circle cx="160" cy="94" r="9" fill="#cf9570" />
+                    <ellipse cx="120" cy="90" rx="38" ry="42" fill="#daa17c" />
+                    <path d="M84 78C92 52 106 46 120 46C134 46 148 52 156 78C142 66 130 62 120 62C110 62 98 66 84 78Z" fill="#3a2822" />
+                    <circle cx="105" cy="92" r="3.2" fill="#1f2937" />
+                    <circle cx="135" cy="92" r="3.2" fill="#1f2937" />
+                    <path d="M108 110C114 117 126 117 132 110" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
+                  }
+                  @case ('arjun') {
+                    <path d="M62 200C68 158 92 146 120 146C148 146 172 158 178 200H62Z" fill="#1c5035" />
+                    <rect x="108" y="128" width="24" height="24" rx="10" fill="#9c6143" />
+                    <circle cx="80" cy="94" r="9" fill="#9c6143" />
+                    <circle cx="160" cy="94" r="9" fill="#9c6143" />
+                    <ellipse cx="120" cy="90" rx="38" ry="42" fill="#a86b4c" />
+                    <path d="M82 78C84 48 100 34 120 34C140 34 156 48 158 78C144 64 132 60 120 60C108 60 96 64 82 78Z" fill="#1b2638" />
+                    <circle cx="105" cy="92" r="3.2" fill="#1f2937" />
+                    <circle cx="135" cy="92" r="3.2" fill="#1f2937" />
+                    <path d="M108 110C114 117 126 117 132 110" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
+                  }
+                }
+              </svg>
+            </div>
+
+            <div class="teacher-card__body">
+              <div class="teacher-card__top-row">
+                <div>
+                  <h3>{{ teacher.name }}</h3>
+                  <p class="teacher-card__specialty">{{ teacher.specialty }}</p>
+                </div>
+
+                @if (teacher.rating !== undefined && teacher.reviewCount !== undefined) {
+                  <span class="rating-pill">
+                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path
+                        d="M8 1.75L9.9 5.6L14.15 6.22L11.08 9.21L11.8 13.44L8 11.44L4.2 13.44L4.92 9.21L1.85 6.22L6.1 5.6L8 1.75Z"
+                      />
+                    </svg>
+                    <strong>{{ teacher.rating }}</strong>
+                    <span>({{ teacher.reviewCount }})</span>
+                  </span>
+                }
+              </div>
+
+              <ul class="teacher-card__meta">
+                <li>
+                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path
+                      d="M9 15.75C9 15.75 13.875 11.7 13.875 7.65C13.875 4.95 11.7 2.75 9 2.75C6.3 2.75 4.125 4.95 4.125 7.65C4.125 11.7 9 15.75 9 15.75Z"
+                    />
+                    <circle cx="9" cy="7.65" r="1.7" />
+                  </svg>
+                  <span>{{ teacher.location }}</span>
+                </li>
+                <li>
+                  <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <rect x="2.75" y="5.25" width="12.5" height="9.5" rx="1.75" />
+                    <path d="M6.5 5.25V3.75C6.5 3.2 6.95 2.75 7.5 2.75H10.5C11.05 2.75 11.5 3.2 11.5 3.75V5.25" />
+                  </svg>
+                  <span>{{ teacher.experienceYears }} years experience</span>
+                </li>
+              </ul>
+
+              <button
+                type="button"
+                class="btn-pill btn-pill--outline teacher-card__cta"
+                (click)="viewProfileClicked.emit(teacher)"
+              >
+                View Profile
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="teachers-empty">
+        <p>No featured teachers matched your filter.</p>
+        <button type="button" class="btn-pill btn-pill--outline browse-btn" (click)="browseAllClicked.emit()">
+          Reset filters
+        </button>
+      </div>
+    }
+
+    <p class="teachers-section__disclaimer">
+      Sample profiles shown for demonstration. Ratings are illustrative, not verified.
+    </p>
+  </div>
+</section>
+

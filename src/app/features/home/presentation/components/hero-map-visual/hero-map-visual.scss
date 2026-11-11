@@ -1,0 +1,105 @@
+.map-card {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  aspect-ratio: 420 / 460;
+
+  &__bg {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+
+  &__pin {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-pill);
+    background: #fff;
+    color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+
+    svg {
+      width: 1.15rem;
+      height: 1.15rem;
+    }
+
+    &--center {
+      top: 50%;
+      left: 50%;
+      width: 4rem;
+      height: 4rem;
+      transform: translate(-50%, -50%);
+
+      svg {
+        width: 1.75rem;
+        height: 1.75rem;
+      }
+    }
+
+    &--music {
+      top: 32%;
+      left: 24%;
+    }
+
+    &--yoga {
+      top: 66%;
+      left: 69%;
+    }
+
+    &--location {
+      top: 76%;
+      left: 21%;
+    }
+  }
+}
+
+.floating-pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1.05rem 0.65rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  box-shadow: var(--shadow-md);
+
+  strong {
+    display: block;
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  small {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  &--top {
+    top: 8%;
+    right: -0.75rem;
+  }
+
+  &--mid {
+    top: 46%;
+    left: -1rem;
+  }
+
+  &--bottom {
+    bottom: 7%;
+    right: -0.75rem;
+  }
+
+  &__avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+}
+

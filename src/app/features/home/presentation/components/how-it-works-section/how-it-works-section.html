@@ -1,0 +1,43 @@
+<section id="how-it-works" class="how-section">
+  <div class="page-container">
+    <div class="how-section__header">
+      <h2>How FindnSeekh Works</h2>
+      <p>Three simple steps from curiosity to your first lesson.</p>
+    </div>
+
+    <div class="steps-grid">
+      @for (step of steps(); track step.stepNumber) {
+        <article class="step-card">
+          <div class="step-card__icon-wrap">
+            <span class="step-card__badge">{{ step.stepNumber }}</span>
+            <div class="step-card__icon" aria-hidden="true">
+              @switch (step.icon) {
+                @case ('discover') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="11" cy="11" r="6" />
+                    <path d="M15.5 15.5L20 20" stroke-linecap="round" />
+                  </svg>
+                }
+                @case ('explore') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <circle cx="12" cy="12" r="8.5" />
+                    <path d="M15.2 8.8L13.2 13.2L8.8 15.2L10.8 10.8L15.2 8.8Z" stroke-linejoin="round" />
+                  </svg>
+                }
+                @case ('connect') {
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M8.5 11.5L11 9L14.5 12.5M4 10L8.5 5.5L12 9M20 10L15.5 5.5L12 9M5 12L9.5 16.5C10.5 17.5 12 17.5 13 16.5L19 10.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                }
+              }
+            </div>
+          </div>
+
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
