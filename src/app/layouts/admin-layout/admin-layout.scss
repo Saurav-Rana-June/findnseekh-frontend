@@ -1,0 +1,17 @@
+.admin-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  min-height: 100vh;
+}
+
+.admin-layout__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-layout__content {
+  flex: 1;
+  padding: var(--space-6, 1.5rem);
+}
+
