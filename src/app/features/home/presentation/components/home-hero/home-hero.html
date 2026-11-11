@@ -2,7 +2,8 @@
   <div class="page-container hero__grid">
     <div class="hero__copy">
       <span class="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          aria-hidden="true">
           <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
           <circle cx="12" cy="10" r="3" />
         </svg>
@@ -19,17 +20,13 @@
       </p>
 
       <div class="hero__search">
-        <form
-          class="search"
-          role="search"
-          aria-label="Find teachers near you"
-          (submit)="onSubmit($event)"
-        >
+        <form class="search" role="search" aria-label="Find teachers near you" (submit)="onSubmit($event)">
           <app-combo-field
             fieldId="search-location"
             label="Location"
+            [showLabel]="false"
             icon="location"
-            placeholder="Enter your city or area"
+            placeholder="Select Area"
             autoComplete="address-level2"
             freeTextPrefix="Search near"
             [value]="location()"
@@ -42,8 +39,9 @@
           <app-combo-field
             fieldId="search-skill"
             label="Skill"
+            [showLabel]="false"
             icon="skill"
-            placeholder="What do you want to learn?"
+            placeholder="Select Skill"
             freeTextPrefix="Search for"
             [value]="skill()"
             [options]="skillOptions()"
@@ -51,7 +49,8 @@
           />
 
           <button type="submit" class="btn btn--primary btn--lg search__submit">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
@@ -64,22 +63,19 @@
         <span>Popular:</span>
         <ul>
           @for (item of popularSkills(); track item.label) {
-            <li>
-              <button type="button" class="chip" (click)="onPopularSkillClick(item.label)">
-                {{ item.label }}
-              </button>
-            </li>
+          <li>
+            <button type="button" class="chip" (click)="onPopularSkillClick(item.label)">
+              {{ item.label }}
+            </button>
+          </li>
           }
         </ul>
       </div>
     </div>
 
     <div class="hero__art">
-      <app-hero-map-visual
-        [vocalAvatar]="heroAvatars().vocal"
-        [dancerAvatar]="heroAvatars().dancer"
-        [yogiAvatar]="heroAvatars().yogi"
-      />
+      <app-hero-map-visual [vocalAvatar]="heroAvatars().vocal" [dancerAvatar]="heroAvatars().dancer"
+        [yogiAvatar]="heroAvatars().yogi" />
     </div>
   </div>
 </section>

@@ -1,5 +1,11 @@
 <div class="field" (focusout)="onFocusOut($event)">
-  <label class="field__label" [attr.for]="fieldId()">{{ label() }}</label>
+  <label
+    class="field__label"
+    [class.visually-hidden]="!showLabel()"
+    [attr.for]="fieldId()"
+  >
+    {{ label() }}
+  </label>
 
   <div class="field__control">
     @if (icon() === 'location') {

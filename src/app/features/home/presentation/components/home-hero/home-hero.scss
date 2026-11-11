@@ -56,7 +56,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 8px;
+  padding: 6px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   background: var(--color-white);
@@ -65,15 +65,15 @@
   &__divider {
     flex-shrink: 0;
     width: 1px;
-    height: 36px;
+    height: 26px;
     background: var(--color-border);
   }
 
   &__submit {
     flex-shrink: 0;
     align-self: stretch;
-    min-height: 60px;
-    padding-inline: 32px;
+    min-height: 46px;
+    padding-inline: 26px;
   }
 }
 
@@ -126,7 +126,7 @@
 
     &__submit {
       width: 100%;
-      min-height: 56px;
+      min-height: 48px;
       margin-top: 4px;
     }
   }

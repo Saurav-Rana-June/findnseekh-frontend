@@ -25,6 +25,7 @@ let nextComboId = 0;
 export class ComboFieldComponent {
   readonly fieldId = input.required<string>();
   readonly label = input.required<string>();
+  readonly showLabel = input<boolean>(true);
   readonly icon = input<'location' | 'skill'>('location');
   readonly placeholder = input<string>('');
   readonly value = input<string>('');
