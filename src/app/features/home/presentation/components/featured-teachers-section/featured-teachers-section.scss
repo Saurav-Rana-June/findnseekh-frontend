@@ -67,13 +67,7 @@
     position: absolute;
     top: 12px;
     left: 12px;
-    padding: 4px 12px;
-    border-radius: var(--radius-pill);
-    background: var(--color-white);
-    color: var(--color-primary);
-    font-size: 0.78rem;
-    font-weight: 600;
-    box-shadow: var(--shadow-sm);
+    z-index: 1;
   }
 
   &__body {

@@ -47,13 +47,13 @@
     color: rgba(248, 248, 242, 0.82);
   }
 
-  .btn {
+  .cta__action {
     position: relative;
   }
 }
 
 @media (max-width: 560px) {
-  .cta .btn {
+  .cta .cta__action {
     width: 100%;
   }
 }

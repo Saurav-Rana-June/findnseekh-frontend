@@ -5,12 +5,14 @@ import {
   Component,
   DestroyRef,
   inject,
+  output,
   PLATFORM_ID,
   signal,
 } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CustomPrimaryButton } from '../../../../shared/components/custom-primary-button/custom.primary.button';
 import { LogoComponent } from '../../../../shared/components/logo/logo';
 
 interface NavItem {
@@ -29,7 +31,7 @@ const OBSERVED_SECTIONS = ['skills', 'teachers', 'how-it-works', 'become-a-teach
 
 @Component({
   selector: 'app-site-header',
-  imports: [RouterLink, LogoComponent],
+  imports: [RouterLink, LogoComponent, CustomPrimaryButton],
   templateUrl: './site-header.html',
   styleUrl: './site-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,6 +45,7 @@ export class SiteHeader {
   protected readonly isMobileMenuOpen = signal(false);
   protected readonly isScrolled = signal(false);
   protected readonly activeSection = signal<string | null>(null);
+  readonly loginRequested = output<void>();
 
   constructor() {
     this.router.events
@@ -118,5 +121,10 @@ export class SiteHeader {
 
   protected closeMobileMenu(): void {
     this.isMobileMenuOpen.set(false);
+  }
+
+  protected onLoginClick(): void {
+    this.isMobileMenuOpen.set(false);
+    this.loginRequested.emit();
   }
 }

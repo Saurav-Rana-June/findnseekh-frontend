@@ -1,14 +1,13 @@
 <section class="hero" aria-labelledby="hero-title">
   <div class="page-container hero__grid">
     <div class="hero__copy">
-      <span class="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          aria-hidden="true">
-          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-          <circle cx="12" cy="10" r="3" />
-        </svg>
-        Skill teachers, right in your neighbourhood
-      </span>
+      <app-custom-status-pill
+        class="hero__eyebrow"
+        variant="soft"
+        size="md"
+        icon="location"
+        label="Skill teachers, right in your neighbourhood"
+      />
 
       <h1 id="hero-title" class="hero__title">
         Discover Skills. <span>Find Your Teacher.</span> Start Learning.
@@ -31,14 +30,15 @@
             placeholder="Select Skill" freeTextPrefix="Search for" [value]="skill()" [options]="skillOptions()"
             (valueChange)="skill.set($event)" />
 
-          <button type="submit" class="btn btn--primary btn--lg search__submit">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              aria-hidden="true">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-            Find Teachers
-          </button>
+          <app-custom-primary-button
+            class="search__submit"
+            type="submit"
+            variant="primary"
+            size="lg"
+            leadingIcon="search"
+            label="Find Teachers"
+            paddingInline="26px"
+          />
         </form>
       </div>
 
@@ -47,9 +47,13 @@
         <ul>
           @for (item of popularSkills(); track item.label) {
           <li>
-            <button type="button" class="chip" (click)="onPopularSkillClick(item.label)">
-              {{ item.label }}
-            </button>
+            <app-custom-status-pill
+              variant="neutral"
+              size="lg"
+              [interactive]="true"
+              [label]="item.label"
+              (clicked)="onPopularSkillClick(item.label)"
+            />
           </li>
           }
         </ul>

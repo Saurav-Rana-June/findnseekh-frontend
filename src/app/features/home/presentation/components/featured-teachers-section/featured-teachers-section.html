@@ -6,14 +6,12 @@
         <p class="section-lead">Featured teachers and instructors near you.</p>
       </div>
 
-      <button type="button" class="btn btn--outline" (click)="browseAllClicked.emit()">
-        <span>{{ hasActiveFilter() ? 'Show all teachers' : 'Browse all teachers' }}</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14" />
-          <path d="m12 5 7 7-7 7" />
-        </svg>
-      </button>
+      <app-custom-primary-button
+        variant="outline"
+        trailingIcon="arrow-right"
+        [label]="hasActiveFilter() ? 'Show all teachers' : 'Browse all teachers'"
+        (clicked)="browseAllClicked.emit()"
+      />
     </div>
 
     @if (teachers().length > 0) {
@@ -23,7 +21,13 @@
         <article class="t-card">
           <div class="t-card__photo" aria-hidden="true">
             <app-teacher-avatar [spec]="teacher.avatar" />
-            <span class="t-card__tag">{{ teacher.category }}</span>
+            <app-custom-status-pill
+              class="t-card__tag"
+              variant="surface"
+              size="sm"
+              elevation="sm"
+              [label]="teacher.category"
+            />
           </div>
 
           <div class="t-card__body">
@@ -63,9 +67,14 @@
               </li>
             </ul>
 
-            <button type="button" class="btn btn--outline t-card__cta" (click)="viewProfileClicked.emit(teacher)">
-              View Profile<span class="visually-hidden"> of {{ teacher.name }}</span>
-            </button>
+            <app-custom-primary-button
+              class="t-card__cta"
+              variant="outline"
+              label="View Profile"
+              [srOnlyLabel]="' of ' + teacher.name"
+              [fullWidth]="true"
+              (clicked)="viewProfileClicked.emit(teacher)"
+            />
           </div>
         </article>
       </li>
@@ -82,9 +91,11 @@
       </svg>
       <h3>No teachers to show yet</h3>
       <p>Try searching for a skill in your city.</p>
-      <button type="button" class="btn btn--outline" (click)="browseAllClicked.emit()">
-        Reset filters
-      </button>
+      <app-custom-primary-button
+        variant="outline"
+        label="Reset filters"
+        (clicked)="browseAllClicked.emit()"
+      />
     </div>
     }
 

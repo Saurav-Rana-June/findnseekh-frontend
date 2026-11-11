@@ -3,6 +3,8 @@ import {
   ComboFieldComponent,
   ComboOption,
 } from '../../../../../shared/components/combo-field/combo-field';
+import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
+import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
 import {
   SkillSuggestion,
   TeacherAvatarSpec,
@@ -12,7 +14,7 @@ import { HeroMapVisual } from '../hero-map-visual/hero-map-visual';
 
 @Component({
   selector: 'app-home-hero',
-  imports: [ComboFieldComponent, HeroMapVisual],
+  imports: [ComboFieldComponent, CustomPrimaryButton, CustomStatusPill, HeroMapVisual],
   templateUrl: './home-hero.html',
   styleUrl: './home-hero.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

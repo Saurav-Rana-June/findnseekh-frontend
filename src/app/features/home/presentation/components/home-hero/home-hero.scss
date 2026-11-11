@@ -12,6 +12,10 @@
     padding-block: clamp(40px, 6vw, 80px) clamp(56px, 7vw, 96px);
   }
 
+  &__eyebrow {
+    margin-bottom: 16px;
+  }
+
   &__title {
     font-size: clamp(2.5rem, 5.2vw, 4.25rem);
     line-height: 1.04;
@@ -72,31 +76,7 @@
   &__submit {
     flex-shrink: 0;
     align-self: stretch;
-    min-height: 46px;
-    padding-inline: 26px;
-  }
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 36px;
-  padding: 0 16px;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
-  background: var(--color-white);
-  font-size: 0.88rem;
-  font-weight: 500;
-  color: var(--color-text);
-  transition:
-    border-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease),
-    background-color var(--dur-fast) var(--ease);
-
-  &:hover {
-    border-color: var(--color-primary);
-    background: var(--color-primary-50);
-    color: var(--color-primary);
+    --cp-btn-min-height: 46px;
   }
 }
 
@@ -126,7 +106,7 @@
 
     &__submit {
       width: 100%;
-      min-height: 48px;
+      --cp-btn-min-height: 48px;
       margin-top: 4px;
     }
   }
