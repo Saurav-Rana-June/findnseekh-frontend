@@ -1,4 +1,4 @@
-import type { AppEnvironment } from './environment';
+import type { AppEnvironment } from './environment.model';
 
 export const environment: AppEnvironment = {
   production: false,
@@ -6,4 +6,3 @@ export const environment: AppEnvironment = {
   apiTimeoutMs: 30_000,
   appName: 'Findnseekh',
 };
-

@@ -1,9 +1,4 @@
-export interface AppEnvironment {
-  readonly production: boolean;
-  readonly apiBaseUrl: string;
-  readonly apiTimeoutMs: number;
-  readonly appName: string;
-}
+import type { AppEnvironment } from './environment.model';
 
 export const environment: AppEnvironment = {
   production: true,
@@ -11,4 +6,3 @@ export const environment: AppEnvironment = {
   apiTimeoutMs: 30_000,
   appName: 'Findnseekh',
 };
-
