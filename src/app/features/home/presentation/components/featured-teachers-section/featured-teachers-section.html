@@ -6,12 +6,8 @@
         <p class="section-lead">Featured teachers and instructors near you.</p>
       </div>
 
-      <app-custom-primary-button
-        variant="outline"
-        trailingIcon="arrow-right"
-        [label]="hasActiveFilter() ? 'Show all teachers' : 'Browse all teachers'"
-        (clicked)="browseAllClicked.emit()"
-      />
+      <app-custom-primary-button variant="outline" trailingIcon="arrow-right"
+        [label]="hasActiveFilter() ? 'Show all teachers' : 'Browse all teachers'" (clicked)="browseAllClicked.emit()" />
     </div>
 
     @if (teachers().length > 0) {
@@ -21,13 +17,8 @@
         <article class="t-card">
           <div class="t-card__photo" aria-hidden="true">
             <app-teacher-avatar [spec]="teacher.avatar" />
-            <app-custom-status-pill
-              class="t-card__tag"
-              variant="surface"
-              size="sm"
-              elevation="sm"
-              [label]="teacher.category"
-            />
+            <app-custom-status-pill class="t-card__tag" variant="surface" size="sm" elevation="sm"
+              [label]="teacher.category" />
           </div>
 
           <div class="t-card__body">
@@ -67,14 +58,8 @@
               </li>
             </ul>
 
-            <app-custom-primary-button
-              class="t-card__cta"
-              variant="outline"
-              label="View Profile"
-              [srOnlyLabel]="' of ' + teacher.name"
-              [fullWidth]="true"
-              (clicked)="viewProfileClicked.emit(teacher)"
-            />
+            <app-custom-primary-button class="t-card__cta" variant="outline" label="View Profile"
+              [srOnlyLabel]="' of ' + teacher.name" [fullWidth]="true" (clicked)="viewProfileClicked.emit(teacher)" />
           </div>
         </article>
       </li>
@@ -91,11 +76,7 @@
       </svg>
       <h3>No teachers to show yet</h3>
       <p>Try searching for a skill in your city.</p>
-      <app-custom-primary-button
-        variant="outline"
-        label="Reset filters"
-        (clicked)="browseAllClicked.emit()"
-      />
+      <app-custom-primary-button variant="outline" label="Reset filters" (clicked)="browseAllClicked.emit()" />
     </div>
     }
 
