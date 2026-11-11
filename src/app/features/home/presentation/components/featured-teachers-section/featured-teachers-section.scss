@@ -6,7 +6,7 @@
 .section-head--row {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
   max-width: none;
@@ -93,6 +93,7 @@
 
   &__name {
     font-size: 1.15rem;
+    font-weight: 600;
   }
 
   &__rating {
@@ -116,7 +117,7 @@
 
   &__skill {
     color: var(--color-primary);
-    font-weight: 600;
+    font-weight: 500;
     font-size: 0.95rem;
   }
 

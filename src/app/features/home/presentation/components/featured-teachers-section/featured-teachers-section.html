@@ -8,7 +8,8 @@
 
       <button type="button" class="btn btn--outline" (click)="browseAllClicked.emit()">
         <span>{{ hasActiveFilter() ? 'Show all teachers' : 'Browse all teachers' }}</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M5 12h14" />
           <path d="m12 5 7 7-7 7" />
         </svg>
@@ -16,75 +17,75 @@
     </div>
 
     @if (teachers().length > 0) {
-      <ul class="grid grid--teachers">
-        @for (teacher of teachers(); track teacher.id) {
-          <li>
-            <article class="t-card">
-              <div class="t-card__photo" aria-hidden="true">
-                <app-teacher-avatar [spec]="teacher.avatar" />
-                <span class="t-card__tag">{{ teacher.category }}</span>
-              </div>
+    <ul class="grid grid--teachers">
+      @for (teacher of teachers(); track teacher.id) {
+      <li>
+        <article class="t-card">
+          <div class="t-card__photo" aria-hidden="true">
+            <app-teacher-avatar [spec]="teacher.avatar" />
+            <span class="t-card__tag">{{ teacher.category }}</span>
+          </div>
 
-              <div class="t-card__body">
-                <div class="t-card__top">
-                  <h3 class="t-card__name">{{ teacher.name }}</h3>
-                  @if (teacher.rating; as rating) {
-                    <span class="t-card__rating" title="Sample rating for demonstration">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                      </svg>
-                      <span class="visually-hidden">Rated </span>
-                      {{ rating.value.toFixed(1) }}
-                      <small>({{ rating.count }})</small>
-                    </span>
-                  }
-                </div>
+          <div class="t-card__body">
+            <div class="t-card__top">
+              <h3 class="t-card__name">{{ teacher.name }}</h3>
+              @if (teacher.rating; as rating) {
+              <span class="t-card__rating" title="Sample rating for demonstration">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                <span class="visually-hidden">Rated </span>
+                {{ rating.value.toFixed(1) }}
+                <small>({{ rating.count }})</small>
+              </span>
+              }
+            </div>
 
-                <p class="t-card__skill">{{ teacher.specialty }}</p>
+            <p class="t-card__skill">{{ teacher.specialty }}</p>
 
-                <ul class="t-card__meta">
-                  <li>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                    {{ teacher.location }}
-                  </li>
-                  <li>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                      <rect width="20" height="14" x="2" y="6" rx="2" />
-                    </svg>
-                    {{ teacher.experienceYears }} years experience
-                  </li>
-                </ul>
+            <ul class="t-card__meta">
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  aria-hidden="true">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                {{ teacher.location }}
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  aria-hidden="true">
+                  <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                  <rect width="20" height="14" x="2" y="6" rx="2" />
+                </svg>
+                {{ teacher.experienceYears }} years experience
+              </li>
+            </ul>
 
-                <button
-                  type="button"
-                  class="btn btn--outline t-card__cta"
-                  (click)="viewProfileClicked.emit(teacher)"
-                >
-                  View Profile<span class="visually-hidden"> of {{ teacher.name }}</span>
-                </button>
-              </div>
-            </article>
-          </li>
-        }
-      </ul>
+            <button type="button" class="btn btn--outline t-card__cta" (click)="viewProfileClicked.emit(teacher)">
+              View Profile<span class="visually-hidden"> of {{ teacher.name }}</span>
+            </button>
+          </div>
+        </article>
+      </li>
+      }
+    </ul>
     } @else {
-      <div class="empty">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <path d="m13.5 8.5-5 5" />
-          <path d="m8.5 8.5 5 5" />
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.3-4.3" />
-        </svg>
-        <h3>No teachers to show yet</h3>
-        <p>Try searching for a skill in your city.</p>
-        <button type="button" class="btn btn--outline" (click)="browseAllClicked.emit()">
-          Reset filters
-        </button>
-      </div>
+    <div class="empty">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+        aria-hidden="true">
+        <path d="m13.5 8.5-5 5" />
+        <path d="m8.5 8.5 5 5" />
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <h3>No teachers to show yet</h3>
+      <p>Try searching for a skill in your city.</p>
+      <button type="button" class="btn btn--outline" (click)="browseAllClicked.emit()">
+        Reset filters
+      </button>
+    </div>
     }
 
     <p class="sample-note">
