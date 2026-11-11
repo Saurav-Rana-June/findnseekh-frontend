@@ -6,8 +6,13 @@
     </div>
 
     <ol class="steps">
-      @for (step of steps(); track step.stepNumber) {
+      @for (step of steps(); track step.stepNumber; let last = $last) {
       <li class="step">
+        @if (!last) {
+        <app-repaint-boundary class="step__connector" [clip]="true" aria-hidden="true">
+          <span class="step__connector-track"></span>
+        </app-repaint-boundary>
+        }
         <span class="step__icon">
           @switch (step.icon) {
           @case ('discover') {

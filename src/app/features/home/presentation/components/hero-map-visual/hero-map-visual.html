@@ -1,5 +1,5 @@
-<div class="hero-art" aria-hidden="true">
-  <div class="hero-art__panel">
+<app-repaint-boundary class="hero-art" aria-hidden="true">
+  <app-repaint-boundary class="hero-art__panel" [clip]="true">
     <svg class="hero-art__map" viewBox="0 0 480 540" preserveAspectRatio="xMidYMid slice">
       <g fill="none" stroke="#F8F8F2" stroke-opacity=".16" stroke-width="14" stroke-linecap="round">
         <path d="M-20 140C90 120 150 210 260 190S420 120 520 170" />
@@ -19,7 +19,7 @@
         stroke-width="2" />
     </svg>
 
-    <div class="hero-art__learner">
+    <app-repaint-boundary class="hero-art__learner">
       <span class="hero-art__pulse"></span>
       <span class="hero-art__learner-dot">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -27,7 +27,7 @@
           <path d="M6 12v5c3 3 9 3 12 0v-5" />
         </svg>
       </span>
-    </div>
+    </app-repaint-boundary>
 
     <div class="hero-art__pin hero-art__pin--a">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -56,10 +56,10 @@
         <circle cx="12" cy="10" r="3" />
       </svg>
     </div>
-  </div>
+  </app-repaint-boundary>
 
   @if (vocalAvatar(); as vocal) {
-  <div class="hero-art__card hero-art__card--top">
+  <app-repaint-boundary class="hero-art__card hero-art__card--top">
     <div class="hero-art__avatar">
       <app-teacher-avatar [spec]="vocal" />
     </div>
@@ -67,11 +67,11 @@
       <strong>Vocals &amp; Music</strong>
       <span>Near you</span>
     </div>
-  </div>
+  </app-repaint-boundary>
   }
 
   @if (dancerAvatar(); as dancer) {
-  <div class="hero-art__card hero-art__card--mid">
+  <app-repaint-boundary class="hero-art__card hero-art__card--mid">
     <div class="hero-art__avatar">
       <app-teacher-avatar [spec]="dancer" />
     </div>
@@ -79,11 +79,11 @@
       <strong>Kathak &amp; Dance</strong>
       <span>Near you</span>
     </div>
-  </div>
+  </app-repaint-boundary>
   }
 
   @if (yogiAvatar(); as yogi) {
-  <div class="hero-art__card hero-art__card--bottom">
+  <app-repaint-boundary class="hero-art__card hero-art__card--bottom">
     <div class="hero-art__avatar">
       <app-teacher-avatar [spec]="yogi" />
     </div>
@@ -91,6 +91,6 @@
       <strong>Yoga &amp; Wellness</strong>
       <span>Near you</span>
     </div>
-  </div>
+  </app-repaint-boundary>
   }
-</div>
+</app-repaint-boundary>

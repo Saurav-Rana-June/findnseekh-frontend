@@ -18,13 +18,28 @@
   text-align: center;
   padding-inline: 8px;
 
-  &:not(:last-child)::after {
-    content: '';
+  &__connector {
     position: absolute;
-    top: 40px;
+    top: 39px;
     left: calc(50% + 56px);
     width: calc(100% - 112px + 40px);
-    border-top: 2px dashed var(--color-primary-200);
+    height: 2px;
+    pointer-events: none;
+  }
+
+  &__connector-track {
+    display: block;
+    position: relative;
+    left: -14px;
+    width: calc(100% + 14px);
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--color-primary-200) 0 7px,
+      transparent 7px 14px
+    );
+    will-change: transform;
+    animation: connector-flow 1.2s linear infinite;
   }
 
   &__icon {
@@ -66,13 +81,22 @@
   }
 }
 
+@keyframes connector-flow {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(14px, 0, 0);
+  }
+}
+
 @media (max-width: 760px) {
   .steps {
     grid-template-columns: 1fr;
     gap: 36px;
   }
 
-  .step:not(:last-child)::after {
+  .step__connector {
     display: none;
   }
 }
