@@ -1,95 +1,43 @@
-<app-modal
-  [open]="open()"
-  title="Welcome back"
-  subtitle="Log in with your email address and password."
-  closeLabel="Close login dialog"
-  (closed)="close()"
->
+<app-custom-modal [open]="open()" title="Welcome back" subtitle="Log in with your email address and password."
+  closeLabel="Close login dialog" (closed)="close()">
   <form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
     @if (authStore.error(); as errorMessage) {
-      <div class="login-form__alert" role="alert">
-        {{ errorMessage }}
-      </div>
+    <div class="login-form__alert" role="alert">
+      {{ errorMessage }}
+    </div>
     }
 
-    <div class="login-field">
-      <label class="login-field__label" for="login-email">Email Address</label>
-      <div
-        class="login-field__control"
-        [class.is-invalid]="form.controls.email.invalid && form.controls.email.touched"
-      >
-        <svg class="login-field__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <rect width="20" height="16" x="2" y="4" rx="2" />
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-        </svg>
-        <input
-          id="login-email"
-          type="email"
-          formControlName="email"
-          autocomplete="email"
-          placeholder="you@example.com"
-          [appAutofocus]="open()"
-        />
-      </div>
-      @if (form.controls.email.touched && form.controls.email.hasError('required')) {
-        <p class="login-field__error">Email address is required.</p>
-      } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
-        <p class="login-field__error">Enter a valid email address.</p>
-      }
-    </div>
+    <app-custom-textfield fieldId="login-email" label="Email Address" type="email" formControlName="email"
+      autocomplete="email" placeholder="you@example.com" leadingIcon="mail" [autofocus]="open()"
+      [invalid]="form.controls.email.invalid && form.controls.email.touched" [errorMessage]="emailError" />
 
-    <div class="login-field">
-      <label class="login-field__label" for="login-password">Password</label>
-      <div
-        class="login-field__control"
-        [class.is-invalid]="form.controls.password.invalid && form.controls.password.touched"
-      >
-        <svg class="login-field__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    <app-custom-textfield fieldId="login-password" label="Password" [type]="showPassword() ? 'text' : 'password'"
+      formControlName="password" autocomplete="current-password" placeholder="Enter your password" leadingIcon="lock"
+      [invalid]="form.controls.password.invalid && form.controls.password.touched" [errorMessage]="passwordError">
+      <app-custom-primary-button textfield-trailing class="login-field__toggle" variant="ghost" shape="rounded"
+        minHeight="28px" paddingInline="4px" borderColor="transparent" textColor="var(--color-muted)"
+        hoverBgColor="transparent" hoverTextColor="var(--color-primary)"
+        [ariaLabel]="showPassword() ? 'Hide password' : 'Show password'" (clicked)="togglePasswordVisibility()">
+        @if (showPassword()) {
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          aria-hidden="true">
+          <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+          <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+          <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+          <path d="m2 2 20 20" />
         </svg>
-        <input
-          id="login-password"
-          [type]="showPassword() ? 'text' : 'password'"
-          formControlName="password"
-          autocomplete="current-password"
-          placeholder="Enter your password"
-        />
-        <button
-          type="button"
-          class="login-field__toggle"
-          [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
-          (click)="togglePasswordVisibility()"
-        >
-          @if (showPassword()) {
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
-              <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
-              <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
-              <path d="m2 2 20 20" />
-            </svg>
-          } @else {
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-          }
-        </button>
-      </div>
-      @if (form.controls.password.touched && form.controls.password.hasError('required')) {
-        <p class="login-field__error">Password is required.</p>
-      } @else if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
-        <p class="login-field__error">Password must be at least 6 characters.</p>
-      }
-    </div>
+        } @else {
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          aria-hidden="true">
+          <path
+            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        }
+      </app-custom-primary-button>
+    </app-custom-textfield>
 
-    <button
-      type="submit"
-      class="btn btn--primary btn--lg login-form__submit"
-      [disabled]="authStore.isLoading()"
-    >
-      {{ authStore.isLoading() ? 'Logging in...' : 'Log In' }}
-    </button>
+    <app-custom-primary-button class="login-form__submit" type="submit" variant="primary" size="lg" [fullWidth]="true"
+      [loading]="authStore.isLoading()" [label]="authStore.isLoading() ? 'Logging in...' : 'Log In'" />
   </form>
-</app-modal>
-
+</app-custom-modal>

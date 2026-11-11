@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ModalComponent } from '../../../../../shared/components/modal/modal';
-import { AutofocusDirective } from '../../../../../shared/directives/autofocus.directive';
+import { CustomModal } from '../../../../../shared/components/custom-modal/custom.modal';
+import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
+import { CustomTextField } from '../../../../../shared/components/custom-textfield/custom.textfield';
 import { AuthStore } from '../../state/auth.store';
 
 @Component({
   selector: 'app-login-modal',
-  imports: [ReactiveFormsModule, ModalComponent, AutofocusDirective],
+  imports: [ReactiveFormsModule, CustomModal, CustomTextField, CustomPrimaryButton],
   templateUrl: './login-modal.html',
   styleUrl: './login-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +36,34 @@ export class LoginModalComponent {
     });
   }
 
+  protected get emailError(): string {
+    const control = this.form.controls.email;
+    if (!control.touched) {
+      return '';
+    }
+    if (control.hasError('required')) {
+      return 'Email address is required.';
+    }
+    if (control.hasError('email')) {
+      return 'Enter a valid email address.';
+    }
+    return '';
+  }
+
+  protected get passwordError(): string {
+    const control = this.form.controls.password;
+    if (!control.touched) {
+      return '';
+    }
+    if (control.hasError('required')) {
+      return 'Password is required.';
+    }
+    if (control.hasError('minlength')) {
+      return 'Password must be at least 6 characters.';
+    }
+    return '';
+  }
+
   protected togglePasswordVisibility(): void {
     this.showPassword.update((visible) => !visible);
   }
@@ -55,4 +84,3 @@ export class LoginModalComponent {
     this.closed.emit();
   }
 }
-
