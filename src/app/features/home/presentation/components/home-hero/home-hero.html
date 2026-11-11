@@ -21,32 +21,15 @@
 
       <div class="hero__search">
         <form class="search" role="search" aria-label="Find teachers near you" (submit)="onSubmit($event)">
-          <app-combo-field
-            fieldId="search-location"
-            label="Location"
-            [showLabel]="false"
-            icon="location"
-            placeholder="Select Area"
-            autoComplete="address-level2"
-            freeTextPrefix="Search near"
-            [value]="location()"
-            [options]="locationOptions()"
-            (valueChange)="location.set($event)"
-          />
+          <app-combo-field fieldId="search-location" label="Location" [showLabel]="false" icon="location"
+            placeholder="Select Area" autoComplete="address-level2" freeTextPrefix="Search near" [value]="location()"
+            [options]="locationOptions()" (valueChange)="location.set($event)" />
 
           <span class="search__divider" aria-hidden="true"></span>
 
-          <app-combo-field
-            fieldId="search-skill"
-            label="Skill"
-            [showLabel]="false"
-            icon="skill"
-            placeholder="Select Skill"
-            freeTextPrefix="Search for"
-            [value]="skill()"
-            [options]="skillOptions()"
-            (valueChange)="skill.set($event)"
-          />
+          <app-combo-field fieldId="search-skill" label="Skill" [showLabel]="false" icon="skill"
+            placeholder="Select Skill" freeTextPrefix="Search for" [value]="skill()" [options]="skillOptions()"
+            (valueChange)="skill.set($event)" />
 
           <button type="submit" class="btn btn--primary btn--lg search__submit">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

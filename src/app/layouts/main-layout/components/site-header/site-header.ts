@@ -11,6 +11,7 @@ import {
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LogoComponent } from '../../../../shared/components/logo/logo';
 
 interface NavItem {
   readonly label: string;
@@ -28,7 +29,7 @@ const OBSERVED_SECTIONS = ['skills', 'teachers', 'how-it-works', 'become-a-teach
 
 @Component({
   selector: 'app-site-header',
-  imports: [RouterLink],
+  imports: [RouterLink, LogoComponent],
   templateUrl: './site-header.html',
   styleUrl: './site-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
