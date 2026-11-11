@@ -1,5 +1,8 @@
 <app-home-hero
   [popularSkills]="store.popularSkills()"
+  [locationOptions]="store.locationOptions()"
+  [skillOptions]="store.skillOptions()"
+  [heroAvatars]="store.heroAvatars()"
   [initialQuery]="store.searchQuery()"
   (searchSubmitted)="onSearchSubmitted($event)"
   (popularSkillSelected)="onPopularSkillSelected($event)"

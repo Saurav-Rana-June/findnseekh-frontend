@@ -18,10 +18,12 @@ describe('HomeStore', () => {
     store = TestBed.inject(HomeStore);
   });
 
-  it('loads categories, featured teachers, and steps', () => {
+  it('loads categories, featured teachers, steps, and combobox options', () => {
     expect(store.categories().length).toBe(8);
     expect(store.featuredTeachers().length).toBe(6);
     expect(store.steps().length).toBe(3);
+    expect(store.locationOptions().length).toBe(14);
+    expect(store.skillOptions().length).toBe(31);
   });
 
   it('filters featured teachers by skill and location', () => {

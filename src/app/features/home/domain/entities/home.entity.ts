@@ -14,24 +14,36 @@ export interface SkillCategory {
   readonly description: string;
 }
 
-export type TeacherAvatarVariant =
-  | 'ananya'
-  | 'rohan'
-  | 'kavya'
-  | 'imran'
-  | 'simran'
-  | 'arjun';
+export interface SkillSuggestion {
+  readonly label: string;
+  readonly category: SkillCategoryIcon;
+}
+
+export interface LocationSuggestion {
+  readonly city: string;
+  readonly region: string;
+}
+
+export type TeacherHairStyle = 'short' | 'long' | 'bun' | 'curly';
+
+export interface TeacherAvatarSpec {
+  readonly skin: string;
+  readonly hair: string;
+  readonly hairStyle: TeacherHairStyle;
+  readonly outfit: string;
+  readonly background: string;
+}
 
 export interface FeaturedTeacher {
   readonly id: string;
   readonly name: string;
   readonly category: string;
+  readonly categoryId: SkillCategoryIcon;
   readonly specialty: string;
   readonly location: string;
   readonly experienceYears: number;
-  readonly rating?: number;
-  readonly reviewCount?: number;
-  readonly avatarVariant: TeacherAvatarVariant;
+  readonly rating?: { readonly value: number; readonly count: number };
+  readonly avatar: TeacherAvatarSpec;
 }
 
 export interface HowItWorksStep {
@@ -42,7 +54,9 @@ export interface HowItWorksStep {
 }
 
 export interface HomeOverview {
-  readonly popularSkills: readonly string[];
+  readonly popularSkills: readonly SkillSuggestion[];
+  readonly locationSuggestions: readonly LocationSuggestion[];
+  readonly skillSuggestions: readonly SkillSuggestion[];
   readonly categories: readonly SkillCategory[];
   readonly featuredTeachers: readonly FeaturedTeacher[];
   readonly steps: readonly HowItWorksStep[];
@@ -52,4 +66,3 @@ export interface TeacherSearchQuery {
   readonly location: string;
   readonly skill: string;
 }
-

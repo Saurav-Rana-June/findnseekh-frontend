@@ -1,94 +1,85 @@
-<section id="top" class="hero">
+<section class="hero" aria-labelledby="hero-title">
   <div class="page-container hero__grid">
-    <div class="hero__content">
-      <div class="hero__badge">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-          <path
-            d="M10 17.5C10 17.5 15.5 13 15.5 8.5C15.5 5.46 13.04 3 10 3C6.96 3 4.5 5.46 4.5 8.5C4.5 13 10 17.5 10 17.5Z"
-          />
-          <circle cx="10" cy="8.5" r="2" />
+    <div class="hero__copy">
+      <span class="eyebrow">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+          <circle cx="12" cy="10" r="3" />
         </svg>
-        <span>Skill teachers, right in your neighbourhood</span>
-      </div>
+        Skill teachers, right in your neighbourhood
+      </span>
 
-      <h1 class="hero__title">
-        <span>Discover Skills.</span>
-        <span class="hero__title--accent">Find Your Teacher.</span>
-        <span>Start Learning.</span>
+      <h1 id="hero-title" class="hero__title">
+        Discover Skills. <span>Find Your Teacher.</span> Start Learning.
       </h1>
 
-      <p class="hero__subtitle">
+      <p class="hero__lead">
         Explore talented teachers and instructors near you. Find the right mentor and turn your
         interests into skills.
       </p>
 
-      <form class="search-bar" (ngSubmit)="onSubmit()">
-        <label class="search-bar__field">
-          <span class="search-bar__label">LOCATION</span>
-          <span class="search-bar__input-wrap">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-              <path
-                d="M10 17.5C10 17.5 15.5 13 15.5 8.5C15.5 5.46 13.04 3 10 3C6.96 3 4.5 5.46 4.5 8.5C4.5 13 10 17.5 10 17.5Z"
-              />
-              <circle cx="10" cy="8.5" r="2" />
+      <div class="hero__search">
+        <form
+          class="search"
+          role="search"
+          aria-label="Find teachers near you"
+          (submit)="onSubmit($event)"
+        >
+          <app-combo-field
+            fieldId="search-location"
+            label="Location"
+            icon="location"
+            placeholder="Enter your city or area"
+            autoComplete="address-level2"
+            freeTextPrefix="Search near"
+            [value]="location()"
+            [options]="locationOptions()"
+            (valueChange)="location.set($event)"
+          />
+
+          <span class="search__divider" aria-hidden="true"></span>
+
+          <app-combo-field
+            fieldId="search-skill"
+            label="Skill"
+            icon="skill"
+            placeholder="What do you want to learn?"
+            freeTextPrefix="Search for"
+            [value]="skill()"
+            [options]="skillOptions()"
+            (valueChange)="skill.set($event)"
+          />
+
+          <button type="submit" class="btn btn--primary btn--lg search__submit">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
             </svg>
-            <input
-              type="text"
-              name="location"
-              [ngModel]="location()"
-              (ngModelChange)="location.set($event)"
-              placeholder="Enter your city or area"
-              autocomplete="address-level2"
-            />
-          </span>
-        </label>
-
-        <span class="search-bar__divider" aria-hidden="true"></span>
-
-        <label class="search-bar__field">
-          <span class="search-bar__label">SKILL</span>
-          <span class="search-bar__input-wrap">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-              <path
-                d="M10 2.5L11.6 7.4L16.5 9L11.6 10.6L10 15.5L8.4 10.6L3.5 9L8.4 7.4L10 2.5Z"
-                stroke-linejoin="round"
-              />
-              <path d="M15.5 13.5L16.2 15.3L18 16L16.2 16.7L15.5 18.5L14.8 16.7L13 16L14.8 15.3L15.5 13.5Z" />
-            </svg>
-            <input
-              type="text"
-              name="skill"
-              [ngModel]="skill()"
-              (ngModelChange)="skill.set($event)"
-              placeholder="What do you want to learn?"
-            />
-          </span>
-        </label>
-
-        <button type="submit" class="btn-pill btn-pill--primary search-bar__submit">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="9" cy="9" r="5.5" />
-            <path d="M13.5 13.5L17 17" stroke-linecap="round" />
-          </svg>
-          <span>Find Teachers</span>
-        </button>
-      </form>
+            Find Teachers
+          </button>
+        </form>
+      </div>
 
       <div class="hero__popular">
-        <span class="hero__popular-label">Popular:</span>
-        <div class="hero__chips">
-          @for (item of popularSkills(); track item) {
-            <button type="button" class="popular-chip" (click)="onPopularSkillClick(item)">
-              {{ item }}
-            </button>
+        <span>Popular:</span>
+        <ul>
+          @for (item of popularSkills(); track item.label) {
+            <li>
+              <button type="button" class="chip" (click)="onPopularSkillClick(item.label)">
+                {{ item.label }}
+              </button>
+            </li>
           }
-        </div>
+        </ul>
       </div>
     </div>
 
-    <div class="hero__visual">
-      <app-hero-map-visual />
+    <div class="hero__art">
+      <app-hero-map-visual
+        [vocalAvatar]="heroAvatars().vocal"
+        [dancerAvatar]="heroAvatars().dancer"
+        [yogiAvatar]="heroAvatars().yogi"
+      />
     </div>
   </div>
 </section>
-

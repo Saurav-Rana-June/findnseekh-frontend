@@ -1,107 +1,77 @@
-@use 'mixins';
-
-.how-section {
-  background-color: var(--color-bg);
-  padding-block: 5rem;
+.section--white {
+  background: var(--color-white);
 }
 
-.how-section__header {
-  text-align: center;
-  max-width: 32rem;
-  margin-inline: auto;
-
-  h2 {
-    font-size: clamp(1.75rem, 3.2vw, 2.35rem);
-    color: var(--color-text-primary);
-  }
-
-  p {
-    margin-top: var(--space-3);
-    color: var(--color-text-secondary);
-    font-size: 0.96875rem;
-  }
-}
-
-.steps-grid {
-  position: relative;
-  margin-top: 3.5rem;
+.steps {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-8);
-
-  @include mixins.respond-to(md) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-6);
-  }
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  position: relative;
 }
 
-.step-card {
+.step {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   text-align: center;
-  padding-inline: var(--space-4);
+  padding-inline: 8px;
 
-  @include mixins.respond-to(md) {
-    &:not(:last-child)::after {
-      content: '';
+  &:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: calc(50% + 56px);
+    width: calc(100% - 112px + 40px);
+    border-top: 2px dashed var(--color-primary-200);
+  }
+
+  &__icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 8px;
+    border-radius: 24px;
+    background: var(--color-primary-50);
+    border: 1px solid var(--color-primary-100);
+    color: var(--color-primary);
+
+    b {
       position: absolute;
-      top: 2.375rem;
-      left: calc(50% + 3.5rem);
-      width: calc(100% - 7rem);
-      border-top: 1.5px dashed rgba(22, 78, 51, 0.25);
+      top: -10px;
+      right: -10px;
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: var(--color-cream);
+      font-size: 0.82rem;
+      font-family: var(--font-display);
     }
   }
 
   h3 {
-    margin-top: var(--space-4);
-    font-size: 1.125rem;
-    color: var(--color-text-primary);
+    font-size: 1.3rem;
   }
 
   p {
-    margin-top: 0.45rem;
-    max-width: 17rem;
-    margin-inline: auto;
-    font-size: 0.875rem;
-    line-height: 1.55;
-    color: var(--color-text-secondary);
+    max-width: 280px;
+    color: var(--color-muted);
   }
 }
 
-.step-card__icon-wrap {
-  position: relative;
-  display: inline-flex;
-}
+@media (max-width: 760px) {
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
 
-.step-card__icon {
-  width: 4.75rem;
-  height: 4.75rem;
-  border-radius: 1.25rem;
-  background-color: var(--color-mint-tint);
-  color: var(--color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  svg {
-    width: 1.65rem;
-    height: 1.65rem;
+  .step:not(:last-child)::after {
+    display: none;
   }
 }
-
-.step-card__badge {
-  position: absolute;
-  top: -0.45rem;
-  right: -0.45rem;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-primary);
-  color: #ffffff;
-  font-size: 0.78125rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-sm);
-}
-

@@ -1,6 +1,6 @@
-<header class="site-header">
-  <div class="page-container site-header__inner">
-    <a class="brand" routerLink="/" (click)="closeMobileMenu()">
+<header class="navbar" [class.navbar--raised]="isScrolled() || isMobileMenuOpen()">
+  <div class="page-container navbar__inner">
+    <a class="brand" routerLink="/" aria-label="FindnSeekh – home" (click)="closeMobileMenu()">
       <svg class="brand__icon" viewBox="0 0 28 28" fill="none" aria-hidden="true">
         <path d="M14 5L3 10.5L14 16L25 10.5L14 5Z" fill="currentColor" />
         <path
@@ -13,33 +13,44 @@
       <span>FindnSeekh</span>
     </a>
 
-    <nav class="site-nav" aria-label="Primary">
-      <a
-        class="site-nav__link"
-        routerLink="/"
-        routerLinkActive="site-nav__link--active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        Home
-      </a>
-      <a class="site-nav__link" href="#explore-skills">Explore Skills</a>
-      <a class="site-nav__link" href="#how-it-works">How It Works</a>
-      <a class="site-nav__link" href="#become-a-teacher">Become a Teacher</a>
+    <nav class="navbar__links" aria-label="Primary">
+      @for (item of navItems; track item.label) {
+        @if (item.fragment) {
+          <a
+            class="navbar__link"
+            [href]="'#' + item.fragment"
+            [class.is-active]="isItemActive(item)"
+            [attr.aria-current]="isItemActive(item) ? 'page' : null"
+          >
+            {{ item.label }}
+          </a>
+        } @else {
+          <a
+            class="navbar__link"
+            routerLink="/"
+            [class.is-active]="isItemActive(item)"
+            [attr.aria-current]="isItemActive(item) ? 'page' : null"
+          >
+            {{ item.label }}
+          </a>
+        }
+      }
     </nav>
 
-    <div class="site-actions">
-      <a class="site-actions__login" routerLink="/auth/login">Log In</a>
-      <a class="btn-pill btn-pill--primary site-actions__signup" routerLink="/auth/login">Sign Up</a>
+    <div class="navbar__actions">
+      <a routerLink="/auth/login" class="btn btn--ghost">Log In</a>
+      <a routerLink="/auth/login" class="btn btn--primary">Sign Up</a>
     </div>
 
     <button
       type="button"
-      class="mobile-toggle"
+      class="navbar__toggle"
+      [attr.aria-label]="isMobileMenuOpen() ? 'Close menu' : 'Open menu'"
       [attr.aria-expanded]="isMobileMenuOpen()"
-      aria-label="Toggle navigation menu"
+      aria-controls="mobile-menu"
       (click)="toggleMobileMenu()"
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         @if (isMobileMenuOpen()) {
           <path d="M6 6L18 18M18 6L6 18" stroke-linecap="round" />
         } @else {
@@ -49,33 +60,33 @@
     </button>
   </div>
 
-  @if (isMobileMenuOpen()) {
-    <div class="mobile-menu">
-      <div class="page-container mobile-menu__inner">
-        <a class="mobile-menu__link" routerLink="/" (click)="closeMobileMenu()">Home</a>
-        <a class="mobile-menu__link" href="#explore-skills" (click)="closeMobileMenu()">
-          Explore Skills
-        </a>
-        <a class="mobile-menu__link" href="#how-it-works" (click)="closeMobileMenu()">
-          How It Works
-        </a>
-        <a class="mobile-menu__link" href="#become-a-teacher" (click)="closeMobileMenu()">
-          Become a Teacher
-        </a>
-        <div class="mobile-menu__actions">
-          <a class="site-actions__login" routerLink="/auth/login" (click)="closeMobileMenu()">
-            Log In
-          </a>
+  <div id="mobile-menu" class="navbar__mobile" [hidden]="!isMobileMenuOpen()">
+    <nav class="page-container navbar__mobile-inner" aria-label="Mobile">
+      @for (item of navItems; track item.label) {
+        @if (item.fragment) {
           <a
-            class="btn-pill btn-pill--primary site-actions__signup"
-            routerLink="/auth/login"
+            class="navbar__mobile-link"
+            [href]="'#' + item.fragment"
+            [class.is-active]="isItemActive(item)"
             (click)="closeMobileMenu()"
           >
-            Sign Up
+            {{ item.label }}
           </a>
-        </div>
+        } @else {
+          <a
+            class="navbar__mobile-link"
+            routerLink="/"
+            [class.is-active]="isItemActive(item)"
+            (click)="closeMobileMenu()"
+          >
+            {{ item.label }}
+          </a>
+        }
+      }
+      <div class="navbar__mobile-actions">
+        <a routerLink="/auth/login" class="btn btn--outline" (click)="closeMobileMenu()">Log In</a>
+        <a routerLink="/auth/login" class="btn btn--primary" (click)="closeMobileMenu()">Sign Up</a>
       </div>
-    </div>
-  }
+    </nav>
+  </div>
 </header>
-

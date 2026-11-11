@@ -1,0 +1,53 @@
+<svg
+  viewBox="0 0 160 160"
+  class="avatar-svg"
+  preserveAspectRatio="xMidYMid slice"
+  [attr.role]="label() ? 'img' : null"
+  [attr.aria-label]="label() ?? null"
+  [attr.aria-hidden]="label() ? null : 'true'"
+>
+  <rect width="160" height="160" [attr.fill]="spec().background" />
+
+  @if (spec().hairStyle === 'long') {
+    <rect x="37" y="36" width="86" height="104" rx="43" [attr.fill]="spec().hair" />
+  }
+
+  <path d="M18 162c0-33 27-50 62-50s62 17 62 50Z" [attr.fill]="spec().outfit" />
+  <rect x="69" y="92" width="22" height="30" rx="9" [attr.fill]="spec().skin" />
+  <path d="M62 114q18 26 36 0Z" [attr.fill]="spec().skin" />
+  <rect x="69" y="92" width="22" height="10" fill="#000" opacity=".08" />
+
+  <circle cx="54" cy="73" r="5.5" [attr.fill]="spec().skin" />
+  <circle cx="106" cy="73" r="5.5" [attr.fill]="spec().skin" />
+  <ellipse cx="80" cy="70" rx="27" ry="31" [attr.fill]="spec().skin" />
+
+  <circle cx="69.5" cy="70" r="2.3" fill="#1F2937" />
+  <circle cx="90.5" cy="70" r="2.3" fill="#1F2937" />
+  <path
+    d="M72 83q8 7 16 0"
+    fill="none"
+    stroke="#1F2937"
+    stroke-width="2.2"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M52 68c-3-26 11-37 28-37s31 11 28 37c-5-13-14-18-28-18s-23 5-28 18Z"
+    [attr.fill]="spec().hair"
+  />
+
+  @if (spec().hairStyle === 'bun') {
+    <circle cx="80" cy="27" r="11" [attr.fill]="spec().hair" />
+  }
+
+  @if (spec().hairStyle === 'curly') {
+    <g [attr.fill]="spec().hair">
+      <circle cx="57" cy="52" r="10" />
+      <circle cx="68" cy="41" r="11" />
+      <circle cx="82" cy="38" r="11" />
+      <circle cx="96" cy="42" r="11" />
+      <circle cx="105" cy="54" r="10" />
+    </g>
+  }
+</svg>
+

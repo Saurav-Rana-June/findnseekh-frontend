@@ -63,6 +63,6 @@ export class HomePage {
       return;
     }
 
-    document.getElementById('featured-teachers')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('teachers')?.scrollIntoView({ behavior: 'smooth' });
   }
 }

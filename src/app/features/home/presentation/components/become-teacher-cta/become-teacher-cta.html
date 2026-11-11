@@ -1,30 +1,27 @@
-<section id="become-a-teacher" class="cta-section">
+<section id="become-a-teacher" class="section section--white section--tight" aria-labelledby="cta-title">
   <div class="page-container">
-    <div class="cta-banner">
-      <div class="cta-banner__rings" aria-hidden="true">
-        <span class="ring ring--outer"></span>
-        <span class="ring ring--middle"></span>
-        <span class="ring ring--inner"></span>
-      </div>
+    <div class="cta">
+      <svg class="cta__mark" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="100" cy="100" r="64" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="100" cy="100" r="32" fill="currentColor" />
+      </svg>
 
-      <div class="cta-banner__content">
-        <h2>
-          <span>Share Your Skills.</span>
-          <span>Inspire Someone.</span>
-        </h2>
+      <div class="cta__copy">
+        <h2 id="cta-title">Share Your Skills. Inspire Someone.</h2>
         <p>
           Are you passionate about teaching? Join FindnSeekh and help people discover and learn new
           skills.
         </p>
       </div>
 
-      <a class="cta-banner__btn" routerLink="/auth/login">
-        <span>Become a Teacher</span>
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-          <path d="M3.5 8H12.5M9 4.5L12.5 8L9 11.5" stroke-linecap="round" stroke-linejoin="round" />
+      <a routerLink="/auth/login" class="btn btn--cream btn--lg">
+        Become a Teacher
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
         </svg>
       </a>
     </div>
   </div>
 </section>
-

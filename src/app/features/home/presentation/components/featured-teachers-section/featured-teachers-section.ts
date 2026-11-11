@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FeaturedTeacher } from '../../../domain/entities/home.entity';
+import { TeacherAvatarComponent } from '../teacher-avatar/teacher-avatar';
 
 @Component({
   selector: 'app-featured-teachers-section',
+  imports: [TeacherAvatarComponent],
   templateUrl: './featured-teachers-section.html',
   styleUrl: './featured-teachers-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,4 +16,3 @@ export class FeaturedTeachersSection {
   readonly browseAllClicked = output<void>();
   readonly viewProfileClicked = output<FeaturedTeacher>();
 }
-

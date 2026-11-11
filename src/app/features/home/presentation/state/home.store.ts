@@ -1,10 +1,12 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ComboOption } from '../../../../shared/components/combo-field/combo-field';
 import {
   FeaturedTeacher,
   HomeOverview,
   HowItWorksStep,
   SkillCategory,
+  SkillSuggestion,
   TeacherSearchQuery,
 } from '../../domain/entities/home.entity';
 import { GetHomeOverviewUseCase } from '../../domain/use-cases/get-home-overview.use-case';
@@ -16,6 +18,8 @@ export class HomeStore {
 
   private readonly _overview = signal<HomeOverview>({
     popularSkills: [],
+    locationSuggestions: [],
+    skillSuggestions: [],
     categories: [],
     featuredTeachers: [],
     steps: [],
@@ -26,10 +30,41 @@ export class HomeStore {
     skill: '',
   });
 
-  readonly popularSkills = computed(() => this._overview().popularSkills);
+  readonly popularSkills = computed<readonly SkillSuggestion[]>(
+    () => this._overview().popularSkills,
+  );
   readonly categories = computed<readonly SkillCategory[]>(() => this._overview().categories);
   readonly steps = computed<readonly HowItWorksStep[]>(() => this._overview().steps);
   readonly searchQuery = this._searchQuery.asReadonly();
+
+  readonly locationOptions = computed<readonly ComboOption[]>(() =>
+    this._overview().locationSuggestions.map((loc) => ({
+      value: loc.city,
+      hint: loc.region,
+    })),
+  );
+
+  readonly skillOptions = computed<readonly ComboOption[]>(() => {
+    const categories = this._overview().categories;
+    const categoryName = (id: string) => categories.find((c) => c.id === id)?.title ?? '';
+
+    return [
+      ...categories.map((c) => ({ value: c.title, hint: 'Category' })),
+      ...this._overview().skillSuggestions.map((s) => ({
+        value: s.label,
+        hint: categoryName(s.category),
+      })),
+    ];
+  });
+
+  readonly heroAvatars = computed(() => {
+    const [vocal, , dancer, , yogi] = this._overview().featuredTeachers;
+    return {
+      vocal: vocal?.avatar ?? null,
+      dancer: dancer?.avatar ?? null,
+      yogi: yogi?.avatar ?? null,
+    };
+  });
 
   readonly featuredTeachers = computed<readonly FeaturedTeacher[]>(() => {
     const teachers = this._overview().featuredTeachers;
@@ -80,4 +115,3 @@ export class HomeStore {
     this._searchQuery.set({ location: '', skill: '' });
   }
 }
-

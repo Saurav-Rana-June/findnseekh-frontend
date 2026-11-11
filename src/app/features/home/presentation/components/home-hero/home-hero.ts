@@ -1,17 +1,31 @@
 import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { TeacherSearchQuery } from '../../../domain/entities/home.entity';
+import {
+  ComboFieldComponent,
+  ComboOption,
+} from '../../../../../shared/components/combo-field/combo-field';
+import {
+  SkillSuggestion,
+  TeacherAvatarSpec,
+  TeacherSearchQuery,
+} from '../../../domain/entities/home.entity';
 import { HeroMapVisual } from '../hero-map-visual/hero-map-visual';
 
 @Component({
   selector: 'app-home-hero',
-  imports: [FormsModule, HeroMapVisual],
+  imports: [ComboFieldComponent, HeroMapVisual],
   templateUrl: './home-hero.html',
   styleUrl: './home-hero.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeHero {
-  readonly popularSkills = input.required<readonly string[]>();
+  readonly popularSkills = input.required<readonly SkillSuggestion[]>();
+  readonly locationOptions = input.required<readonly ComboOption[]>();
+  readonly skillOptions = input.required<readonly ComboOption[]>();
+  readonly heroAvatars = input.required<{
+    readonly vocal: TeacherAvatarSpec | null;
+    readonly dancer: TeacherAvatarSpec | null;
+    readonly yogi: TeacherAvatarSpec | null;
+  }>();
   readonly initialQuery = input<TeacherSearchQuery>({ location: '', skill: '' });
 
   readonly searchSubmitted = output<TeacherSearchQuery>();
@@ -28,16 +42,16 @@ export class HomeHero {
     });
   }
 
-  protected onSubmit(): void {
+  protected onSubmit(event: Event): void {
+    event.preventDefault();
     this.searchSubmitted.emit({
       location: this.location(),
       skill: this.skill(),
     });
   }
 
-  protected onPopularSkillClick(skill: string): void {
-    this.skill.set(skill);
-    this.popularSkillSelected.emit(skill);
+  protected onPopularSkillClick(label: string): void {
+    this.skill.set(label);
+    this.popularSkillSelected.emit(label);
   }
 }
-

@@ -1,102 +1,108 @@
-<div class="map-card" aria-hidden="true">
-  <svg class="map-card__bg" viewBox="0 0 420 460" fill="none" preserveAspectRatio="xMidYMid slice">
-    <rect width="420" height="460" fill="#174d33" />
-    <path
-      d="M-20 120C95 95 160 175 265 150C340 132 390 155 440 130"
-      stroke="rgba(255,255,255,0.12)"
-      stroke-width="10"
-      stroke-linecap="round"
-    />
-    <path
-      d="M110 -10C135 120 95 230 165 340C205 405 245 435 280 475"
-      stroke="rgba(255,255,255,0.12)"
-      stroke-width="10"
-      stroke-linecap="round"
-    />
-    <path
-      d="M280 -10C295 110 250 220 315 335C345 385 385 430 430 460"
-      stroke="rgba(255,255,255,0.08)"
-      stroke-width="6"
-    />
-    <rect x="64" y="54" width="60" height="44" rx="10" fill="rgba(255,255,255,0.06)" />
-    <rect x="315" y="265" width="70" height="58" rx="12" fill="rgba(255,255,255,0.06)" />
-    <circle cx="210" cy="235" r="78" stroke="rgba(255,255,255,0.18)" stroke-dasharray="4 6" />
-    <circle cx="210" cy="235" r="128" stroke="rgba(255,255,255,0.12)" stroke-dasharray="4 6" />
-    <circle cx="210" cy="235" r="176" stroke="rgba(255,255,255,0.08)" stroke-dasharray="4 6" />
-  </svg>
-
-  <div class="map-card__pin map-card__pin--center">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <path d="M12 5L3 9.5L12 14L21 9.5L12 5Z" />
-      <path d="M6.5 11.5V16.5C6.5 17.8 9 19.2 12 19.2C15 19.2 17.5 17.8 17.5 16.5V11.5" />
+<div class="hero-art" aria-hidden="true">
+  <div class="hero-art__panel">
+    <svg class="hero-art__map" viewBox="0 0 480 540" preserveAspectRatio="xMidYMid slice">
+      <g fill="none" stroke="#F8F8F2" stroke-opacity=".16" stroke-width="14" stroke-linecap="round">
+        <path d="M-20 140C90 120 150 210 260 190S420 120 520 170" />
+        <path d="M60 -20C80 120 40 240 120 340S130 520 150 570" />
+        <path d="M330 -20C300 110 380 220 340 330S420 470 400 570" />
+        <path d="M-20 420C120 400 220 470 330 440S450 400 520 430" />
+      </g>
+      <g fill="#F8F8F2" fill-opacity=".06">
+        <rect x="170" y="230" width="110" height="80" rx="18" />
+        <rect x="20" y="40" width="90" height="70" rx="18" />
+        <rect x="360" y="260" width="90" height="110" rx="18" />
+        <rect x="190" y="470" width="120" height="60" rx="18" />
+      </g>
+      <circle
+        cx="240"
+        cy="290"
+        r="150"
+        fill="none"
+        stroke="#F8F8F2"
+        stroke-opacity=".22"
+        stroke-dasharray="3 9"
+        stroke-width="2"
+      />
+      <circle
+        cx="240"
+        cy="290"
+        r="92"
+        fill="none"
+        stroke="#F8F8F2"
+        stroke-opacity=".28"
+        stroke-dasharray="3 9"
+        stroke-width="2"
+      />
     </svg>
-  </div>
 
-  <div class="map-card__pin map-card__pin--music">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <path d="M9 18V6L19 4V16" stroke-linecap="round" stroke-linejoin="round" />
-      <circle cx="6.5" cy="18" r="2.5" />
-      <circle cx="16.5" cy="16" r="2.5" />
-    </svg>
-  </div>
+    <div class="hero-art__learner">
+      <span class="hero-art__pulse"></span>
+      <span class="hero-art__learner-dot">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+          <path d="M6 12v5c3 3 9 3 12 0v-5" />
+        </svg>
+      </span>
+    </div>
 
-  <div class="map-card__pin map-card__pin--yoga">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <circle cx="12" cy="5.5" r="2" />
-      <path d="M7 10.5L12 9L17 10.5M12 9V14.5M9 19L12 14.5L15 19" stroke-linecap="round" />
-    </svg>
-  </div>
-
-  <div class="map-card__pin map-card__pin--location">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-      <path d="M12 20C12 20 18 15 18 10C18 6.7 15.3 4 12 4C8.7 4 6 6.7 6 10C6 15 12 20 12 20Z" />
-      <circle cx="12" cy="10" r="2" />
-    </svg>
-  </div>
-
-  <div class="floating-pill floating-pill--top">
-    <span class="floating-pill__avatar">
-      <svg viewBox="0 0 36 36">
-        <circle cx="18" cy="18" r="18" fill="#e5eee7" />
-        <path d="M9 34C10 27 14 25 18 25C22 25 26 27 27 34" fill="#1b4d34" />
-        <circle cx="18" cy="15" r="7" fill="#1e2a38" />
-        <circle cx="18" cy="16" r="5" fill="#d99b76" />
+    <div class="hero-art__pin hero-art__pin--a">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m11.9 12.1 4.5-4.5" />
+        <path d="m20 7-3-3-1.5 1.5 3 3Z" />
+        <path d="M13.4 13.4a4 4 0 1 1-5.6-5.6c1.6-1.6 3.7-1.4 5.2-.1.5.4 1.3.4 1.8-.1l.7-.7c1 1 1.4 2.5.8 3.9-.4.9-.3 2 .4 2.7l.7.7a2.8 2.8 0 0 1-4 4l-.7-.7c-.7-.7-1.8-.8-2.7-.4-1.4.6-2.9.2-3.9-.8" />
       </svg>
-    </span>
-    <span>
-      <strong>Vocals &amp; Music</strong>
-      <small>Near you</small>
-    </span>
+    </div>
+
+    <div class="hero-art__pin hero-art__pin--b">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="5" r="1" />
+        <path d="m9 20 3-6 3 6" />
+        <path d="m6 8 6 2 6-2" />
+        <path d="M12 10v4" />
+      </svg>
+    </div>
+
+    <div class="hero-art__pin hero-art__pin--c">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    </div>
   </div>
 
-  <div class="floating-pill floating-pill--mid">
-    <span class="floating-pill__avatar">
-      <svg viewBox="0 0 36 36">
-        <circle cx="18" cy="18" r="18" fill="#f3efe7" />
-        <path d="M9 34C10 27 14 25 18 25C22 25 26 27 27 34" fill="#1e293b" />
-        <circle cx="18" cy="11" r="3" fill="#2d201c" />
-        <circle cx="18" cy="16" r="5" fill="#c98d68" />
-      </svg>
-    </span>
-    <span>
-      <strong>Kathak &amp; Dance</strong>
-      <small>Near you</small>
-    </span>
-  </div>
+  @if (vocalAvatar(); as vocal) {
+    <div class="hero-art__card hero-art__card--top">
+      <div class="hero-art__avatar">
+        <app-teacher-avatar [spec]="vocal" />
+      </div>
+      <div>
+        <strong>Vocals &amp; Music</strong>
+        <span>Near you</span>
+      </div>
+    </div>
+  }
 
-  <div class="floating-pill floating-pill--bottom">
-    <span class="floating-pill__avatar">
-      <svg viewBox="0 0 36 36">
-        <circle cx="18" cy="18" r="18" fill="#e6efe9" />
-        <path d="M9 34C10 27 14 25 18 25C22 25 26 27 27 34" fill="#5c937a" />
-        <circle cx="18" cy="15" r="7" fill="#3a2822" />
-        <circle cx="18" cy="16" r="5" fill="#d8a07a" />
-      </svg>
-    </span>
-    <span>
-      <strong>Yoga &amp; Wellness</strong>
-      <small>Near you</small>
-    </span>
-  </div>
+  @if (dancerAvatar(); as dancer) {
+    <div class="hero-art__card hero-art__card--mid">
+      <div class="hero-art__avatar">
+        <app-teacher-avatar [spec]="dancer" />
+      </div>
+      <div>
+        <strong>Kathak &amp; Dance</strong>
+        <span>Near you</span>
+      </div>
+    </div>
+  }
+
+  @if (yogiAvatar(); as yogi) {
+    <div class="hero-art__card hero-art__card--bottom">
+      <div class="hero-art__avatar">
+        <app-teacher-avatar [spec]="yogi" />
+      </div>
+      <div>
+        <strong>Yoga &amp; Wellness</strong>
+        <span>Near you</span>
+      </div>
+    </div>
+  }
 </div>
-
