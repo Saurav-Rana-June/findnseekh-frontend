@@ -1,7 +1,14 @@
 .profile-page {
-  padding: 2.5rem 0 4rem;
+  padding: 1.75rem 0 4rem;
   background-color: var(--color-surface, #f8fafc);
   min-height: calc(100vh - var(--nav-height, 72px));
+}
+
+.profile-nav-back {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 1.125rem;
 }
 
 .profile-header {
@@ -16,6 +23,11 @@
   box-shadow: var(--shadow-sm);
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
+
+  @media (max-width: 640px) {
+    padding: 1.25rem 1rem;
+    gap: 1rem;
+  }
 
   &__left {
     display: flex;

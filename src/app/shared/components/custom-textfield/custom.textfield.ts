@@ -32,7 +32,8 @@ export type CustomTextFieldIcon =
   | 'user'
   | 'search'
   | 'phone'
-  | 'location';
+  | 'location'
+  | 'academic';
 
 let nextTextFieldId = 0;
 
@@ -172,6 +173,21 @@ let nextTextFieldId = 0;
               >
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                 <circle cx="12" cy="10" r="3" />
+              </svg>
+            }
+            @case ('academic') {
+              <svg
+                class="cp-tf__icon"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                <path d="M6 12v5c3 3 9 3 12 0v-5" />
               </svg>
             }
           }

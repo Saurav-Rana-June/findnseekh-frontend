@@ -15,6 +15,7 @@ import { CustomPrimaryButton } from '../../../../../shared/components/custom-pri
 import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
 import { CustomTextField } from '../../../../../shared/components/custom-textfield/custom.textfield';
 import { CustomAvatarComponent } from '../../../../../shared/components/custom-avatar/custom-avatar';
+import { CustomCloseOutlinedButton } from '../../../../../shared/components/custom-close-outlined-button/custom.close.outlined.button';
 import { CustomImageCropperModalComponent } from '../../../../../shared/components/custom-image-cropper-modal/custom-image-cropper-modal';
 import {
   TeacherProfileUpdatePayload,
@@ -54,6 +55,7 @@ const TEACHING_MODES: readonly TeachingModeOption[] = [
     CustomPrimaryButton,
     CustomStatusPill,
     CustomAvatarComponent,
+    CustomCloseOutlinedButton,
     CustomImageCropperModalComponent,
   ],
   templateUrl: './profile-page.html',
@@ -70,6 +72,14 @@ export class ProfilePage {
   protected readonly teachingModes = TEACHING_MODES;
   protected readonly isSavedRecently = signal(false);
 
+  protected onBack(): void {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      window.history.back();
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
+
   // Avatar Upload & 1:1 Cropper State
   protected readonly profileImageUrl = signal<string | null>(null);
   protected readonly selectedRawImage = signal<string | null>(null);
@@ -83,6 +93,7 @@ export class ProfilePage {
 
   protected readonly form = this.fb.nonNullable.group({
     bio: ['', [Validators.maxLength(1000)]],
+    qualification: ['', [Validators.maxLength(150)]],
     experienceYears: [0, [Validators.min(0), Validators.max(80)]],
     teachingMode: ['both' as TeachingMode, [Validators.required]],
     phone: ['', [Validators.maxLength(20)]],
@@ -96,6 +107,7 @@ export class ProfilePage {
       if (profile) {
         this.form.patchValue({
           bio: profile.bio ?? '',
+          qualification: profile.qualification ?? '',
           experienceYears: profile.experienceYears ?? 0,
           teachingMode: profile.teachingMode ?? 'both',
           city: profile.city ?? '',
@@ -154,6 +166,7 @@ export class ProfilePage {
     const raw = this.form.getRawValue();
     const payload: TeacherProfileUpdatePayload = {
       bio: raw.bio.trim() || null,
+      qualification: raw.qualification.trim() || null,
       experienceYears: Number(raw.experienceYears) || 0,
       teachingMode: raw.teachingMode,
       phone: raw.phone.trim() || null,

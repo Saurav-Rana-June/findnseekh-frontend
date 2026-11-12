@@ -1,5 +1,14 @@
 <div class="profile-page">
   <div class="page-container">
+    <!-- Back navigation above User Details Card, left aligned -->
+    <div class="profile-nav-back">
+      <app-custom-close-outlined-button
+        icon="back"
+        ariaLabel="Go back"
+        (clicked)="onBack()"
+      />
+    </div>
+
     <!-- Header card: User summary banner -->
     <header class="profile-header">
       <div class="profile-header__left">
@@ -59,7 +68,7 @@
           <div class="profile-alert__content">
             <h2 class="profile-alert__title">Teacher Profile Incomplete</h2>
             <p class="profile-alert__desc">
-              Please fill out your bio, teaching mode, experience, and location below so students
+              Please fill out your qualification, experience, teaching mode, bio, and location below so students
               can find and connect with you.
             </p>
           </div>
@@ -137,8 +146,17 @@
             </div>
           </div>
 
-          <!-- Experience and Phone row -->
+          <!-- Qualification and Experience row -->
           <div class="profile-form__row">
+            <app-custom-textfield
+              fieldId="profile-qualification"
+              label="Qualification"
+              type="text"
+              formControlName="qualification"
+              placeholder="e.g. Master in Mathematics, B.Ed, B.Tech"
+              leadingIcon="academic"
+            />
+
             <app-custom-textfield
               fieldId="profile-experience"
               label="Years of Experience"
@@ -147,7 +165,10 @@
               placeholder="e.g. 5"
               [required]="true"
             />
+          </div>
 
+          <!-- Contact Phone and City row -->
+          <div class="profile-form__row">
             <app-custom-textfield
               fieldId="profile-phone"
               label="Contact Phone"
@@ -156,10 +177,7 @@
               placeholder="+91 98765 43210"
               leadingIcon="phone"
             />
-          </div>
 
-          <!-- Location row -->
-          <div class="profile-form__row">
             <app-custom-textfield
               fieldId="profile-city"
               label="City"
@@ -168,7 +186,10 @@
               placeholder="Bengaluru"
               leadingIcon="location"
             />
+          </div>
 
+          <!-- State row -->
+          <div class="profile-form__row">
             <app-custom-textfield
               fieldId="profile-state"
               label="State / Province"

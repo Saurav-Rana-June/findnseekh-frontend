@@ -156,6 +156,7 @@ export class AuthStore {
         id: 1,
         userId: 1,
         bio: payload.bio ?? null,
+        qualification: payload.qualification ?? null,
         experienceYears: payload.experienceYears ?? 0,
         city: payload.city ?? null,
         state: payload.state ?? null,

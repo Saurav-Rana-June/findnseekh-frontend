@@ -26,6 +26,7 @@ export interface UserUpdateRequestDto {
 
 export interface TeacherProfileUpdateRequestDto {
   readonly bio?: string | null;
+  readonly qualification?: string | null;
   readonly experience_years?: number;
   readonly city?: string | null;
   readonly state?: string | null;
@@ -50,6 +51,7 @@ export interface TeacherProfileDto {
   readonly id: number;
   readonly user_id: number;
   readonly bio: string | null;
+  readonly qualification?: string | null;
   readonly experience_years: number;
   readonly city: string | null;
   readonly state: string | null;
@@ -77,6 +79,7 @@ export function toTeacherProfileUpdateRequestDto(
 ): TeacherProfileUpdateRequestDto {
   return {
     bio: payload.bio?.trim() || null,
+    qualification: payload.qualification?.trim() || null,
     experience_years: payload.experienceYears ?? 0,
     city: payload.city?.trim() || null,
     state: payload.state?.trim() || null,
@@ -107,6 +110,7 @@ export function toTeacherProfile(dto: TeacherProfileDto): TeacherProfile {
     id: dto.id,
     userId: dto.user_id,
     bio: dto.bio,
+    qualification: dto.qualification ?? null,
     experienceYears: dto.experience_years,
     city: dto.city,
     state: dto.state,
