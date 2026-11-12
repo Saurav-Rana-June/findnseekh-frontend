@@ -190,3 +190,4 @@ export class CustomImageCropperModalComponent {
     this.closed.emit();
   }
 }
+
