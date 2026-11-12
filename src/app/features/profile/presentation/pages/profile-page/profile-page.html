@@ -3,9 +3,35 @@
     <!-- Header card: User summary banner -->
     <header class="profile-header">
       <div class="profile-header__left">
-        <div class="profile-avatar" aria-hidden="true">
-          {{ userInitials() }}
+        <!-- Avatar with 1:1 Edit Upload Button -->
+        <div class="profile-avatar-wrapper">
+          <app-custom-avatar
+            size="lg"
+            customSize="4.25rem"
+            fontSize="1.35rem"
+            [name]="user()?.fullName || 'User'"
+            [imageUrl]="profileImageUrl()"
+          />
+          <button
+            type="button"
+            class="profile-avatar-edit-btn"
+            aria-label="Upload profile photo"
+            (click)="triggerFileInput()"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+          </button>
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            class="visually-hidden-file-input"
+            (change)="onFileSelected($event)"
+          />
         </div>
+
         <div class="profile-meta">
           <div class="profile-meta__top">
             <h1 class="profile-meta__name">{{ user()?.fullName || 'Your Account' }}</h1>
@@ -16,15 +42,6 @@
           </div>
           <p class="profile-meta__email">{{ user()?.email }}</p>
         </div>
-      </div>
-
-      <div class="profile-header__actions">
-        <app-custom-primary-button
-          variant="outline"
-          size="sm"
-          label="Back to Explore"
-          (clicked)="navigateToExplore()"
-        />
       </div>
     </header>
 
@@ -202,5 +219,15 @@
       </section>
     }
   </div>
+
+  <!-- Reusable 1:1 Image Cropper Modal -->
+  @if (isCropperOpen()) {
+    <app-custom-image-cropper-modal
+      [open]="isCropperOpen()"
+      [imageSource]="selectedRawImage()"
+      (cropped)="onImageCropped($event)"
+      (closed)="onCropperClosed()"
+    />
+  }
 </div>
 

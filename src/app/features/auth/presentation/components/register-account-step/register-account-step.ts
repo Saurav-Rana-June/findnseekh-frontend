@@ -9,7 +9,7 @@ import {
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomTextField } from '../../../../../shared/components/custom-textfield/custom.textfield';
 import { RegisterPayload, UserRole } from '../../../domain/entities/auth.entity';
-import { PasswordFieldComponent } from '../password-field/password-field';
+import { PasswordFieldComponent } from '../../../../../shared/components/custom-password-field/password-field';
 
 function nonBlankValidator(control: AbstractControl<string>): ValidationErrors | null {
   return control.value && control.value.trim().length === 0 ? { blank: true } : null;

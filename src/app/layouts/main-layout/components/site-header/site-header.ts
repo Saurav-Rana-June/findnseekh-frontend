@@ -13,6 +13,7 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CustomPrimaryButton } from '../../../../shared/components/custom-primary-button/custom.primary.button';
+import { CustomAvatarComponent } from '../../../../shared/components/custom-avatar/custom-avatar';
 import { LogoComponent } from '../../../../shared/components/logo/logo';
 import { AuthStore } from '../../../../features/auth/presentation/state/auth.store';
 
@@ -32,7 +33,7 @@ const OBSERVED_SECTIONS = ['skills', 'teachers', 'how-it-works', 'become-a-teach
 
 @Component({
   selector: 'app-site-header',
-  imports: [RouterLink, LogoComponent, CustomPrimaryButton],
+  imports: [RouterLink, LogoComponent, CustomPrimaryButton, CustomAvatarComponent],
   templateUrl: './site-header.html',
   styleUrl: './site-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

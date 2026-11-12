@@ -23,10 +23,23 @@
         <app-custom-primary-button
           variant="outline"
           size="sm"
-          leadingIcon="user"
+          paddingInline="6px"
+          minHeight="38px"
+          gap="10px"
           [label]="currentUser.fullName"
           routerLink="/profile"
-        />
+        >
+          <app-custom-avatar
+            btn-leading
+            size="sm"
+            customSize="26px"
+            [name]="currentUser.fullName"
+            bgColor="var(--color-primary, #174e38)"
+            textColor="var(--color-cream, #f8f8f2)"
+            borderColor="transparent"
+            fontSize="0.72rem"
+          />
+        </app-custom-primary-button>
       } @else {
         <app-custom-primary-button variant="ghost" label="Log In" (clicked)="onLoginClick()" />
         <app-custom-primary-button variant="primary" label="Sign Up" (clicked)="onRegisterClick()" />
@@ -65,11 +78,24 @@
           <app-custom-primary-button
             variant="outline"
             [fullWidth]="true"
-            leadingIcon="user"
+            minHeight="44px"
+            paddingInline="10px"
+            gap="10px"
             [label]="currentUser.fullName"
             routerLink="/profile"
             (clicked)="closeMobileMenu()"
-          />
+          >
+            <app-custom-avatar
+              btn-leading
+              size="sm"
+              customSize="28px"
+              [name]="currentUser.fullName"
+              bgColor="var(--color-primary, #174e38)"
+              textColor="var(--color-cream, #f8f8f2)"
+              borderColor="transparent"
+              fontSize="0.75rem"
+            />
+          </app-custom-primary-button>
         } @else {
           <app-custom-primary-button
             variant="outline"

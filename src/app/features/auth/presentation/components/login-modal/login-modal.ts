@@ -4,7 +4,7 @@ import { CustomModal } from '../../../../../shared/components/custom-modal/custo
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomTextField } from '../../../../../shared/components/custom-textfield/custom.textfield';
 import { AuthStore } from '../../state/auth.store';
-import { PasswordFieldComponent } from '../password-field/password-field';
+import { PasswordFieldComponent } from '../../../../../shared/components/custom-password-field/password-field';
 
 @Component({
   selector: 'app-login-modal',

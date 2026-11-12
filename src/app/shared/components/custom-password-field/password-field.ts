@@ -6,8 +6,8 @@ import {
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
-import { CustomTextField } from '../../../../../shared/components/custom-textfield/custom.textfield';
+import { CustomPrimaryButton } from '../custom-primary-button/custom.primary.button';
+import { CustomTextField } from '../custom-textfield/custom.textfield';
 
 /**
  * Reusable password field wrapping `app-custom-textfield` with a show/hide toggle button.

@@ -3,8 +3,10 @@ import {
   Component,
   computed,
   effect,
+  ElementRef,
   inject,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,6 +14,8 @@ import { APP_ROUTE_PATHS } from '../../../../../core/constants/app.constants';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
 import { CustomTextField } from '../../../../../shared/components/custom-textfield/custom.textfield';
+import { CustomAvatarComponent } from '../../../../../shared/components/custom-avatar/custom-avatar';
+import { CustomImageCropperModalComponent } from '../../../../../shared/components/custom-image-cropper-modal/custom-image-cropper-modal';
 import {
   TeacherProfileUpdatePayload,
   TeachingMode,
@@ -49,6 +53,8 @@ const TEACHING_MODES: readonly TeachingModeOption[] = [
     CustomTextField,
     CustomPrimaryButton,
     CustomStatusPill,
+    CustomAvatarComponent,
+    CustomImageCropperModalComponent,
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.scss',
@@ -59,22 +65,21 @@ export class ProfilePage {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
+  protected readonly fileInputRef = viewChild<ElementRef<HTMLInputElement>>('fileInput');
+
   protected readonly teachingModes = TEACHING_MODES;
   protected readonly isSavedRecently = signal(false);
+
+  // Avatar Upload & 1:1 Cropper State
+  protected readonly profileImageUrl = signal<string | null>(null);
+  protected readonly selectedRawImage = signal<string | null>(null);
+  protected readonly isCropperOpen = signal(false);
 
   protected readonly user = this.authStore.user;
   protected readonly isTeacher = computed(
     () => this.user()?.roles.includes('teacher') ?? false,
   );
   protected readonly teacherProfile = this.authStore.teacherProfile;
-
-  protected readonly userInitials = computed(() => {
-    const name = this.user()?.fullName?.trim() ?? '';
-    if (!name) return 'U';
-    const parts = name.split(/\s+/);
-    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  });
 
   protected readonly form = this.fb.nonNullable.group({
     bio: ['', [Validators.maxLength(1000)]],
@@ -102,6 +107,38 @@ export class ProfilePage {
         this.form.patchValue({ phone: user.phone });
       }
     });
+  }
+
+  protected triggerFileInput(): void {
+    this.fileInputRef()?.nativeElement.click();
+  }
+
+  protected onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    if (!file.type.startsWith('image/')) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.selectedRawImage.set(reader.result as string);
+      this.isCropperOpen.set(true);
+      // Reset input value so same file can be picked again if desired
+      input.value = '';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  protected onImageCropped(croppedDataUrl: string): void {
+    this.profileImageUrl.set(croppedDataUrl);
+    this.isCropperOpen.set(false);
+    this.selectedRawImage.set(null);
+  }
+
+  protected onCropperClosed(): void {
+    this.isCropperOpen.set(false);
+    this.selectedRawImage.set(null);
   }
 
   protected setTeachingMode(mode: TeachingMode): void {
@@ -134,4 +171,5 @@ export class ProfilePage {
     void this.router.navigate(['/', APP_ROUTE_PATHS.root]);
   }
 }
+
 
