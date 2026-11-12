@@ -1,6 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Params, RouterLink } from '@angular/router';
 
 export type CustomButtonVariant =
   | 'primary'
@@ -152,6 +152,7 @@ export type CustomButtonIcon = 'none' | 'search' | 'arrow-right' | 'plus' | 'use
       <a
         class="cp-btn"
         [routerLink]="isDisabled() ? null : linkTarget"
+        [queryParams]="queryParams()"
         [attr.data-variant]="variant()"
         [attr.data-size]="size()"
         [attr.data-shape]="shape()"
@@ -373,6 +374,7 @@ export class CustomPrimaryButton {
   readonly shape = input<CustomButtonShape>('pill');
   readonly type = input<CustomButtonType>('button');
   readonly routerLink = input<string | readonly unknown[] | null>(null);
+  readonly queryParams = input<Params | null>(null);
   readonly href = input<string | null>(null);
   readonly target = input<'_self' | '_blank'>('_self');
   readonly disabled = input<boolean>(false);

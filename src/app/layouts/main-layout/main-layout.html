@@ -1,9 +1,22 @@
 <div class="main-layout">
   <a class="skip-link" href="#main">Skip to main content</a>
-  <app-site-header (loginRequested)="isLoginModalOpen.set(true)" />
+  <app-site-header
+    (loginRequested)="authModal.openLogin()"
+    (registerRequested)="authModal.openRegister('student')"
+  />
   <main id="main" class="main-layout__content">
     <router-outlet />
   </main>
   <app-site-footer />
-  <app-login-modal [open]="isLoginModalOpen()" (closed)="isLoginModalOpen.set(false)" />
+  <app-login-modal
+    [open]="authModal.isLoginOpen()"
+    (closed)="authModal.closeLogin()"
+    (registerRequested)="authModal.openRegister('student')"
+  />
+  <app-register-modal
+    [open]="authModal.isRegisterOpen()"
+    [initialRole]="authModal.registerInitialRole()"
+    (closed)="authModal.closeRegister()"
+    (loginRequested)="authModal.openLogin()"
+  />
 </div>

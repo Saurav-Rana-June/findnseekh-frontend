@@ -1,0 +1,99 @@
+<form class="teacher-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  @if (errorMessage(); as error) {
+    <div class="teacher-form__alert" role="alert">
+      {{ error }}
+    </div>
+  }
+
+  <div class="teacher-form__field">
+    <label class="teacher-form__label" for="teacher-bio">Short Bio</label>
+    <textarea
+      id="teacher-bio"
+      class="teacher-form__textarea"
+      formControlName="bio"
+      rows="3"
+      maxlength="1000"
+      placeholder="Tell students about your background, teaching style, and what they will learn..."
+    ></textarea>
+  </div>
+
+  <div class="teacher-form__field">
+    <span class="teacher-form__label" id="teaching-mode-label">Teaching Mode</span>
+    <div class="teacher-form__modes" role="radiogroup" aria-labelledby="teaching-mode-label">
+      @for (mode of teachingModes; track mode.value) {
+        <button
+          type="button"
+          class="mode-pill"
+          role="radio"
+          [attr.aria-checked]="form.controls.teachingMode.value === mode.value"
+          [class.is-active]="form.controls.teachingMode.value === mode.value"
+          (click)="setTeachingMode(mode.value)"
+        >
+          {{ mode.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="teacher-form__row">
+    <app-custom-textfield
+      fieldId="teacher-experience"
+      label="Years of Experience"
+      type="number"
+      formControlName="experienceYears"
+      placeholder="0"
+    />
+
+    <app-custom-textfield
+      fieldId="teacher-phone"
+      label="Phone (Optional)"
+      type="tel"
+      formControlName="phone"
+      autocomplete="tel"
+      placeholder="+91 98765 43210"
+      leadingIcon="phone"
+    />
+  </div>
+
+  <div class="teacher-form__row">
+    <app-custom-textfield
+      fieldId="teacher-city"
+      label="City"
+      type="text"
+      formControlName="city"
+      autocomplete="address-level2"
+      placeholder="Bengaluru"
+      leadingIcon="location"
+    />
+
+    <app-custom-textfield
+      fieldId="teacher-state"
+      label="State"
+      type="text"
+      formControlName="state"
+      autocomplete="address-level1"
+      placeholder="Karnataka"
+      leadingIcon="location"
+    />
+  </div>
+
+  <div class="teacher-form__actions">
+    <app-custom-primary-button
+      type="button"
+      variant="ghost"
+      size="lg"
+      label="Skip for now"
+      [disabled]="isLoading()"
+      (clicked)="skipped.emit()"
+    />
+    <app-custom-primary-button
+      type="submit"
+      variant="primary"
+      size="lg"
+      [fullWidth]="true"
+      [loading]="isLoading()"
+      [label]="isLoading() ? 'Saving profile...' : 'Complete Setup'"
+    />
+  </div>
+</form>
+

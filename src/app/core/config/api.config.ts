@@ -16,11 +16,12 @@ export const SKIP_AUTH = new HttpContextToken<boolean>(() => false);
 
 export const API_ENDPOINTS = {
   auth: {
-    login: '/auth/login',
-    register: '/auth/register',
-    refresh: '/auth/refresh',
-    logout: '/auth/logout',
-    me: '/auth/me',
+    login: '/users/login',
+    register: '/users/register',
+    logout: '/users/logout',
+    me: '/users/me',
+    becomeTeacher: '/users/become-teacher',
+    teacherProfileMe: '/profile/teacher/me',
   },
 } as const;
 

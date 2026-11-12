@@ -46,6 +46,7 @@ export class SiteHeader {
   protected readonly isScrolled = signal(false);
   protected readonly activeSection = signal<string | null>(null);
   readonly loginRequested = output<void>();
+  readonly registerRequested = output<void>();
 
   constructor() {
     this.router.events
@@ -126,5 +127,10 @@ export class SiteHeader {
   protected onLoginClick(): void {
     this.isMobileMenuOpen.set(false);
     this.loginRequested.emit();
+  }
+
+  protected onRegisterClick(): void {
+    this.isMobileMenuOpen.set(false);
+    this.registerRequested.emit();
   }
 }

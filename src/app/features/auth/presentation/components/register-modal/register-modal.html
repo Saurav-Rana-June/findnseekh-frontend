@@ -1,0 +1,19 @@
+<app-custom-modal
+  [open]="open()"
+  maxWidth="34rem"
+  padding="0"
+  borderRadius="var(--radius-lg)"
+  [showHeader]="false"
+  closeLabel="Close registration dialog"
+  (closed)="close()"
+>
+  <app-register-flow
+    [initialRole]="initialRole()"
+    [modalMode]="true"
+    [showCloseButton]="true"
+    (completed)="close()"
+    (closed)="close()"
+    (loginRequested)="switchToLogin()"
+  />
+</app-custom-modal>
+

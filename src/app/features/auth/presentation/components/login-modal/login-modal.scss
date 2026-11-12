@@ -21,3 +21,29 @@
 .login-field__toggle {
   flex-shrink: 0;
 }
+
+.login-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border, #e4e7e0);
+  font-size: 0.875rem;
+  color: var(--color-muted, #6b7280);
+}
+
+.login-modal__link-btn {
+  color: var(--color-primary, #174e38);
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

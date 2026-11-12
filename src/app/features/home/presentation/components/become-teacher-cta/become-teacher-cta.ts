@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { AuthModalService } from '../../../../auth/presentation/state/auth-modal.service';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 
 @Component({
@@ -8,5 +9,11 @@ import { CustomPrimaryButton } from '../../../../../shared/components/custom-pri
   styleUrl: './become-teacher-cta.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BecomeTeacherCta {}
+export class BecomeTeacherCta {
+  private readonly authModal = inject(AuthModalService);
+
+  protected openTeacherRegister(): void {
+    this.authModal.openRegister('teacher');
+  }
+}
 

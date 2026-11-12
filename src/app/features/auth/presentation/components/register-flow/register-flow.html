@@ -1,0 +1,66 @@
+<section class="register-card" [class.register-card--modal]="modalMode()" aria-labelledby="register-heading">
+  <header class="register-card__header">
+    <div class="register-card__header-row">
+      <div class="register-card__heading">
+        <div class="register-card__title-row">
+          <h1 id="register-heading" class="register-card__title">{{ stepHeading() }}</h1>
+          <app-custom-status-pill
+            [label]="'Step ' + currentStepNumber() + ' of ' + totalSteps()"
+            variant="info"
+          />
+        </div>
+        <p class="register-card__subtitle">{{ stepSubtitle() }}</p>
+      </div>
+
+      @if (showCloseButton()) {
+        <app-custom-close-outlined-button
+          ariaLabel="Close registration dialog"
+          (clicked)="closed.emit()"
+        />
+      }
+    </div>
+  </header>
+
+  <div class="register-card__body">
+    @switch (step()) {
+      @case ('role') {
+        <app-role-selector-step
+          [selectedRole]="selectedRole()"
+          (roleSelected)="onRoleSelected($event)"
+          (continueRequested)="goToAccountStep()"
+        />
+      }
+      @case ('account') {
+        <app-register-account-step
+          [role]="selectedRole()"
+          [isLoading]="authStore.isLoading()"
+          [errorMessage]="authStore.error()"
+          (submitted)="onAccountSubmitted($event)"
+          (backRequested)="goToRoleStep()"
+        />
+      }
+      @case ('teacher-profile') {
+        <app-teacher-profile-step
+          [isLoading]="authStore.isLoading()"
+          [errorMessage]="authStore.error()"
+          (submitted)="onTeacherProfileSubmitted($event)"
+          (skipped)="onTeacherProfileSkipped()"
+        />
+      }
+    }
+  </div>
+
+  @if (step() !== 'teacher-profile') {
+    <footer class="register-card__footer">
+      <span>Already have an account?</span>
+      @if (modalMode()) {
+        <button type="button" class="register-card__link-btn" (click)="onLoginLinkClick($event)">
+          Log in
+        </button>
+      } @else {
+        <a class="register-card__link" [routerLink]="loginRoute">Log in</a>
+      }
+    </footer>
+  }
+</section>
+

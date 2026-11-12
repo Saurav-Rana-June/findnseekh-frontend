@@ -20,7 +20,7 @@
 
     <div class="navbar__actions">
       <app-custom-primary-button variant="ghost" label="Log In" (clicked)="onLoginClick()" />
-      <app-custom-primary-button variant="primary" label="Sign Up" routerLink="/auth/login" />
+      <app-custom-primary-button variant="primary" label="Sign Up" (clicked)="onRegisterClick()" />
     </div>
 
     <button type="button" class="navbar__toggle" [attr.aria-label]="isMobileMenuOpen() ? 'Close menu' : 'Open menu'"
@@ -60,9 +60,8 @@
         <app-custom-primary-button
           variant="primary"
           label="Sign Up"
-          routerLink="/auth/login"
           [fullWidth]="true"
-          (clicked)="closeMobileMenu()"
+          (clicked)="onRegisterClick()"
         />
       </div>
     </nav>

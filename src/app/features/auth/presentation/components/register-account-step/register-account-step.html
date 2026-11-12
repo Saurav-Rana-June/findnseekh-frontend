@@ -1,0 +1,86 @@
+<form class="account-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  @if (errorMessage(); as error) {
+    <div class="account-form__alert" role="alert">
+      {{ error }}
+    </div>
+  }
+
+  <app-custom-textfield
+    fieldId="register-name"
+    label="Full Name"
+    type="text"
+    formControlName="name"
+    autocomplete="name"
+    placeholder="Jane Doe"
+    leadingIcon="user"
+    [required]="true"
+    [autofocus]="true"
+    [invalid]="form.controls.name.invalid && form.controls.name.touched"
+    [errorMessage]="nameError"
+  />
+
+  <app-custom-textfield
+    fieldId="register-email"
+    label="Email Address"
+    type="email"
+    formControlName="email"
+    autocomplete="email"
+    placeholder="you@example.com"
+    leadingIcon="mail"
+    [required]="true"
+    [invalid]="form.controls.email.invalid && form.controls.email.touched"
+    [errorMessage]="emailError"
+  />
+
+  <app-password-field
+    fieldId="register-password"
+    label="Password"
+    formControlName="password"
+    autocomplete="new-password"
+    placeholder="Minimum 8 characters"
+    [required]="true"
+    [invalid]="form.controls.password.invalid && form.controls.password.touched"
+    [errorMessage]="passwordError"
+  />
+
+  <app-password-field
+    fieldId="register-confirm-password"
+    label="Confirm Password"
+    formControlName="confirmPassword"
+    autocomplete="new-password"
+    placeholder="Re-enter your password"
+    [required]="true"
+    [invalid]="
+      (form.controls.confirmPassword.invalid || form.hasError('passwordMismatch')) &&
+      form.controls.confirmPassword.touched
+    "
+    [errorMessage]="confirmPasswordError"
+  />
+
+  <div class="account-form__actions">
+    <app-custom-primary-button
+      type="button"
+      variant="outline"
+      size="lg"
+      label="Back"
+      [disabled]="isLoading()"
+      (clicked)="backRequested.emit()"
+    />
+    <app-custom-primary-button
+      class="account-form__submit"
+      type="submit"
+      variant="primary"
+      size="lg"
+      [fullWidth]="true"
+      [loading]="isLoading()"
+      [label]="
+        isLoading()
+          ? 'Creating account...'
+          : role() === 'teacher'
+            ? 'Continue to Profile'
+            : 'Create Account'
+      "
+    />
+  </div>
+</form>
+

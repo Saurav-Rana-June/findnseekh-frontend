@@ -1,0 +1,36 @@
+<div class="role-step">
+  <div class="role-step__grid" role="radiogroup" aria-label="Choose your account role">
+    @for (option of roleOptions; track option.id) {
+      <button
+        type="button"
+        class="role-card"
+        role="radio"
+        [attr.aria-checked]="selectedRole() === option.id"
+        [class.is-selected]="selectedRole() === option.id"
+        (click)="selectRole(option.id)"
+      >
+        <div class="role-card__top">
+          <span class="role-card__badge">{{ option.badge }}</span>
+          <span class="role-card__radio" aria-hidden="true">
+            @if (selectedRole() === option.id) {
+              <span class="role-card__radio-dot"></span>
+            }
+          </span>
+        </div>
+        <h2 class="role-card__title">{{ option.title }}</h2>
+        <p class="role-card__desc">{{ option.description }}</p>
+      </button>
+    }
+  </div>
+
+  <app-custom-primary-button
+    type="button"
+    variant="primary"
+    size="lg"
+    trailingIcon="arrow-right"
+    [fullWidth]="true"
+    [label]="selectedRole() === 'teacher' ? 'Continue as Teacher' : 'Continue as Student'"
+    (clicked)="continueRequested.emit()"
+  />
+</div>
+

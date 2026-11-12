@@ -8,6 +8,7 @@ import {
   output,
   PLATFORM_ID,
 } from '@angular/core';
+import { CustomCloseOutlinedButton } from '../custom-close-outlined-button/custom.close.outlined.button';
 
 export type CustomModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export type CustomModalAlign = 'center' | 'top';
@@ -20,6 +21,7 @@ let nextCustomModalId = 0;
  */
 @Component({
   selector: 'app-custom-modal',
+  imports: [CustomCloseOutlinedButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(document:keydown.escape)': 'onEscapeKey()',
@@ -63,24 +65,10 @@ let nextCustomModalId = 0;
               </div>
 
               @if (showCloseButton()) {
-                <button
-                  type="button"
-                  class="cp-modal__close"
-                  [attr.aria-label]="closeLabel()"
-                  (click)="close()"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M18 6 6 18M6 6l12 12" stroke-linecap="round" />
-                  </svg>
-                </button>
+                <app-custom-close-outlined-button
+                  [ariaLabel]="closeLabel()"
+                  (clicked)="close()"
+                />
               }
             </div>
           }
@@ -170,29 +158,6 @@ let nextCustomModalId = 0;
       margin-top: 6px;
       font-size: 0.92rem;
       color: var(--cp-modal-subtitle-color, var(--color-muted, #6b7280));
-    }
-
-    .cp-modal__close {
-      flex-shrink: 0;
-      display: grid;
-      place-items: center;
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--color-border, #e4e7e0);
-      border-radius: var(--radius-pill, 999px);
-      background: var(--color-white, #ffffff);
-      color: var(--color-muted, #6b7280);
-      cursor: pointer;
-      transition:
-        background-color var(--dur-fast, 150ms) var(--ease, ease),
-        color var(--dur-fast, 150ms) var(--ease, ease),
-        border-color var(--dur-fast, 150ms) var(--ease, ease);
-    }
-
-    .cp-modal__close:hover {
-      background: var(--color-primary-50, #eef4f0);
-      border-color: var(--color-primary-200, #bcd3c6);
-      color: var(--color-primary, #174e38);
     }
 
     .cp-modal__body {

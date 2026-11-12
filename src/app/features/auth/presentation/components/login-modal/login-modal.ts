@@ -1,13 +1,20 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomModal } from '../../../../../shared/components/custom-modal/custom.modal';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomTextField } from '../../../../../shared/components/custom-textfield/custom.textfield';
 import { AuthStore } from '../../state/auth.store';
+import { PasswordFieldComponent } from '../password-field/password-field';
 
 @Component({
   selector: 'app-login-modal',
-  imports: [ReactiveFormsModule, CustomModal, CustomTextField, CustomPrimaryButton],
+  imports: [
+    ReactiveFormsModule,
+    CustomModal,
+    CustomTextField,
+    CustomPrimaryButton,
+    PasswordFieldComponent,
+  ],
   templateUrl: './login-modal.html',
   styleUrl: './login-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,11 +22,10 @@ import { AuthStore } from '../../state/auth.store';
 export class LoginModalComponent {
   readonly open = input<boolean>(false);
   readonly closed = output<void>();
+  readonly registerRequested = output<void>();
 
   protected readonly authStore = inject(AuthStore);
   private readonly fb = inject(FormBuilder);
-
-  protected readonly showPassword = signal(false);
 
   protected readonly form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -30,7 +36,6 @@ export class LoginModalComponent {
     effect(() => {
       if (!this.open()) {
         this.form.reset({ email: '', password: '' });
-        this.showPassword.set(false);
         this.authStore.clearError();
       }
     });
@@ -64,10 +69,6 @@ export class LoginModalComponent {
     return '';
   }
 
-  protected togglePasswordVisibility(): void {
-    this.showPassword.update((visible) => !visible);
-  }
-
   protected onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -82,5 +83,10 @@ export class LoginModalComponent {
 
   protected close(): void {
     this.closed.emit();
+  }
+
+  protected switchToRegister(): void {
+    this.closed.emit();
+    this.registerRequested.emit();
   }
 }
