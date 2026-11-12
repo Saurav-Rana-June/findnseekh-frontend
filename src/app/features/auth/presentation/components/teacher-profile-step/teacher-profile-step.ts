@@ -25,6 +25,7 @@ const TEACHING_MODES: readonly TeachingModeOption[] = [
 export class TeacherProfileStepComponent {
   readonly isLoading = input<boolean>(false);
   readonly errorMessage = input<string | null>(null);
+  readonly allowSkip = input<boolean>(false);
 
   readonly submitted = output<TeacherProfileUpdatePayload>();
   readonly skipped = output<void>();

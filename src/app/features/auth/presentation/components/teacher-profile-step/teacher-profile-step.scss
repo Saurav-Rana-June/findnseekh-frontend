@@ -106,5 +106,9 @@
   grid-template-columns: auto 1fr;
   gap: 0.75rem;
   margin-top: 0.5rem;
+
+  &--single {
+    grid-template-columns: 1fr;
+  }
 }
 

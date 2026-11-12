@@ -14,6 +14,7 @@ import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CustomPrimaryButton } from '../../../../shared/components/custom-primary-button/custom.primary.button';
 import { LogoComponent } from '../../../../shared/components/logo/logo';
+import { AuthStore } from '../../../../features/auth/presentation/state/auth.store';
 
 interface NavItem {
   readonly label: string;
@@ -37,6 +38,7 @@ const OBSERVED_SECTIONS = ['skills', 'teachers', 'how-it-works', 'become-a-teach
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SiteHeader {
+  protected readonly authStore = inject(AuthStore);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);

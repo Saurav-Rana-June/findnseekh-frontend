@@ -77,15 +77,17 @@
     />
   </div>
 
-  <div class="teacher-form__actions">
-    <app-custom-primary-button
-      type="button"
-      variant="ghost"
-      size="lg"
-      label="Skip for now"
-      [disabled]="isLoading()"
-      (clicked)="skipped.emit()"
-    />
+  <div class="teacher-form__actions" [class.teacher-form__actions--single]="!allowSkip()">
+    @if (allowSkip()) {
+      <app-custom-primary-button
+        type="button"
+        variant="ghost"
+        size="lg"
+        label="Skip for now"
+        [disabled]="isLoading()"
+        (clicked)="skipped.emit()"
+      />
+    }
     <app-custom-primary-button
       type="submit"
       variant="primary"

@@ -19,8 +19,18 @@
     </nav>
 
     <div class="navbar__actions">
-      <app-custom-primary-button variant="ghost" label="Log In" (clicked)="onLoginClick()" />
-      <app-custom-primary-button variant="primary" label="Sign Up" (clicked)="onRegisterClick()" />
+      @if (authStore.user(); as currentUser) {
+        <app-custom-primary-button
+          variant="outline"
+          size="sm"
+          leadingIcon="user"
+          [label]="currentUser.fullName"
+          routerLink="/profile"
+        />
+      } @else {
+        <app-custom-primary-button variant="ghost" label="Log In" (clicked)="onLoginClick()" />
+        <app-custom-primary-button variant="primary" label="Sign Up" (clicked)="onRegisterClick()" />
+      }
     </div>
 
     <button type="button" class="navbar__toggle" [attr.aria-label]="isMobileMenuOpen() ? 'Close menu' : 'Open menu'"
@@ -51,18 +61,29 @@
       }
       }
       <div class="navbar__mobile-actions">
-        <app-custom-primary-button
-          variant="outline"
-          label="Log In"
-          [fullWidth]="true"
-          (clicked)="onLoginClick()"
-        />
-        <app-custom-primary-button
-          variant="primary"
-          label="Sign Up"
-          [fullWidth]="true"
-          (clicked)="onRegisterClick()"
-        />
+        @if (authStore.user(); as currentUser) {
+          <app-custom-primary-button
+            variant="outline"
+            [fullWidth]="true"
+            leadingIcon="user"
+            [label]="currentUser.fullName"
+            routerLink="/profile"
+            (clicked)="closeMobileMenu()"
+          />
+        } @else {
+          <app-custom-primary-button
+            variant="outline"
+            label="Log In"
+            [fullWidth]="true"
+            (clicked)="onLoginClick()"
+          />
+          <app-custom-primary-button
+            variant="primary"
+            label="Sign Up"
+            [fullWidth]="true"
+            (clicked)="onRegisterClick()"
+          />
+        }
       </div>
     </nav>
   </div>

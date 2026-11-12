@@ -4,6 +4,9 @@
     (loginRequested)="authModal.openLogin()"
     (registerRequested)="authModal.openRegister('student')"
   />
+  @if (authStore.needsTeacherProfileCompletion()) {
+    <app-teacher-profile-banner />
+  }
   <main id="main" class="main-layout__content">
     <router-outlet />
   </main>

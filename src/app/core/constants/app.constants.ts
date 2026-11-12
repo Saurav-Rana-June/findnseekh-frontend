@@ -10,6 +10,7 @@ export const APP_ROUTE_PATHS = {
   auth: 'auth',
   login: 'login',
   register: 'register',
+  profile: 'profile',
   admin: 'admin',
 } as const;
 

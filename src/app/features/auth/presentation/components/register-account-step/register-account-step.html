@@ -73,13 +73,7 @@
       size="lg"
       [fullWidth]="true"
       [loading]="isLoading()"
-      [label]="
-        isLoading()
-          ? 'Creating account...'
-          : role() === 'teacher'
-            ? 'Continue to Profile'
-            : 'Create Account'
-      "
+      [label]="isLoading() ? 'Creating account...' : 'Create Account'"
     />
   </div>
 </form>

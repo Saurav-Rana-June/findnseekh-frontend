@@ -5,15 +5,13 @@ import { CustomCloseOutlinedButton } from '../../../../../shared/components/cust
 import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
 import {
   RegisterPayload,
-  TeacherProfileUpdatePayload,
   UserRole,
 } from '../../../domain/entities/auth.entity';
 import { AuthStore } from '../../state/auth.store';
 import { RegisterAccountStepComponent } from '../register-account-step/register-account-step';
 import { RoleSelectorStepComponent } from '../role-selector-step/role-selector-step';
-import { TeacherProfileStepComponent } from '../teacher-profile-step/teacher-profile-step';
 
-export type RegisterStep = 'role' | 'account' | 'teacher-profile';
+export type RegisterStep = 'role' | 'account';
 
 @Component({
   selector: 'app-register-flow',
@@ -23,7 +21,6 @@ export type RegisterStep = 'role' | 'account' | 'teacher-profile';
     CustomCloseOutlinedButton,
     RoleSelectorStepComponent,
     RegisterAccountStepComponent,
-    TeacherProfileStepComponent,
   ],
   templateUrl: './register-flow.html',
   styleUrl: './register-flow.scss',
@@ -50,17 +47,10 @@ export class RegisterFlowComponent {
     () => this._step() ?? (this.startAtAccount() ? 'account' : 'role'),
   );
 
-  protected readonly totalSteps = computed(() => (this.selectedRole() === 'teacher' ? 3 : 2));
+  protected readonly totalSteps = computed(() => 2);
 
   protected readonly currentStepNumber = computed(() => {
-    switch (this.step()) {
-      case 'role':
-        return 1;
-      case 'account':
-        return 2;
-      case 'teacher-profile':
-        return 3;
-    }
+    return this.step() === 'role' ? 1 : 2;
   });
 
   protected readonly stepHeading = computed(() => {
@@ -71,8 +61,6 @@ export class RegisterFlowComponent {
         return this.selectedRole() === 'teacher'
           ? 'Create your Teacher account'
           : 'Create your Student account';
-      case 'teacher-profile':
-        return 'Set up your Teacher profile';
     }
   });
 
@@ -82,8 +70,6 @@ export class RegisterFlowComponent {
         return 'Choose how you want to get started. You can always switch later.';
       case 'account':
         return 'Enter your details to create your FindnSeekh account.';
-      case 'teacher-profile':
-        return 'Tell learners about your experience and how you prefer to teach.';
     }
   });
 
@@ -112,22 +98,8 @@ export class RegisterFlowComponent {
   protected onAccountSubmitted(payload: RegisterPayload): void {
     const role = this.selectedRole();
     this.authStore.register(payload, role, () => {
-      if (role === 'teacher') {
-        this._step.set('teacher-profile');
-      } else {
-        this.finishFlow();
-      }
+      this.finishFlow(role);
     });
-  }
-
-  protected onTeacherProfileSubmitted(payload: TeacherProfileUpdatePayload): void {
-    this.authStore.updateTeacherProfile(payload, () => {
-      this.finishFlow();
-    });
-  }
-
-  protected onTeacherProfileSkipped(): void {
-    this.finishFlow();
   }
 
   protected onLoginLinkClick(event: Event): void {
@@ -137,9 +109,11 @@ export class RegisterFlowComponent {
     }
   }
 
-  private finishFlow(): void {
+  private finishFlow(role?: UserRole): void {
     this.completed.emit();
-    if (!this.modalMode()) {
+    if (role === 'teacher') {
+      void this.router.navigate(['/', APP_ROUTE_PATHS.profile]);
+    } else if (!this.modalMode()) {
       void this.router.navigate(['/', APP_ROUTE_PATHS.root]);
     }
   }

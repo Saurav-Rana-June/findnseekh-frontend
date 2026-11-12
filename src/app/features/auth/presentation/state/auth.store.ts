@@ -1,7 +1,8 @@
-import { DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, map, of, switchMap } from 'rxjs';
 import { ApiError } from '../../../../core/models/api-error.model';
+import { AuthSessionService } from '../../../../core/services/auth-session.service';
 import {
   AuthUser,
   LoginCredentials,
@@ -24,15 +25,20 @@ export class AuthStore {
   private readonly registerUseCase = inject(RegisterUseCase);
   private readonly becomeTeacherUseCase = inject(BecomeTeacherUseCase);
   private readonly updateTeacherProfileUseCase = inject(UpdateTeacherProfileUseCase);
+  private readonly authSession = inject(AuthSessionService);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly _user = signal<AuthUser | null>(null);
   private readonly _teacherProfile = signal<TeacherProfile | null>(null);
+  private readonly _isTeacherProfileCompleted = signal(false);
   private readonly _isLoading = signal(false);
   private readonly _error = signal<string | null>(null);
 
   readonly user = this._user.asReadonly();
   readonly teacherProfile = this._teacherProfile.asReadonly();
+  readonly needsTeacherProfileCompletion = computed(
+    () => Boolean(this._user()?.roles.includes('teacher')) && !this._isTeacherProfileCompleted(),
+  );
   readonly isLoading = this._isLoading.asReadonly();
   readonly error = this._error.asReadonly();
 
@@ -47,6 +53,7 @@ export class AuthStore {
         isActive: true,
         roles: ['student'],
       };
+      this.authSession.setTokens('prototype-mock-jwt-token');
       this._user.set(mockUser);
       onSuccess?.(mockUser);
       return;
@@ -87,6 +94,7 @@ export class AuthStore {
         roles: role === 'teacher' ? ['student', 'teacher'] : ['student'],
       };
       if (role === 'teacher') {
+        this._isTeacherProfileCompleted.set(false);
         this._teacherProfile.set({
           id: 1,
           userId: 1,
@@ -98,6 +106,7 @@ export class AuthStore {
           isVerified: false,
         });
       }
+      this.authSession.setTokens('prototype-mock-jwt-token');
       this._user.set(mockUser);
       onSuccess?.(mockUser);
       return;
@@ -154,6 +163,7 @@ export class AuthStore {
         isVerified: false,
       };
       this._teacherProfile.set(mockProfile);
+      this._isTeacherProfileCompleted.set(true);
       onSuccess?.(mockProfile);
       return;
     }
@@ -169,6 +179,7 @@ export class AuthStore {
       .subscribe({
         next: (profile) => {
           this._teacherProfile.set(profile);
+          this._isTeacherProfileCompleted.set(true);
           onSuccess?.(profile);
         },
         error: (err: ApiError) => {

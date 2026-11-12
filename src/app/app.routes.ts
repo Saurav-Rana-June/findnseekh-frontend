@@ -15,6 +15,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/home/presentation/home.routes').then((m) => m.HOME_ROUTES),
       },
+      {
+        path: APP_ROUTE_PATHS.profile,
+        loadChildren: () =>
+          import('./features/profile/presentation/profile.routes').then((m) => m.PROFILE_ROUTES),
+      },
     ],
   },
   {

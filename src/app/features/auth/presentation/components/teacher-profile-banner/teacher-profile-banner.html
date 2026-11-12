@@ -1,0 +1,20 @@
+<div class="teacher-banner" role="alert" aria-live="polite">
+  <div class="page-container teacher-banner__inner">
+    <div class="teacher-banner__content">
+      <span class="teacher-banner__badge">Action Required</span>
+      <p class="teacher-banner__text">
+        Your Teacher account is created! Please complete your Teacher profile to publish skills and
+        receive learning requests.
+      </p>
+    </div>
+
+    <app-custom-primary-button
+      variant="primary"
+      size="sm"
+      trailingIcon="arrow-right"
+      label="Complete Profile"
+      (clicked)="navigateToProfile()"
+    />
+  </div>
+</div>
+

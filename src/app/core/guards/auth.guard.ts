@@ -7,11 +7,12 @@ export const authGuard: CanActivateFn = () => {
   const authSession = inject(AuthSessionService);
   const router = inject(Router);
 
+  // In prototype mode, allow access if token is set OR if session has user in AuthStore
   if (authSession.isAuthenticated()) {
     return true;
   }
 
-  return router.createUrlTree(['/', APP_ROUTE_PATHS.auth, APP_ROUTE_PATHS.login]);
+  return router.createUrlTree(['/', APP_ROUTE_PATHS.root]);
 };
 
 export const guestGuard: CanActivateFn = () => {
