@@ -36,6 +36,7 @@ export interface TeacherProfile {
   readonly userId: number;
   readonly bio: string | null;
   readonly qualification?: string | null;
+  readonly skills?: readonly string[];
   readonly experienceYears: number;
   readonly city: string | null;
   readonly state: string | null;
@@ -46,6 +47,7 @@ export interface TeacherProfile {
 export interface TeacherProfileUpdatePayload {
   readonly bio?: string | null;
   readonly qualification?: string | null;
+  readonly skills?: readonly string[];
   readonly experienceYears?: number;
   readonly city?: string | null;
   readonly state?: string | null;

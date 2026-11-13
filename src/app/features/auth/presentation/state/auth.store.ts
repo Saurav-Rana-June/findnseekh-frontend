@@ -18,8 +18,12 @@ import { UpdateTeacherProfileUseCase } from '../../domain/use-cases/update-teach
 
 @Injectable()
 export class AuthStore {
-  /** Set to `false` when connecting to the live backend API. */
-  private readonly prototypeMode = true;
+  /** Set to `false` when connecting to the live backend API or during tests. */
+  prototypeMode = true;
+
+  setPrototypeMode(enabled: boolean): void {
+    this.prototypeMode = enabled;
+  }
 
   private readonly loginUseCase = inject(LoginUseCase);
   private readonly registerUseCase = inject(RegisterUseCase);
@@ -157,6 +161,7 @@ export class AuthStore {
         userId: 1,
         bio: payload.bio ?? null,
         qualification: payload.qualification ?? null,
+        skills: payload.skills ?? ['Guitar', 'Music Theory'],
         experienceYears: payload.experienceYears ?? 0,
         city: payload.city ?? null,
         state: payload.state ?? null,

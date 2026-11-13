@@ -2,11 +2,7 @@
   <div class="page-container">
     <!-- Back navigation above User Details Card, left aligned -->
     <div class="profile-nav-back">
-      <app-custom-close-outlined-button
-        icon="back"
-        ariaLabel="Go back"
-        (clicked)="onBack()"
-      />
+      <app-custom-close-outlined-button icon="back" ariaLabel="Go back" (clicked)="onBack()" />
     </div>
 
     <!-- Header card: User summary banner -->
@@ -14,40 +10,25 @@
       <div class="profile-header__left">
         <!-- Avatar with 1:1 Edit Upload Button -->
         <div class="profile-avatar-wrapper">
-          <app-custom-avatar
-            size="lg"
-            customSize="4.25rem"
-            fontSize="1.35rem"
-            [name]="user()?.fullName || 'User'"
-            [imageUrl]="profileImageUrl()"
-          />
-          <button
-            type="button"
-            class="profile-avatar-edit-btn"
-            aria-label="Upload profile photo"
-            (click)="triggerFileInput()"
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+          <app-custom-avatar size="lg" customSize="4.25rem" fontSize="1.35rem" [name]="user()?.fullName || 'User'"
+            [imageUrl]="profileImageUrl()" />
+          <button type="button" class="profile-avatar-edit-btn" aria-label="Upload profile photo"
+            (click)="triggerFileInput()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              aria-hidden="true">
               <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
               <circle cx="12" cy="13" r="4" />
             </svg>
           </button>
-          <input
-            #fileInput
-            type="file"
-            accept="image/*"
-            class="visually-hidden-file-input"
-            (change)="onFileSelected($event)"
-          />
+          <input #fileInput type="file" accept="image/*" class="visually-hidden-file-input"
+            (change)="onFileSelected($event)" />
         </div>
 
         <div class="profile-meta">
           <div class="profile-meta__top">
             <h1 class="profile-meta__name">{{ user()?.fullName || 'Your Account' }}</h1>
-            <app-custom-status-pill
-              [label]="isTeacher() ? 'Teacher' : 'Student'"
-              [variant]="isTeacher() ? 'success' : 'info'"
-            />
+            <app-custom-status-pill [label]="isTeacher() ? 'Teacher' : 'Student'"
+              [variant]="isTeacher() ? 'success' : 'info'" />
           </div>
           <p class="profile-meta__email">{{ user()?.email }}</p>
         </div>
@@ -55,200 +36,226 @@
     </header>
 
     @if (isTeacher()) {
-      <!-- Teacher Notice if profile not yet completed -->
-      @if (authStore.needsTeacherProfileCompletion()) {
-        <aside class="profile-alert" role="status">
-          <div class="profile-alert__icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-          </div>
-          <div class="profile-alert__content">
-            <h2 class="profile-alert__title">Teacher Profile Incomplete</h2>
-            <p class="profile-alert__desc">
-              Please fill out your qualification, experience, teaching mode, bio, and location below so students
-              can find and connect with you.
-            </p>
-          </div>
-        </aside>
-      }
+    <!-- Teacher Notice if profile not yet completed -->
+    @if (authStore.needsTeacherProfileCompletion()) {
+    <aside class="profile-alert" role="status">
+      <div class="profile-alert__icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      </div>
+      <div class="profile-alert__content">
+        <h2 class="profile-alert__title">Teacher Profile Incomplete</h2>
+        <p class="profile-alert__desc">
+          Please fill out your skills, qualification, experience, teaching mode, bio, and location below so students
+          can find and connect with you.
+        </p>
+      </div>
+    </aside>
+    }
 
-      @if (isSavedRecently()) {
-        <div class="profile-success-toast" role="status">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-          <span>Your teacher profile details have been saved successfully!</span>
+    @if (isSavedRecently()) {
+    <div class="profile-success-toast" role="status">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      <span>Your teacher profile details have been saved successfully!</span>
+    </div>
+    }
+
+    <!-- Main Teacher Profile Edit Card -->
+    <section class="profile-card" aria-labelledby="teacher-details-title">
+      <div class="profile-card__header">
+        <div class="profile-card__title-row">
+          <h2 id="teacher-details-title" class="profile-card__title">Teacher Details</h2>
+          <span class="profile-card__badge">Public Profile</span>
         </div>
-      }
+        <p class="profile-card__subtitle">
+          These details are displayed on your public profile and skill listings.
+        </p>
+      </div>
 
-      <!-- Main Teacher Profile Edit Card -->
-      <section class="profile-card" aria-labelledby="teacher-details-title">
-        <div class="profile-card__header">
-          <div class="profile-card__title-row">
-            <h2 id="teacher-details-title" class="profile-card__title">Teacher Details</h2>
-            <span class="profile-card__badge">Public Profile</span>
-          </div>
-          <p class="profile-card__subtitle">
-            These details are displayed on your public profile and skill listings.
-          </p>
+      <form class="profile-form" [formGroup]="form" (ngSubmit)="onSave()" novalidate>
+        @if (authStore.error(); as error) {
+        <div class="profile-form__error" role="alert">
+          {{ error }}
+        </div>
+        }
+
+        <!-- Bio -->
+        <div class="profile-field">
+          <label class="profile-field__label" for="profile-bio">
+            Bio & Introduction
+            <span class="profile-field__hint">Briefly explain your experience and teaching approach</span>
+          </label>
+          <textarea id="profile-bio" class="profile-textarea" formControlName="bio" rows="4" maxlength="1000"
+            placeholder="Hi, I am a passionate instructor with experience teaching..."></textarea>
         </div>
 
-        <form class="profile-form" [formGroup]="form" (ngSubmit)="onSave()" novalidate>
-          @if (authStore.error(); as error) {
-            <div class="profile-form__error" role="alert">
-              {{ error }}
+        <!-- Teaching Mode Cards -->
+        <div class="profile-field">
+          <span class="profile-field__label" id="teaching-mode-group-label">Teaching Mode</span>
+          <div class="teaching-modes-grid" role="radiogroup" aria-labelledby="teaching-mode-group-label">
+            @for (mode of teachingModes; track mode.value) {
+            <button type="button" class="mode-card" role="radio"
+              [attr.aria-checked]="form.controls.teachingMode.value === mode.value"
+              [class.is-active]="form.controls.teachingMode.value === mode.value" (click)="setTeachingMode(mode.value)">
+              <div class="mode-card__top">
+                <span class="mode-card__title">{{ mode.label }}</span>
+                <span class="mode-card__radio" aria-hidden="true">
+                  @if (form.controls.teachingMode.value === mode.value) {
+                  <span class="mode-card__radio-dot"></span>
+                  }
+                </span>
+              </div>
+              <p class="mode-card__hint">{{ mode.hint }}</p>
+            </button>
+            }
+          </div>
+        </div>
+
+        <!-- Qualification and Experience row -->
+        <div class="profile-form__row">
+          <app-custom-textfield fieldId="profile-qualification" label="Qualification" type="text"
+            formControlName="qualification" placeholder="e.g. Master in Mathematics, B.Ed, B.Tech"
+            leadingIcon="academic" />
+
+          <app-custom-textfield fieldId="profile-experience" label="Years of Experience" type="number"
+            formControlName="experienceYears" placeholder="e.g. 5" [required]="true" />
+        </div>
+
+        <!-- Skills & Subjects Section (Add multiple skills at a time) -->
+        <div class="profile-field profile-skills-section">
+          <div class="profile-skills-header">
+            <div class="profile-skills-header__info">
+              <label class="profile-field__label" for="profile-skill-input">
+                Skills & Subjects
+              </label>
+              <span class="profile-field__hint">
+                Add the subjects, instruments, languages, or skills you teach
+              </span>
             </div>
-          }
-
-          <!-- Bio -->
-          <div class="profile-field">
-            <label class="profile-field__label" for="profile-bio">
-              Bio & Introduction
-              <span class="profile-field__hint">Briefly explain your experience and teaching approach</span>
-            </label>
-            <textarea
-              id="profile-bio"
-              class="profile-textarea"
-              formControlName="bio"
-              rows="4"
-              maxlength="1000"
-              placeholder="Hi, I am a passionate instructor with experience teaching..."
-            ></textarea>
+            @if (skills().length > 0) {
+            <div class="profile-skills-meta">
+              <app-custom-status-pill [label]="skills().length + (skills().length === 1 ? ' skill' : ' skills')"
+                variant="neutral" size="sm" icon="spark" />
+              <button type="button" class="profile-skills-clear-btn" (click)="clearAllSkills()">
+                Clear all
+              </button>
+            </div>
+            }
           </div>
 
-          <!-- Teaching Mode Cards -->
-          <div class="profile-field">
-            <span class="profile-field__label" id="teaching-mode-group-label">Teaching Mode</span>
-            <div class="teaching-modes-grid" role="radiogroup" aria-labelledby="teaching-mode-group-label">
-              @for (mode of teachingModes; track mode.value) {
-                <button
-                  type="button"
-                  class="mode-card"
-                  role="radio"
-                  [attr.aria-checked]="form.controls.teachingMode.value === mode.value"
-                  [class.is-active]="form.controls.teachingMode.value === mode.value"
-                  (click)="setTeachingMode(mode.value)"
-                >
-                  <div class="mode-card__top">
-                    <span class="mode-card__title">{{ mode.label }}</span>
-                    <span class="mode-card__radio" aria-hidden="true">
-                      @if (form.controls.teachingMode.value === mode.value) {
-                        <span class="mode-card__radio-dot"></span>
-                      }
-                    </span>
-                  </div>
-                  <p class="mode-card__hint">{{ mode.hint }}</p>
-                </button>
+          <!-- Active Added Skills List (displayed prominently above input) -->
+          @if (skills().length > 0) {
+          <div class="profile-skills-active">
+            <div class="profile-skills-tags-grid">
+              @for (skill of skills(); track skill) {
+              <app-custom-status-pill [label]="skill" variant="soft" size="md" icon="dot" fontWeight="500"
+                [removable]="true" (removed)="removeSkill(skill)" />
               }
             </div>
           </div>
-
-          <!-- Qualification and Experience row -->
-          <div class="profile-form__row">
-            <app-custom-textfield
-              fieldId="profile-qualification"
-              label="Qualification"
-              type="text"
-              formControlName="qualification"
-              placeholder="e.g. Master in Mathematics, B.Ed, B.Tech"
-              leadingIcon="academic"
-            />
-
-            <app-custom-textfield
-              fieldId="profile-experience"
-              label="Years of Experience"
-              type="number"
-              formControlName="experienceYears"
-              placeholder="e.g. 5"
-              [required]="true"
-            />
+          } @else {
+          <div class="profile-skills-empty-hint">
+            <svg class="profile-skills-empty-hint__icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="m12 3-1.9 5.8L4 10.7l5.1 2L12 19l1.9-6.3 5.1-2-6.1-1.9Z" />
+            </svg>
+            <span>No skills added yet. Type your subjects below or pick from quick suggestions.</span>
           </div>
+          }
 
-          <!-- Contact Phone and City row -->
-          <div class="profile-form__row">
-            <app-custom-textfield
-              fieldId="profile-phone"
-              label="Contact Phone"
-              type="tel"
-              formControlName="phone"
-              placeholder="+91 98765 43210"
-              leadingIcon="phone"
-            />
-
-            <app-custom-textfield
-              fieldId="profile-city"
-              label="City"
-              type="text"
-              formControlName="city"
-              placeholder="Bengaluru"
-              leadingIcon="location"
-            />
+          <!-- Add Skill Input + Add Button -->
+          <div class="profile-skills-input-row">
+            <div class="profile-skills-input-box">
+              <app-custom-textfield fieldId="profile-skill-input" type="text"
+                placeholder="Add a skill or subject (e.g. Mathematics, Guitar, Python)..." leadingIcon="spark"
+                [value]="skillInputValue()" (valueChange)="onSkillInputChange($event)"
+                (keydown)="onSkillInputKeydown($event)" />
+            </div>
+            <app-custom-primary-button type="button" variant="outline" size="md" label="+ Add"
+              [disabled]="!skillInputValue().trim()" (clicked)="addSkillsFromInput()" />
           </div>
+          <span class="profile-skills-input-tip">
+            Tip: Press Enter or comma to add multiple skills
+          </span>
 
-          <!-- State row -->
-          <div class="profile-form__row">
-            <app-custom-textfield
-              fieldId="profile-state"
-              label="State / Province"
-              type="text"
-              formControlName="state"
-              placeholder="Karnataka"
-              leadingIcon="location"
-            />
+          <!-- Curated Popular Suggestions -->
+          @if (visibleSuggestions().length > 0) {
+          <div class="profile-skills-suggestions">
+            <span class="profile-skills-suggestions__label">Quick add:</span>
+            <div class="profile-skills-suggestions__pills">
+              @for (suggestion of visibleSuggestions(); track suggestion) {
+              <app-custom-status-pill [label]="'+ ' + suggestion" variant="surface" size="sm" fontWeight="500"
+                [interactive]="true" (clicked)="addSuggestedSkill(suggestion)" />
+              }
+              @if (remainingSuggestionsCount() > 0 || showAllSuggestions()) {
+              <button type="button" class="profile-skills-more-btn" (click)="toggleShowAllSuggestions()">
+                {{ showAllSuggestions() ? 'Show less' : '+' + remainingSuggestionsCount() + ' more' }}
+              </button>
+              }
+            </div>
           </div>
+          }
+        </div>
 
-          <!-- Submit Button -->
-          <div class="profile-form__footer">
-            <app-custom-primary-button
-              type="submit"
-              variant="primary"
-              size="lg"
-              [loading]="authStore.isLoading()"
-              [label]="authStore.isLoading() ? 'Saving...' : 'Save Profile Changes'"
-            />
-          </div>
-        </form>
-      </section>
+        <!-- Contact Phone and City row -->
+        <div class="profile-form__row">
+          <app-custom-textfield fieldId="profile-phone" label="Contact Phone" type="tel" formControlName="phone"
+            placeholder="+91 98765 43210" leadingIcon="phone" />
+
+          <app-custom-textfield fieldId="profile-city" label="City" type="text" formControlName="city"
+            placeholder="Bengaluru" leadingIcon="location" />
+        </div>
+
+        <!-- State row -->
+        <div class="profile-form__row">
+          <app-custom-textfield fieldId="profile-state" label="State / Province" type="text" formControlName="state"
+            placeholder="Karnataka" leadingIcon="location" />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="profile-form__footer">
+          <app-custom-primary-button type="submit" variant="primary" size="lg" [loading]="authStore.isLoading()"
+            [label]="authStore.isLoading() ? 'Saving...' : 'Save Profile Changes'" />
+        </div>
+      </form>
+    </section>
     } @else {
-      <!-- Non-Teacher (Student) Profile View -->
-      <section class="profile-card" aria-labelledby="student-details-title">
-        <div class="profile-card__header">
-          <h2 id="student-details-title" class="profile-card__title">Student Profile</h2>
-          <p class="profile-card__subtitle">
-            You are currently registered as a Student. Explore tutors, book lessons, and send
-            learning requests.
-          </p>
-        </div>
+    <!-- Non-Teacher (Student) Profile View -->
+    <section class="profile-card" aria-labelledby="student-details-title">
+      <div class="profile-card__header">
+        <h2 id="student-details-title" class="profile-card__title">Student Profile</h2>
+        <p class="profile-card__subtitle">
+          You are currently registered as a Student. Explore tutors, book lessons, and send
+          learning requests.
+        </p>
+      </div>
 
-        <div class="student-info-grid">
-          <div class="info-tile">
-            <span class="info-tile__label">Full Name</span>
-            <span class="info-tile__value">{{ user()?.fullName }}</span>
-          </div>
-          <div class="info-tile">
-            <span class="info-tile__label">Email</span>
-            <span class="info-tile__value">{{ user()?.email }}</span>
-          </div>
-          <div class="info-tile">
-            <span class="info-tile__label">Account Role</span>
-            <span class="info-tile__value">Student</span>
-          </div>
+      <div class="student-info-grid">
+        <div class="info-tile">
+          <span class="info-tile__label">Full Name</span>
+          <span class="info-tile__value">{{ user()?.fullName }}</span>
         </div>
-      </section>
+        <div class="info-tile">
+          <span class="info-tile__label">Email</span>
+          <span class="info-tile__value">{{ user()?.email }}</span>
+        </div>
+        <div class="info-tile">
+          <span class="info-tile__label">Account Role</span>
+          <span class="info-tile__value">Student</span>
+        </div>
+      </div>
+    </section>
     }
   </div>
 
   <!-- Reusable 1:1 Image Cropper Modal -->
   @if (isCropperOpen()) {
-    <app-custom-image-cropper-modal
-      [open]="isCropperOpen()"
-      [imageSource]="selectedRawImage()"
-      (cropped)="onImageCropped($event)"
-      (closed)="onCropperClosed()"
-    />
+  <app-custom-image-cropper-modal [open]="isCropperOpen()" [imageSource]="selectedRawImage()"
+    (cropped)="onImageCropped($event)" (closed)="onCropperClosed()" />
   }
 </div>
-

@@ -3,15 +3,20 @@ import { Observable, of, throwError } from 'rxjs';
 import { AuthUser, LoginCredentials } from '../../../domain/entities/auth.entity';
 import { AuthRepository } from '../../../domain/repositories/auth.repository';
 import { LoginUseCase } from '../../../domain/use-cases/login.use-case';
+import { RegisterUseCase } from '../../../domain/use-cases/register.use-case';
+import { BecomeTeacherUseCase } from '../../../domain/use-cases/become-teacher.use-case';
+import { UpdateTeacherProfileUseCase } from '../../../domain/use-cases/update-teacher-profile.use-case';
+import { AuthSessionService } from '../../../../../core/services/auth-session.service';
 import { AuthStore } from '../../state/auth.store';
 import { LoginModalComponent } from './login-modal';
 
 describe('LoginModalComponent', () => {
   const mockUser: AuthUser = {
-    id: 'user-1',
+    id: 1,
     email: 'learner@findnseekh.com',
     fullName: 'Test Learner',
-    role: 'learner',
+    isActive: true,
+    roles: ['student'],
   };
 
   let authRepositoryMock: {
@@ -32,9 +37,15 @@ describe('LoginModalComponent', () => {
       providers: [
         { provide: AuthRepository, useValue: authRepositoryMock },
         LoginUseCase,
+        RegisterUseCase,
+        BecomeTeacherUseCase,
+        UpdateTeacherProfileUseCase,
+        AuthSessionService,
         AuthStore,
       ],
     }).compileComponents();
+
+    TestBed.inject(AuthStore).setPrototypeMode(false);
   });
 
   it('does not render dialog when closed', () => {

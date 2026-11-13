@@ -60,5 +60,22 @@ describe('CustomStatusPill', () => {
     expect(host.style.getPropertyValue('--cp-pill-color')).toBe('#174e38');
     expect(host.style.getPropertyValue('--cp-pill-font-size')).toBe('13px');
   });
+
+  it('renders remove button when removable is true and emits removed event', () => {
+    const fixture = TestBed.createComponent(CustomStatusPill);
+    fixture.componentRef.setInput('label', 'Guitar');
+    fixture.componentRef.setInput('removable', true);
+    fixture.detectChanges();
+
+    const removedSpy = vi.fn();
+    fixture.componentInstance.removed.subscribe(removedSpy);
+
+    const removeBtn = (fixture.nativeElement as HTMLElement).querySelector('button.cp-pill__remove') as HTMLButtonElement | null;
+    expect(removeBtn).not.toBeNull();
+    expect(removeBtn?.getAttribute('aria-label')).toBe('Remove Guitar');
+
+    removeBtn?.click();
+    expect(removedSpy).toHaveBeenCalledTimes(1);
+  });
 });
 

@@ -95,9 +95,32 @@ export type StatusPillIcon = 'none' | 'location' | 'spark' | 'check' | 'dot';
       }
       <ng-content />
       <ng-content select="[pill-trailing]" />
+
+      @if (removable()) {
+        <button
+          type="button"
+          class="cp-pill__remove"
+          [attr.aria-label]="removeAriaLabel() || 'Remove ' + label()"
+          [disabled]="disabled()"
+          (click)="handleRemove($event)"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      }
     </ng-template>
 
-    @if (interactive()) {
+    @if (interactive() && !removable()) {
       <button
         type="button"
         class="cp-pill is-interactive"
@@ -272,6 +295,45 @@ export type StatusPillIcon = 'none' | 'location' | 'spark' | 'check' | 'dot';
       flex-shrink: 0;
       background: var(--cp-pill-dot-color, currentColor);
     }
+
+    .cp-pill__remove {
+      display: inline-grid;
+      place-items: center;
+      width: 1.125rem;
+      height: 1.125rem;
+      padding: 0;
+      margin-left: 0.375rem;
+      margin-right: -0.25rem;
+      border: none;
+      border-radius: var(--radius-pill, 999px);
+      background: transparent;
+      color: inherit;
+      opacity: 0.65;
+      cursor: pointer;
+      transition:
+        opacity var(--dur-fast, 150ms) var(--ease, ease),
+        background-color var(--dur-fast, 150ms) var(--ease, ease),
+        transform var(--dur-fast, 150ms) var(--ease, ease);
+
+      &:hover:not(:disabled) {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.12);
+      }
+
+      &:active:not(:disabled) {
+        transform: scale(0.92);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--color-focus, #174e38);
+        outline-offset: 1px;
+      }
+
+      &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+    }
   `,
 })
 export class CustomStatusPill {
@@ -279,6 +341,8 @@ export class CustomStatusPill {
   readonly variant = input<StatusPillVariant>('soft');
   readonly size = input<StatusPillSize>('md');
   readonly interactive = input<boolean>(false);
+  readonly removable = input<boolean>(false);
+  readonly removeAriaLabel = input<string | null>(null);
   readonly active = input<boolean>(false);
   readonly disabled = input<boolean>(false);
   readonly icon = input<StatusPillIcon>('none');
@@ -301,10 +365,18 @@ export class CustomStatusPill {
   readonly customStyles = input<Record<string, string | number> | null>(null);
 
   readonly clicked = output<MouseEvent>();
+  readonly removed = output<MouseEvent>();
 
   protected handleClick(event: MouseEvent): void {
     if (!this.disabled()) {
       this.clicked.emit(event);
+    }
+  }
+
+  protected handleRemove(event: MouseEvent): void {
+    event.stopPropagation();
+    if (!this.disabled()) {
+      this.removed.emit(event);
     }
   }
 }
