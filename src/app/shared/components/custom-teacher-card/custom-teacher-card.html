@@ -1,60 +1,74 @@
 <article class="t-card">
+  <!-- Photo Container with Soft Sage Background -->
   <div class="t-card__photo" aria-hidden="true">
     <app-teacher-avatar [spec]="teacher().avatar" />
 
-    <div class="t-card__badges">
-      @if (showCategory() && teacher().category) {
-        <app-custom-status-pill
-          class="t-card__tag"
-          variant="surface"
-          size="sm"
-          elevation="sm"
-          [label]="teacher().category"
-        />
-      }
-
-      @if (showMode() && modeLabel(); as mode) {
-        <span class="t-card__mode-badge" [attr.data-mode]="teacher().teachingMode">
-          {{ mode }}
-        </span>
-      }
-    </div>
+    @if (showMode() && teacher().teachingMode; as mode) {
+      <div class="t-card__mode-pill" [attr.data-mode]="mode">
+        @if (mode === 'online') {
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="20" height="14" x="2" y="3" rx="2" />
+            <line x1="8" x2="16" y1="21" y2="21" />
+            <line x1="12" x2="12" y1="17" y2="21" />
+          </svg>
+          <span>Online</span>
+        } @else if (mode === 'offline') {
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>In person</span>
+        } @else {
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          <span>Online & in person</span>
+        }
+      </div>
+    }
   </div>
 
+  <!-- Content Body -->
   <div class="t-card__body">
+    <!-- Top Row: Name + Verified Checkmark & Rating Pill -->
     <div class="t-card__top">
       <div class="t-card__name-wrapper">
-        <h3 class="t-card__name">{{ teacher().name }}</h3>
+        <h3 class="t-card__name" [title]="teacher().name">{{ teacher().name }}</h3>
         @if (teacher().verified) {
           <span class="t-card__verified" title="Verified Teacher">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="var(--color-primary-50)" />
-              <path d="m9 12 2 2 4-4" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="#174e38" stroke-width="2" fill="#eef4f0" />
+              <path d="m8.5 12 2.5 2.5 4.5-5" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </span>
         }
       </div>
 
       @if (showRating() && teacher().rating; as rating) {
-        <span class="t-card__rating" title="Rating">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <div class="t-card__rating">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#174e38" aria-hidden="true">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
           </svg>
-          <span class="visually-hidden">Rated </span>
           <span class="t-card__rating-val">{{ rating.value.toFixed(1) }}</span>
           <span class="t-card__rating-count">({{ rating.count }})</span>
-        </span>
+        </div>
       }
     </div>
 
+    <!-- Specialty -->
     @if (showSpecialty()) {
-      <p class="t-card__skill">{{ teacher().specialty }}</p>
+      <p class="t-card__specialty">{{ teacher().specialty }}</p>
     }
 
-    @if (teacher().bio) {
+    <!-- Bio Snippet -->
+    @if (showBio() && teacher().bio) {
       <p class="t-card__bio">{{ teacher().bio }}</p>
     }
 
+    <!-- Skill Chips -->
     @if (showSkills() && displayedSkills().length > 0) {
       <div class="t-card__skills-row">
         @for (s of displayedSkills(); track s) {
@@ -66,43 +80,49 @@
       </div>
     }
 
-    <ul class="t-card__meta">
+    <!-- Meta Details: Location & Experience -->
+    <div class="t-card__meta">
       @if (showLocation()) {
-        <li>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <span class="t-card__meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
             <circle cx="12" cy="10" r="3" />
           </svg>
           <span>{{ teacher().location }}</span>
-        </li>
+        </span>
       }
 
       @if (showExperience()) {
-        <li>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <span class="t-card__meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
             <rect width="20" height="14" x="2" y="6" rx="2" />
           </svg>
-          <span>{{ teacher().experienceYears }} yrs exp</span>
-        </li>
+          <span>{{ teacher().experienceYears }} {{ experienceFormat() === 'full' ? 'years experience' : 'yrs exp' }}</span>
+        </span>
       }
+    </div>
 
+    <!-- Footer: Hourly Rate & View Profile Action Button -->
+    <div class="t-card__footer">
       @if (showPrice() && teacher().hourlyRate) {
-        <li class="t-card__meta-price">
+        <div class="t-card__price">
           <span class="t-card__price-val">₹{{ teacher().hourlyRate }}</span>
-          <span class="t-card__price-unit">/hr</span>
-        </li>
+          <span class="t-card__price-unit">/ hour</span>
+        </div>
       }
-    </ul>
 
-    <app-custom-primary-button
-      class="t-card__cta"
-      variant="outline"
-      [label]="primaryCtaLabel()"
-      [srOnlyLabel]="' of ' + teacher().name"
-      [fullWidth]="true"
-      (clicked)="onViewProfile()"
-    />
+      <app-custom-primary-button
+        class="t-card__cta"
+        variant="outline"
+        size="md"
+        shape="pill"
+        trailingIcon="arrow-right"
+        [label]="primaryCtaLabel()"
+        [srOnlyLabel]="' for ' + teacher().name"
+        [fullWidth]="!showPrice() || !teacher().hourlyRate"
+        (clicked)="onViewProfile()"
+      />
+    </div>
   </div>
 </article>
-

@@ -36,12 +36,12 @@ describe('CustomTeacherCard', () => {
     fixture.detectChanges();
   });
 
-  it('renders teacher name, category, specialty, and location', () => {
+  it('renders teacher name, specialty, location, experience, and price', () => {
     const el: HTMLElement = fixture.nativeElement;
     expect(el.textContent).toContain('Aarav Sharma');
     expect(el.textContent).toContain('Classical Flute');
     expect(el.textContent).toContain('Dehradun, Uttarakhand');
-    expect(el.textContent).toContain('6 yrs exp');
+    expect(el.textContent).toContain('6 years experience');
     expect(el.textContent).toContain('₹500');
   });
 
@@ -57,4 +57,3 @@ describe('CustomTeacherCard', () => {
     expect(emittedTeacher).toEqual(SAMPLE_TEACHER);
   });
 });
-

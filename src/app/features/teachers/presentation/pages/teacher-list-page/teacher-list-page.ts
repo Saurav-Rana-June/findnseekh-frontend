@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   OnInit,
@@ -9,6 +10,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ComboFieldComponent } from '../../../../../shared/components/combo-field/combo-field';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
 import {
@@ -25,9 +27,10 @@ import { TeachersStore } from '../../state/teachers.store';
     FormsModule,
     ReactiveFormsModule,
     RouterLink,
+    CustomTeacherCard,
+    ComboFieldComponent,
     CustomPrimaryButton,
     CustomStatusPill,
-    CustomTeacherCard,
   ],
   templateUrl: './teacher-list-page.html',
   styleUrl: './teacher-list-page.scss',
@@ -39,15 +42,25 @@ export class TeacherListPage implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  // Local form signals synced to store
+  // Local form inputs
   protected readonly localSkill = signal<string>('');
   protected readonly localLocation = signal<string>('');
 
+  // Pagination / slice count
+  protected readonly visibleCount = signal<number>(9);
+
+  // Filters drawer toggle
+  protected readonly showFilterDrawer = signal<boolean>(false);
+
+  // Sliced teachers for display
+  protected readonly displayedTeachers = computed(() => {
+    return this.store.filteredTeachers().slice(0, this.visibleCount());
+  });
+
   protected readonly modeOptions: readonly { readonly id: TeachingMode | 'all'; readonly label: string }[] = [
-    { id: 'all', label: 'All Modes' },
+    { id: 'all', label: 'All' },
     { id: 'online', label: 'Online' },
-    { id: 'offline', label: 'In-person' },
-    { id: 'both', label: 'Both' },
+    { id: 'offline', label: 'In person' },
   ];
 
   protected readonly experienceOptions: readonly { readonly years: number; readonly label: string }[] = [
@@ -55,6 +68,7 @@ export class TeacherListPage implements OnInit {
     { years: 3, label: '3+ Years' },
     { years: 5, label: '5+ Years' },
     { years: 8, label: '8+ Years' },
+    { years: 10, label: '10+ Years' },
   ];
 
   protected readonly sortOptions: readonly { readonly value: TeacherSortOption; readonly label: string }[] = [
@@ -66,7 +80,6 @@ export class TeacherListPage implements OnInit {
   ];
 
   ngOnInit(): void {
-    // Listen to URL query params to initialize / sync search
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
@@ -87,25 +100,31 @@ export class TeacherListPage implements OnInit {
       });
   }
 
-  protected onSearchSubmit(event: Event): void {
-    event.preventDefault();
+  protected onSearchSubmit(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.visibleCount.set(9);
     this.store.setSearchQuery(this.localSkill());
     this.store.setLocationQuery(this.localLocation());
     this.updateUrlParams();
   }
 
   protected onCategorySelect(categoryId: string): void {
+    this.visibleCount.set(9);
     this.store.setSelectedCategory(categoryId);
     this.updateUrlParams();
   }
 
   protected onModeSelect(mode: TeachingMode | 'all'): void {
+    this.visibleCount.set(9);
     this.store.setSelectedMode(mode);
     this.updateUrlParams();
   }
 
   protected onExperienceSelect(event: Event): void {
     const value = Number((event.target as HTMLSelectElement).value);
+    this.visibleCount.set(9);
     this.store.setSelectedExperience(value);
   }
 
@@ -114,9 +133,19 @@ export class TeacherListPage implements OnInit {
     this.store.setSortBy(value);
   }
 
+  protected onShowMore(): void {
+    this.visibleCount.update((count) => count + 9);
+  }
+
+  protected toggleFilterDrawer(): void {
+    this.showFilterDrawer.update((v) => !v);
+  }
+
   protected onResetFilters(): void {
     this.localSkill.set('');
     this.localLocation.set('');
+    this.visibleCount.set(9);
+    this.showFilterDrawer.set(false);
     this.store.resetFilters();
     this.router.navigate([], {
       relativeTo: this.route,
@@ -126,18 +155,19 @@ export class TeacherListPage implements OnInit {
 
   protected onClearSkill(): void {
     this.localSkill.set('');
+    this.visibleCount.set(9);
     this.store.setSearchQuery('');
     this.updateUrlParams();
   }
 
   protected onClearLocation(): void {
     this.localLocation.set('');
+    this.visibleCount.set(9);
     this.store.setLocationQuery('');
     this.updateUrlParams();
   }
 
   protected onViewTeacherProfile(teacher: TeacherCardData): void {
-    // Placeholder for teacher detail navigation or modal
     console.log('View teacher profile:', teacher.id);
   }
 

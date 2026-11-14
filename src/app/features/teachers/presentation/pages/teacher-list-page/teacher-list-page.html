@@ -1,7 +1,8 @@
 <div class="teachers-page">
-  <!-- Hero / Search Section -->
-  <section class="teachers-hero" aria-labelledby="teachers-hero-title">
+  <!-- Hero Section -->
+  <header class="teachers-hero" aria-labelledby="teachers-hero-title">
     <div class="page-container">
+      <!-- Breadcrumb Navigation -->
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
           <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
@@ -11,152 +12,91 @@
       </nav>
 
       <div class="teachers-hero__content">
-        <app-custom-status-pill
-          class="teachers-hero__eyebrow"
-          variant="soft"
-          size="md"
-          icon="spark"
-          label="Browse Verified Mentors & Instructors"
-        />
-
         <h1 id="teachers-hero-title" class="teachers-hero__title">
-          Find Your Perfect <span>Skill Teacher</span>
+          Find your perfect <span>skill teacher</span>
         </h1>
 
         <p class="teachers-hero__lead">
-          Learn one-on-one from certified local teachers and online mentors. Compare experience, reviews, and teaching modes.
+          Learn one-on-one from local teachers and online mentors.
         </p>
 
-        <!-- Search Form -->
-        <form class="teachers-search-bar" role="search" aria-label="Search teachers" (submit)="onSearchSubmit($event)">
-          <div class="search-field search-field--skill">
-            <svg class="search-field__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-            <input
-              type="text"
-              class="search-field__input"
-              placeholder="What do you want to learn? (e.g. Guitar, Yoga, Python)"
-              [value]="localSkill()"
-              (input)="localSkill.set($any($event.target).value)"
-              aria-label="Skill or subject"
-            />
-            @if (localSkill()) {
-              <button type="button" class="search-field__clear" (click)="onClearSkill()" aria-label="Clear skill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
-              </button>
-            }
-          </div>
-
-          <span class="search-bar__divider" aria-hidden="true"></span>
-
-          <div class="search-field search-field--location">
-            <svg class="search-field__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            <input
-              type="text"
-              class="search-field__input"
-              placeholder="City or area (e.g. Dehradun, Delhi)"
+        <!-- Search Section matching HomePage -->
+        <div class="hero__search">
+          <form class="search" role="search" aria-label="Find teachers near you" (submit)="onSearchSubmit($event)">
+            <app-combo-field
+              fieldId="search-location"
+              label="Location"
+              [showLabel]="false"
+              icon="location"
+              placeholder="Select Area"
+              autoComplete="address-level2"
+              freeTextPrefix="Search near"
               [value]="localLocation()"
-              (input)="localLocation.set($any($event.target).value)"
-              aria-label="Location or city"
+              [options]="store.locationOptions()"
+              (valueChange)="localLocation.set($event)"
             />
-            @if (localLocation()) {
-              <button type="button" class="search-field__clear" (click)="onClearLocation()" aria-label="Clear location">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
-              </button>
-            }
-          </div>
 
-          <app-custom-primary-button
-            class="search-bar__submit"
-            type="submit"
-            variant="primary"
-            size="md"
-            leadingIcon="search"
-            label="Search"
-            paddingInline="24px"
-          />
-        </form>
+            <span class="search__divider" aria-hidden="true"></span>
+
+            <app-combo-field
+              fieldId="search-skill"
+              label="Skill"
+              [showLabel]="false"
+              icon="skill"
+              placeholder="Select Skill"
+              freeTextPrefix="Search for"
+              [value]="localSkill()"
+              [options]="store.skillOptions()"
+              (valueChange)="localSkill.set($event)"
+            />
+
+            <app-custom-primary-button
+              class="search__submit"
+              type="submit"
+              variant="primary"
+              size="lg"
+              leadingIcon="search"
+              label="Find Teachers"
+              paddingInline="26px"
+            />
+          </form>
+        </div>
+
+        <!-- Category Pills Strip using reusable CustomStatusPill -->
+        <nav class="categories-strip" aria-label="Filter by category">
+          @for (cat of store.categories; track cat.id) {
+            <app-custom-status-pill
+              [variant]="store.selectedCategory() === cat.id ? 'solid' : 'surface'"
+              size="md"
+              [interactive]="true"
+              [label]="cat.label"
+              (clicked)="onCategorySelect(cat.id)"
+            />
+          }
+        </nav>
       </div>
     </div>
-  </section>
-
-  <!-- Filter Pills Bar -->
-  <section class="filter-strip" aria-label="Filter by category">
-    <div class="page-container">
-      <div class="category-pills">
-        @for (cat of store.categories; track cat.id) {
-          <app-custom-status-pill
-            [variant]="store.selectedCategory() === cat.id ? 'solid' : 'neutral'"
-            size="md"
-            [interactive]="true"
-            [label]="cat.label"
-            (clicked)="onCategorySelect(cat.id)"
-          />
-        }
-      </div>
-    </div>
-  </section>
+  </header>
 
   <!-- Main Content & Results -->
   <main class="page-container teachers-main">
-    <!-- Controls Bar -->
-    <div class="controls-bar">
-      <div class="controls-bar__left">
-        <h2 class="results-heading">
-          @if (store.totalCount() > 0) {
-            Showing <span>{{ store.totalCount() }}</span> {{ store.totalCount() === 1 ? 'teacher' : 'teachers' }}
-          } @else {
-            No teachers found
-          }
-        </h2>
-
-        <!-- Active Filter Badges -->
-        @if (store.hasActiveFilters()) {
-          <div class="active-badges">
-            @if (store.searchQuery()) {
-              <span class="active-badge">
-                "{{ store.searchQuery() }}"
-                <button type="button" (click)="onClearSkill()" aria-label="Remove skill filter">×</button>
-              </span>
-            }
-            @if (store.locationQuery()) {
-              <span class="active-badge">
-                in {{ store.locationQuery() }}
-                <button type="button" (click)="onClearLocation()" aria-label="Remove location filter">×</button>
-              </span>
-            }
-            @if (store.selectedCategory() !== 'all') {
-              <span class="active-badge">
-                {{ store.selectedCategory() }}
-                <button type="button" (click)="onCategorySelect('all')" aria-label="Remove category filter">×</button>
-              </span>
-            }
-            @if (store.selectedMode() !== 'all') {
-              <span class="active-badge">
-                {{ store.selectedMode() }}
-                <button type="button" (click)="onModeSelect('all')" aria-label="Remove mode filter">×</button>
-              </span>
-            }
-            <button type="button" class="reset-all-btn" (click)="onResetFilters()">
-              Clear all
-            </button>
-          </div>
-        }
+    <!-- Toolbar Section -->
+    <section class="toolbar-section" aria-label="Filter and sort results">
+      <div class="toolbar-section__left">
+        <p class="teachers-count">
+          <strong class="teachers-count__number">{{ store.totalCount() }}</strong>
+          <span class="teachers-count__label">teachers</span>
+        </p>
       </div>
 
-      <div class="controls-bar__right">
-        <!-- Teaching Mode Selector -->
-        <div class="mode-toggles" role="group" aria-label="Filter by teaching mode">
+      <div class="toolbar-section__right">
+        <!-- Teaching Mode Capsule -->
+        <div class="mode-capsule" role="group" aria-label="Filter by teaching mode">
           @for (m of modeOptions; track m.id) {
             <button
               type="button"
-              class="mode-toggle-btn"
-              [class.mode-toggle-btn--active]="store.selectedMode() === m.id"
+              class="mode-capsule__btn"
+              [class.mode-capsule__btn--active]="store.selectedMode() === m.id"
               (click)="onModeSelect(m.id)"
             >
               {{ m.label }}
@@ -164,27 +104,34 @@
           }
         </div>
 
-        <!-- Experience Filter Dropdown -->
-        <div class="filter-select-wrapper">
-          <label for="exp-filter" class="visually-hidden">Experience</label>
-          <select
-            id="exp-filter"
-            class="filter-select"
-            [value]="store.selectedExperience()"
-            (change)="onExperienceSelect($event)"
-          >
-            @for (exp of experienceOptions; track exp.years) {
-              <option [value]="exp.years">{{ exp.label }}</option>
-            }
-          </select>
-        </div>
+        <!-- Filters Outline Button -->
+        <button
+          type="button"
+          class="toolbar-filter-btn"
+          [class.toolbar-filter-btn--active]="showFilterDrawer()"
+          (click)="toggleFilterDrawer()"
+          aria-label="Filter options"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" x2="20" y1="21" y2="21" />
+            <line x1="4" x2="20" y1="3" y2="3" />
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <circle cx="8" cy="12" r="3" />
+            <circle cx="16" cy="3" r="3" />
+            <circle cx="12" cy="21" r="3" />
+          </svg>
+          <span>Filters</span>
+          @if (store.activeFilterCount() > 0) {
+            <span class="filter-count-badge">{{ store.activeFilterCount() }}</span>
+          }
+        </button>
 
-        <!-- Sort Dropdown -->
-        <div class="filter-select-wrapper">
+        <!-- Sort Select -->
+        <div class="sort-select-box">
           <label for="sort-select" class="visually-hidden">Sort by</label>
           <select
             id="sort-select"
-            class="filter-select"
+            class="sort-select"
             [value]="store.sortBy()"
             (change)="onSortSelect($event)"
           >
@@ -194,21 +141,90 @@
           </select>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Results Grid -->
-    @if (store.filteredTeachers().length > 0) {
+    <!-- Expanded Filter Drawer (When Filters button is clicked or filters active) -->
+    @if (showFilterDrawer() || store.hasActiveFilters()) {
+      <div class="filters-drawer">
+        <div class="filters-drawer__row">
+          <div class="filters-drawer__group">
+            <label for="drawer-exp-select" class="filters-drawer__label">Minimum Experience:</label>
+            <select
+              id="drawer-exp-select"
+              class="filters-drawer__select"
+              [value]="store.selectedExperience()"
+              (change)="onExperienceSelect($event)"
+            >
+              @for (exp of experienceOptions; track exp.years) {
+                <option [value]="exp.years">{{ exp.label }}</option>
+              }
+            </select>
+          </div>
+
+          @if (store.hasActiveFilters()) {
+            <div class="active-chips">
+              @if (store.searchQuery()) {
+                <span class="active-chip">
+                  "{{ store.searchQuery() }}"
+                  <button type="button" (click)="onClearSkill()" aria-label="Remove skill filter">×</button>
+                </span>
+              }
+              @if (store.locationQuery()) {
+                <span class="active-chip">
+                  📍 {{ store.locationQuery() }}
+                  <button type="button" (click)="onClearLocation()" aria-label="Remove location filter">×</button>
+                </span>
+              }
+              @if (store.selectedCategory() !== 'all') {
+                <span class="active-chip">
+                  Category: {{ store.selectedCategory() }}
+                  <button type="button" (click)="onCategorySelect('all')" aria-label="Reset category">×</button>
+                </span>
+              }
+              @if (store.selectedMode() !== 'all') {
+                <span class="active-chip">
+                  Mode: {{ store.selectedMode() }}
+                  <button type="button" (click)="onModeSelect('all')" aria-label="Reset mode">×</button>
+                </span>
+              }
+              <button type="button" class="reset-all-link" (click)="onResetFilters()">
+                Clear all filters
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Teachers Grid -->
+    @if (displayedTeachers().length > 0) {
       <div class="teachers-grid">
-        @for (teacher of store.filteredTeachers(); track teacher.id) {
+        @for (teacher of displayedTeachers(); track teacher.id) {
           <app-custom-teacher-card
             [teacher]="teacher"
-            [showSkills]="true"
-            [showPrice]="true"
-            [showMode]="true"
             (viewProfile)="onViewTeacherProfile($event)"
           />
         }
       </div>
+
+      <!-- Bottom Pagination & Disclaimer -->
+      <footer class="teachers-pagination-footer">
+        <p class="pagination-info">Showing {{ displayedTeachers().length }} of {{ store.totalCount() }}</p>
+
+        @if (displayedTeachers().length < store.totalCount()) {
+          <app-custom-primary-button
+            variant="outline"
+            size="md"
+            shape="pill"
+            label="Show more teachers"
+            (clicked)="onShowMore()"
+          />
+        }
+
+        <p class="sample-disclaimer">
+          Sample teachers for demonstration. Ratings and verification badges are illustrative.
+        </p>
+      </footer>
     } @else {
       <!-- Empty State -->
       <div class="empty-state">
@@ -221,10 +237,12 @@
         </div>
         <h3 class="empty-state__title">No teachers match your search</h3>
         <p class="empty-state__desc">
-          We couldn't find any teachers matching "{{ store.searchQuery() || store.locationQuery() || 'your selected filters' }}". Try checking for spelling errors, clearing some filters, or searching for broader categories.
+          We couldn't find any instructors matching "{{ store.searchQuery() || store.locationQuery() || 'your current filters' }}". Try checking the spelling, resetting some filters, or exploring all categories.
         </p>
         <app-custom-primary-button
           variant="outline"
+          size="md"
+          shape="pill"
           label="Reset all filters"
           (clicked)="onResetFilters()"
         />

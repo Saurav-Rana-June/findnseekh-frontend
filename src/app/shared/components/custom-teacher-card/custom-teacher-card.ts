@@ -6,7 +6,6 @@ import {
   output,
 } from '@angular/core';
 import { CustomPrimaryButton } from '../custom-primary-button/custom.primary.button';
-import { CustomStatusPill } from '../custom-status-pill/custom.status.pill';
 import {
   TeacherAvatarComponent,
   TeacherAvatarSpec,
@@ -32,12 +31,13 @@ export interface TeacherCardData {
 }
 
 /**
- * Highly reusable Teacher Card component following FindnSeekh design system.
- * Used on HomePage featured section, TeacherListPage search results, and recommendations.
+ * Reusable Teacher Card component matching FindnSeekh design system.
+ * Features rounded avatar photo with floating mode badge, verified badge,
+ * ratings, specialty, bio snippet, skill chips, location/exp, and action footer.
  */
 @Component({
   selector: 'app-custom-teacher-card',
-  imports: [CustomPrimaryButton, CustomStatusPill, TeacherAvatarComponent],
+  imports: [TeacherAvatarComponent, CustomPrimaryButton],
   templateUrl: './custom-teacher-card.html',
   styleUrl: './custom-teacher-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,15 +49,17 @@ export interface TeacherCardData {
 export class CustomTeacherCard {
   readonly teacher = input.required<TeacherCardData>();
   readonly elevation = input<'none' | 'sm' | 'md'>('sm');
-  readonly showCategory = input<boolean>(true);
+  readonly showCategory = input<boolean>(false);
   readonly showRating = input<boolean>(true);
   readonly showSpecialty = input<boolean>(true);
+  readonly showBio = input<boolean>(true);
   readonly showSkills = input<boolean>(true);
   readonly showLocation = input<boolean>(true);
   readonly showExperience = input<boolean>(true);
   readonly showMode = input<boolean>(true);
   readonly showPrice = input<boolean>(true);
-  readonly primaryCtaLabel = input<string>('View Profile');
+  readonly primaryCtaLabel = input<string>('View profile');
+  readonly experienceFormat = input<'full' | 'short'>('full');
 
   readonly viewProfile = output<TeacherCardData>();
   readonly connect = output<TeacherCardData>();
@@ -69,9 +71,9 @@ export class CustomTeacherCard {
       case 'online':
         return 'Online';
       case 'offline':
-        return 'In-person';
+        return 'In person';
       case 'both':
-        return 'Online & In-person';
+        return 'Online & in person';
       default:
         return null;
     }

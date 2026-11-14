@@ -1,5 +1,6 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ComboOption } from '../../../../shared/components/combo-field/combo-field';
 import { TeachingMode } from '../../../../shared/components/custom-teacher-card/custom-teacher-card';
 import {
   Teacher,
@@ -15,7 +16,7 @@ export interface CategoryOption {
 }
 
 export const TEACHER_CATEGORIES: readonly CategoryOption[] = [
-  { id: 'all', label: 'All Categories' },
+  { id: 'all', label: 'All categories' },
   { id: 'music', label: 'Music' },
   { id: 'dance', label: 'Dance' },
   { id: 'photography', label: 'Photography' },
@@ -48,6 +49,41 @@ export class TeachersStore {
   readonly sortBy = this._sortBy.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
   readonly categories = TEACHER_CATEGORIES;
+
+  readonly locationOptions = computed<readonly ComboOption[]>(() => {
+    const set = new Map<string, string>();
+    for (const t of this._allTeachers()) {
+      if (t.city && !set.has(t.city)) {
+        set.set(t.city, t.state);
+      }
+    }
+    return Array.from(set.entries()).map(([city, state]) => ({
+      value: city,
+      hint: state,
+    }));
+  });
+
+  readonly skillOptions = computed<readonly ComboOption[]>(() => {
+    const categories = this.categories.filter((c) => c.id !== 'all');
+    const skillSet = new Map<string, string>();
+
+    for (const c of categories) {
+      skillSet.set(c.label, 'Category');
+    }
+
+    for (const t of this._allTeachers()) {
+      for (const s of t.skills) {
+        if (!skillSet.has(s)) {
+          skillSet.set(s, t.category);
+        }
+      }
+    }
+
+    return Array.from(skillSet.entries()).map(([value, hint]) => ({
+      value,
+      hint,
+    }));
+  });
 
   readonly hasActiveFilters = computed(() => {
     return (
