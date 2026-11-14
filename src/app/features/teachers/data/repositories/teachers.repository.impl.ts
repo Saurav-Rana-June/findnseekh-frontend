@@ -372,7 +372,61 @@ export class TeachersRepositoryImpl extends TeachersRepository {
   }
 
   override getTeacherById(id: string): Observable<Teacher | null> {
-    const teacher = MOCK_TEACHERS.find((t) => t.id === id) ?? null;
-    return of(teacher);
+    const teacher = MOCK_TEACHERS.find((t) => t.id === id);
+    if (!teacher) {
+      return of(null);
+    }
+
+    const enriched: Teacher = {
+      ...teacher,
+      about:
+        teacher.about ||
+        `${teacher.bio} With over ${teacher.experienceYears} years of teaching and stage experience, I believe learning should be structured yet enjoyable. My lessons are tailored to each student's pace, whether you are picking up this skill as a beginner hobby or preparing for advanced performances and certifications.`,
+      languages: teacher.languages || ['English', 'Hindi'],
+      qualifications: teacher.qualifications || [
+        `${teacher.experienceYears}+ years of teaching & professional practice`,
+        `Certified instructor in ${teacher.category}`,
+        `Mentored 150+ students across India and abroad`,
+      ],
+      reviews: teacher.reviews || [
+        {
+          id: 'rev-1',
+          studentName: 'Aarav Patel',
+          rating: 5,
+          date: '2 weeks ago',
+          comment: `Amazing teacher! Extremely patient and gives personalized feedback after every class. Highly recommended.`,
+        },
+        {
+          id: 'rev-2',
+          studentName: 'Pooja Sharma',
+          rating: 5,
+          date: '1 month ago',
+          comment: `I have seen huge improvement in my technique within just 4 sessions. Very organized and knowledgeable.`,
+        },
+        {
+          id: 'rev-3',
+          studentName: 'Rohan Verma',
+          rating: 4.8,
+          date: '2 months ago',
+          comment: `Great guidance and step-by-step methodology. Always on time and very encouraging.`,
+        },
+      ],
+      faqs: teacher.faqs || [
+        {
+          question: 'What should I prepare for the first trial session?',
+          answer: `Just bring your enthusiasm! For online lessons, ensure a quiet space and a stable internet connection. If instruments or materials are required, I will guide you on what to acquire before subsequent classes.`,
+        },
+        {
+          question: 'How do online sessions work?',
+          answer: `We connect over Google Meet or Zoom. I use high-definition audio and multi-angle camera setups to ensure you can clearly see techniques and posture. After each session, you receive notes and practice exercises.`,
+        },
+        {
+          question: 'Can I reschedule or cancel a class?',
+          answer: `Yes, you can easily reschedule anytime up to 6 hours before the scheduled session with no cancellation fee.`,
+        },
+      ],
+    };
+
+    return of(enriched);
   }
 }

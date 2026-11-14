@@ -66,8 +66,6 @@ export class HomePage {
   }
 
   protected onViewProfileClicked(teacher: FeaturedTeacher): void {
-    this.router.navigate(['/' + APP_ROUTE_PATHS.teachers], {
-      queryParams: { skill: teacher.specialty },
-    });
+    this.router.navigate(['/' + APP_ROUTE_PATHS.teachers, teacher.id]);
   }
 }

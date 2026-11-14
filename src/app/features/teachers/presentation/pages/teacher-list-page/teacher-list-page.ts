@@ -168,7 +168,7 @@ export class TeacherListPage implements OnInit {
   }
 
   protected onViewTeacherProfile(teacher: TeacherCardData): void {
-    console.log('View teacher profile:', teacher.id);
+    this.router.navigate(['/teachers', teacher.id]);
   }
 
   private updateUrlParams(): void {

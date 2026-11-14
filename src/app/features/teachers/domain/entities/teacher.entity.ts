@@ -11,6 +11,19 @@ export type SkillCategoryId =
   | 'technology'
   | 'languages';
 
+export interface TeacherReview {
+  readonly id: string;
+  readonly studentName: string;
+  readonly rating: number;
+  readonly date: string;
+  readonly comment: string;
+}
+
+export interface TeacherFaq {
+  readonly question: string;
+  readonly answer: string;
+}
+
 export interface Teacher {
   readonly id: string;
   readonly name: string;
@@ -18,6 +31,7 @@ export interface Teacher {
   readonly categoryId: SkillCategoryId;
   readonly specialty: string;
   readonly bio?: string;
+  readonly about?: string;
   readonly skills: readonly string[];
   readonly location: string;
   readonly city: string;
@@ -28,6 +42,10 @@ export interface Teacher {
   readonly teachingMode: TeachingMode;
   readonly hourlyRate?: number;
   readonly verified?: boolean;
+  readonly languages?: readonly string[];
+  readonly qualifications?: readonly string[];
+  readonly reviews?: readonly TeacherReview[];
+  readonly faqs?: readonly TeacherFaq[];
 }
 
 export type TeacherSortOption =
