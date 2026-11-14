@@ -3,6 +3,8 @@ import {
   AuthUser,
   LoginCredentials,
   RegisterPayload,
+  StudentProfile,
+  StudentProfileUpdatePayload,
   TeacherProfile,
   TeacherProfileUpdatePayload,
 } from '../entities/auth.entity';
@@ -13,5 +15,7 @@ export abstract class AuthRepository {
   abstract getCurrentUser(): Observable<AuthUser>;
   abstract becomeTeacher(): Observable<TeacherProfile>;
   abstract updateTeacherProfile(payload: TeacherProfileUpdatePayload): Observable<TeacherProfile>;
+  abstract getStudentProfile(): Observable<StudentProfile>;
+  abstract updateStudentProfile(payload: StudentProfileUpdatePayload): Observable<StudentProfile>;
   abstract logout(): Observable<void>;
 }

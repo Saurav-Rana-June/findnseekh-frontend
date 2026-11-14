@@ -5,6 +5,8 @@ import { AuthRepository } from '../../../domain/repositories/auth.repository';
 import { LoginUseCase } from '../../../domain/use-cases/login.use-case';
 import { RegisterUseCase } from '../../../domain/use-cases/register.use-case';
 import { BecomeTeacherUseCase } from '../../../domain/use-cases/become-teacher.use-case';
+import { GetStudentProfileUseCase } from '../../../domain/use-cases/get-student-profile.use-case';
+import { UpdateStudentProfileUseCase } from '../../../domain/use-cases/update-student-profile.use-case';
 import { UpdateTeacherProfileUseCase } from '../../../domain/use-cases/update-teacher-profile.use-case';
 import { AuthSessionService } from '../../../../../core/services/auth-session.service';
 import { AuthStore } from '../../state/auth.store';
@@ -40,6 +42,8 @@ describe('LoginModalComponent', () => {
         RegisterUseCase,
         BecomeTeacherUseCase,
         UpdateTeacherProfileUseCase,
+        GetStudentProfileUseCase,
+        UpdateStudentProfileUseCase,
         AuthSessionService,
         AuthStore,
       ],

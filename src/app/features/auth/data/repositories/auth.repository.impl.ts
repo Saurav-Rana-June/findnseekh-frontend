@@ -5,6 +5,8 @@ import {
   AuthUser,
   LoginCredentials,
   RegisterPayload,
+  StudentProfile,
+  StudentProfileUpdatePayload,
   TeacherProfile,
   TeacherProfileUpdatePayload,
 } from '../../domain/entities/auth.entity';
@@ -14,6 +16,8 @@ import {
   toAuthUser,
   toLoginRequestDto,
   toRegisterRequestDto,
+  toStudentProfile,
+  toStudentProfileUpdateRequestDto,
   toTeacherProfile,
   toTeacherProfileUpdateRequestDto,
 } from '../models/auth.dto';
@@ -63,6 +67,20 @@ export class AuthRepositoryImpl extends AuthRepository {
     }
 
     return profile$;
+  }
+
+  override getStudentProfile(): Observable<StudentProfile> {
+    return this.authApi
+      .getStudentProfile()
+      .pipe(map((response) => toStudentProfile(response.data)));
+  }
+
+  override updateStudentProfile(
+    payload: StudentProfileUpdatePayload,
+  ): Observable<StudentProfile> {
+    return this.authApi
+      .updateStudentProfile(toStudentProfileUpdateRequestDto(payload))
+      .pipe(map((response) => toStudentProfile(response.data)));
   }
 
   override logout(): Observable<void> {

@@ -18,6 +18,7 @@ import { CustomAvatarComponent } from '../../../../../shared/components/custom-a
 import { CustomCloseOutlinedButton } from '../../../../../shared/components/custom-close-outlined-button/custom.close.outlined.button';
 import { CustomImageCropperModalComponent } from '../../../../../shared/components/custom-image-cropper-modal/custom-image-cropper-modal';
 import {
+  StudentProfileUpdatePayload,
   TeacherProfileUpdatePayload,
   TeachingMode,
 } from '../../../../auth/domain/entities/auth.entity';
@@ -123,6 +124,7 @@ export class ProfilePage {
     () => this.user()?.roles.includes('teacher') ?? false,
   );
   protected readonly teacherProfile = this.authStore.teacherProfile;
+  protected readonly studentProfile = this.authStore.studentProfile;
 
   // Student profile state
   protected readonly studentSkills = signal<string[]>(['Mathematics', 'Guitar']);
@@ -192,6 +194,8 @@ export class ProfilePage {
   });
 
   constructor() {
+    this.authStore.getStudentProfile();
+
     effect(() => {
       const profile = this.teacherProfile();
       if (profile) {
@@ -207,10 +211,28 @@ export class ProfilePage {
           this.skills.set([...profile.skills]);
         }
       }
+
+      const student = this.studentProfile();
+      if (student) {
+        this.studentForm.patchValue({
+          phone: student.phone ?? '',
+          city: student.city ?? '',
+          state: student.state ?? '',
+          learningMode: student.learningMode ?? 'both',
+          learningLevel: student.learningLevel ?? 'beginner',
+          learningGoals: student.learningGoals ?? '',
+        });
+        if (student.skillsToLearn && student.skillsToLearn.length > 0) {
+          this.studentSkills.set([...student.skillsToLearn]);
+        }
+      }
+
       const user = this.user();
       if (user?.phone) {
         this.form.patchValue({ phone: user.phone });
-        this.studentForm.patchValue({ phone: user.phone });
+        if (!this.studentForm.controls.phone.value) {
+          this.studentForm.patchValue({ phone: user.phone });
+        }
       }
     });
   }
@@ -418,10 +440,24 @@ export class ProfilePage {
       this.studentForm.markAllAsTouched();
       return;
     }
-    this.isStudentSavedRecently.set(true);
-    setTimeout(() => {
-      this.isStudentSavedRecently.set(false);
-    }, 3500);
+
+    const raw = this.studentForm.getRawValue();
+    const payload: StudentProfileUpdatePayload = {
+      phone: raw.phone.trim() || null,
+      city: raw.city.trim() || null,
+      state: raw.state.trim() || null,
+      learningMode: raw.learningMode,
+      learningLevel: raw.learningLevel,
+      learningGoals: raw.learningGoals.trim() || null,
+      skillsToLearn: this.studentSkills(),
+    };
+
+    this.authStore.updateStudentProfile(payload, () => {
+      this.isStudentSavedRecently.set(true);
+      setTimeout(() => {
+        this.isStudentSavedRecently.set(false);
+      }, 3500);
+    });
   }
 
   protected onBecomeTeacher(): void {

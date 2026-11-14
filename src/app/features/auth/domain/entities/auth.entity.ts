@@ -54,3 +54,27 @@ export interface TeacherProfileUpdatePayload {
   readonly teachingMode?: TeachingMode;
   readonly phone?: string | null;
 }
+
+export type LearningLevel = 'beginner' | 'intermediate' | 'advanced';
+
+export interface StudentProfile {
+  readonly id: number;
+  readonly userId: number;
+  readonly phone?: string | null;
+  readonly city: string | null;
+  readonly state: string | null;
+  readonly learningMode: TeachingMode;
+  readonly learningLevel: LearningLevel;
+  readonly learningGoals: string | null;
+  readonly skillsToLearn?: readonly string[];
+}
+
+export interface StudentProfileUpdatePayload {
+  readonly phone?: string | null;
+  readonly city?: string | null;
+  readonly state?: string | null;
+  readonly learningMode?: TeachingMode;
+  readonly learningLevel?: LearningLevel;
+  readonly learningGoals?: string | null;
+  readonly skillsToLearn?: readonly string[];
+}

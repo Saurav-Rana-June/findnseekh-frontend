@@ -8,6 +8,8 @@ import {
   AuthUserDto,
   LoginRequestDto,
   RegisterRequestDto,
+  StudentProfileDto,
+  StudentProfileUpdateRequestDto,
   TeacherProfileDto,
   TeacherProfileUpdateRequestDto,
   TokenResponseDto,
@@ -57,6 +59,19 @@ export class AuthApiService {
   ): Observable<ApiResponse<TeacherProfileDto>> {
     return this.api.put<ApiResponse<TeacherProfileDto>, TeacherProfileUpdateRequestDto>(
       API_ENDPOINTS.auth.teacherProfileMe,
+      payload,
+    );
+  }
+
+  getStudentProfile(): Observable<ApiResponse<StudentProfileDto>> {
+    return this.api.get<ApiResponse<StudentProfileDto>>(API_ENDPOINTS.auth.studentProfileMe);
+  }
+
+  updateStudentProfile(
+    payload: StudentProfileUpdateRequestDto,
+  ): Observable<ApiResponse<StudentProfileDto>> {
+    return this.api.put<ApiResponse<StudentProfileDto>, StudentProfileUpdateRequestDto>(
+      API_ENDPOINTS.auth.studentProfileMe,
       payload,
     );
   }

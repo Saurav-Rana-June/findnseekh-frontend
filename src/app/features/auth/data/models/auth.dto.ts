@@ -1,8 +1,11 @@
 import {
   AuthTokens,
   AuthUser,
+  LearningLevel,
   LoginCredentials,
   RegisterPayload,
+  StudentProfile,
+  StudentProfileUpdatePayload,
   TeacherProfile,
   TeacherProfileUpdatePayload,
   TeachingMode,
@@ -59,6 +62,28 @@ export interface TeacherProfileDto {
   readonly state: string | null;
   readonly teaching_mode: TeachingMode;
   readonly is_verified: boolean;
+}
+
+export interface StudentProfileDto {
+  readonly id: number;
+  readonly user_id: number;
+  readonly phone?: string | null;
+  readonly city: string | null;
+  readonly state: string | null;
+  readonly learning_mode: TeachingMode;
+  readonly learning_level: LearningLevel;
+  readonly learning_goals: string | null;
+  readonly skills_to_learn?: readonly string[] | string | null;
+}
+
+export interface StudentProfileUpdateRequestDto {
+  readonly phone?: string | null;
+  readonly city?: string | null;
+  readonly state?: string | null;
+  readonly learning_mode?: TeachingMode;
+  readonly learning_level?: LearningLevel;
+  readonly learning_goals?: string | null;
+  readonly skills_to_learn?: string[];
 }
 
 export function toLoginRequestDto(credentials: LoginCredentials): LoginRequestDto {
@@ -132,5 +157,45 @@ export function toTeacherProfile(dto: TeacherProfileDto): TeacherProfile {
     state: dto.state,
     teachingMode: dto.teaching_mode,
     isVerified: dto.is_verified,
+  };
+}
+
+export function toStudentProfileUpdateRequestDto(
+  payload: StudentProfileUpdatePayload,
+): StudentProfileUpdateRequestDto {
+  return {
+    phone: payload.phone?.trim() || null,
+    city: payload.city?.trim() || null,
+    state: payload.state?.trim() || null,
+    learning_mode: payload.learningMode ?? 'both',
+    learning_level: payload.learningLevel ?? 'beginner',
+    learning_goals: payload.learningGoals?.trim() || null,
+    skills_to_learn: payload.skillsToLearn ? Array.from(payload.skillsToLearn) : undefined,
+  };
+}
+
+export function toStudentProfile(dto: StudentProfileDto): StudentProfile {
+  let skillsToLearn: readonly string[] | undefined;
+  if (Array.isArray(dto.skills_to_learn)) {
+    skillsToLearn = dto.skills_to_learn;
+  } else if (typeof dto.skills_to_learn === 'string') {
+    try {
+      const parsed = JSON.parse(dto.skills_to_learn);
+      skillsToLearn = Array.isArray(parsed) ? parsed : [dto.skills_to_learn];
+    } catch {
+      skillsToLearn = dto.skills_to_learn.split(',').map((s) => s.trim()).filter(Boolean);
+    }
+  }
+
+  return {
+    id: dto.id,
+    userId: dto.user_id,
+    phone: dto.phone ?? null,
+    city: dto.city,
+    state: dto.state,
+    learningMode: dto.learning_mode,
+    learningLevel: dto.learning_level,
+    learningGoals: dto.learning_goals,
+    skillsToLearn: skillsToLearn ?? [],
   };
 }
