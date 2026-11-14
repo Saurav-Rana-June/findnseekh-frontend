@@ -53,7 +53,7 @@ export class TeacherProfilePage implements OnInit {
   // Interactive booking state
   protected readonly isBookingOpen = signal<boolean>(false);
   protected readonly bookingSuccess = signal<boolean>(false);
-  protected readonly selectedSessionType = signal<'trial' | 'regular'>('trial');
+  protected readonly selectedSessionType = signal<'enquiry' | 'trial' | 'regular'>('enquiry');
   protected readonly selectedBookingMode = signal<TeachingMode>('online');
 
   // Save & Share states
@@ -153,7 +153,7 @@ export class TeacherProfilePage implements OnInit {
     }
   }
 
-  protected onOpenBooking(type: 'trial' | 'regular' = 'trial'): void {
+  protected onOpenBooking(type: 'enquiry' | 'trial' | 'regular' = 'enquiry'): void {
     this.selectedSessionType.set(type);
     this.bookingSuccess.set(false);
     this.isBookingOpen.set(true);

@@ -126,20 +126,15 @@
           }
         </button>
 
-        <!-- Sort Select -->
-        <div class="sort-select-box">
-          <label for="sort-select" class="visually-hidden">Sort by</label>
-          <select
-            id="sort-select"
-            class="sort-select"
-            [value]="store.sortBy()"
-            (change)="onSortSelect($event)"
-          >
-            @for (opt of sortOptions; track opt.value) {
-              <option [value]="opt.value">{{ opt.label }}</option>
-            }
-          </select>
-        </div>
+        <!-- Sort Dropdown using CustomDropdown -->
+        <app-custom-dropdown
+          ariaLabel="Sort teachers"
+          [options]="sortOptions"
+          [value]="store.sortBy()"
+          align="right"
+          minWidth="205px"
+          (valueChange)="onSortChange($event)"
+        />
       </div>
     </section>
 
@@ -148,17 +143,15 @@
       <div class="filters-drawer">
         <div class="filters-drawer__row">
           <div class="filters-drawer__group">
-            <label for="drawer-exp-select" class="filters-drawer__label">Minimum Experience:</label>
-            <select
-              id="drawer-exp-select"
-              class="filters-drawer__select"
+            <app-custom-dropdown
+              label="Minimum Experience:"
+              ariaLabel="Minimum experience filter"
+              [options]="experienceOptions"
               [value]="store.selectedExperience()"
-              (change)="onExperienceSelect($event)"
-            >
-              @for (exp of experienceOptions; track exp.years) {
-                <option [value]="exp.years">{{ exp.label }}</option>
-              }
-            </select>
+              align="left"
+              minWidth="195px"
+              (valueChange)="onExperienceChange($event)"
+            />
           </div>
 
           @if (store.hasActiveFilters()) {

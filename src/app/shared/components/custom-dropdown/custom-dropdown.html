@@ -1,0 +1,85 @@
+<div class="dropdown-wrapper" (focusout)="onFocusOut($event)">
+  @if (label()) {
+    <span class="dropdown-label">{{ label() }}</span>
+  }
+
+  <div class="dropdown-container">
+    <button
+      type="button"
+      class="dropdown-trigger"
+      [attr.id]="dropdownId"
+      [attr.aria-haspopup]="'listbox'"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-controls]="listId"
+      [attr.aria-label]="ariaLabel() || label() || displayLabel()"
+      [attr.data-size]="size()"
+      [class.is-open]="isOpen()"
+      [class.is-disabled]="disabled()"
+      [disabled]="disabled()"
+      (click)="toggleOpen()"
+    >
+      <span class="dropdown-trigger__label">{{ displayLabel() }}</span>
+      <svg
+        class="dropdown-trigger__chevron"
+        [class.is-rotated]="isOpen()"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </button>
+
+    @if (isOpen()) {
+      <ul
+        [id]="listId"
+        class="dropdown-menu"
+        [attr.data-align]="align()"
+        [style.min-width]="minWidth()"
+        role="listbox"
+        [attr.aria-labelledby]="dropdownId"
+      >
+        @for (opt of options(); track opt.value) {
+          <li
+            role="option"
+            [attr.aria-selected]="opt.value === value()"
+            class="dropdown-option"
+            [class.is-selected]="opt.value === value()"
+            (click)="selectOption(opt)"
+          >
+            <div class="dropdown-option__left">
+              @if (opt.value === value()) {
+                <svg
+                  class="dropdown-option__check"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              }
+              <span class="dropdown-option__value">{{ opt.label }}</span>
+            </div>
+
+            @if (opt.hint) {
+              <span class="dropdown-option__hint">{{ opt.hint }}</span>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>
+

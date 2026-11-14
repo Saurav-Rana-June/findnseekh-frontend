@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ComboFieldComponent } from '../../../../../shared/components/combo-field/combo-field';
+import { CustomDropdown, CustomDropdownOption } from '../../../../../shared/components/custom-dropdown/custom-dropdown';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
 import {
@@ -29,6 +30,7 @@ import { TeachersStore } from '../../state/teachers.store';
     RouterLink,
     CustomTeacherCard,
     ComboFieldComponent,
+    CustomDropdown,
     CustomPrimaryButton,
     CustomStatusPill,
   ],
@@ -63,20 +65,20 @@ export class TeacherListPage implements OnInit {
     { id: 'offline', label: 'In person' },
   ];
 
-  protected readonly experienceOptions: readonly { readonly years: number; readonly label: string }[] = [
-    { years: 0, label: 'Any Experience' },
-    { years: 3, label: '3+ Years' },
-    { years: 5, label: '5+ Years' },
-    { years: 8, label: '8+ Years' },
-    { years: 10, label: '10+ Years' },
+  protected readonly experienceOptions: readonly CustomDropdownOption<number>[] = [
+    { value: 0, label: 'Any Experience', hint: 'All levels' },
+    { value: 3, label: '3+ Years', hint: 'Intermediate' },
+    { value: 5, label: '5+ Years', hint: 'Experienced' },
+    { value: 8, label: '8+ Years', hint: 'Senior' },
+    { value: 10, label: '10+ Years', hint: 'Master' },
   ];
 
-  protected readonly sortOptions: readonly { readonly value: TeacherSortOption; readonly label: string }[] = [
-    { value: 'recommended', label: 'Recommended' },
-    { value: 'rating', label: 'Highest Rated' },
-    { value: 'experience', label: 'Most Experienced' },
-    { value: 'price-asc', label: 'Price: Low to High' },
-    { value: 'price-desc', label: 'Price: High to Low' },
+  protected readonly sortOptions: readonly CustomDropdownOption<TeacherSortOption>[] = [
+    { value: 'recommended', label: 'Recommended', hint: 'Best match' },
+    { value: 'rating', label: 'Highest Rated', hint: 'Top score' },
+    { value: 'experience', label: 'Most Experienced', hint: 'Years' },
+    { value: 'price-asc', label: 'Price: Low to High', hint: 'Lowest' },
+    { value: 'price-desc', label: 'Price: High to Low', hint: 'Highest' },
   ];
 
   ngOnInit(): void {
@@ -120,6 +122,15 @@ export class TeacherListPage implements OnInit {
     this.visibleCount.set(9);
     this.store.setSelectedMode(mode);
     this.updateUrlParams();
+  }
+
+  protected onExperienceChange(value: number): void {
+    this.visibleCount.set(9);
+    this.store.setSelectedExperience(value);
+  }
+
+  protected onSortChange(value: TeacherSortOption): void {
+    this.store.setSortBy(value);
   }
 
   protected onExperienceSelect(event: Event): void {
