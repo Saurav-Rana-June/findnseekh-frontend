@@ -24,6 +24,25 @@ export const API_ENDPOINTS = {
     teacherProfileMe: '/profile/teacher/me',
     studentProfileMe: '/profile/student/me',
   },
+  home: {
+    overview: '/home/overview',
+  },
+  teachers: {
+    featured: '/teachers/featured',
+    list: '/teachers',
+    detail: (userId: number | string) => `/teachers/${userId}`,
+  },
+  skills: {
+    popular: '/skills/popular',
+    suggestions: '/skills/suggestions',
+  },
+  locations: {
+    suggestions: '/locations/suggestions',
+  },
+  categories: {
+    list: '/categories',
+    detail: (id: number | string) => `/categories/${id}`,
+  },
 } as const;
 
 export function provideApiConfig(config: ApiConfig): Provider {

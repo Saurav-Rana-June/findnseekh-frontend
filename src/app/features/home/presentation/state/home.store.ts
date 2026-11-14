@@ -30,6 +30,11 @@ export class HomeStore {
     skill: '',
   });
 
+  private readonly _isLoading = signal<boolean>(false);
+  private readonly _error = signal<string | null>(null);
+
+  readonly isLoading = this._isLoading.asReadonly();
+  readonly error = this._error.asReadonly();
   readonly popularSkills = computed<readonly SkillSuggestion[]>(
     () => this._overview().popularSkills,
   );
@@ -92,11 +97,20 @@ export class HomeStore {
   }
 
   loadOverview(): void {
+    this._isLoading.set(true);
+    this._error.set(null);
     this.getHomeOverview
       .execute()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((overview) => {
-        this._overview.set(overview);
+      .subscribe({
+        next: (overview) => {
+          this._overview.set(overview);
+          this._isLoading.set(false);
+        },
+        error: (err) => {
+          this._error.set(err?.message || 'Failed to load home page data');
+          this._isLoading.set(false);
+        },
       });
   }
 

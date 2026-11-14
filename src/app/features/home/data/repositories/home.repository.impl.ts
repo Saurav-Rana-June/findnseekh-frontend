@@ -1,7 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { catchError, map, Observable, of } from 'rxjs';
 import { HomeOverview } from '../../domain/entities/home.entity';
 import { HomeRepository } from '../../domain/repositories/home.repository';
+import { toHomeOverview } from '../models/home.dto';
+import { HomeApiService } from '../services/home-api.service';
 
 const INITIAL_HOME_OVERVIEW: HomeOverview = {
   popularSkills: [
@@ -219,7 +222,16 @@ const INITIAL_HOME_OVERVIEW: HomeOverview = {
 
 @Injectable()
 export class HomeRepositoryImpl extends HomeRepository {
+  private readonly homeApi = inject(HomeApiService, { optional: true });
+  private readonly platformId = inject(PLATFORM_ID);
+
   override getOverview(): Observable<HomeOverview> {
-    return of(INITIAL_HOME_OVERVIEW);
+    if (!isPlatformBrowser(this.platformId) || !this.homeApi) {
+      return of(INITIAL_HOME_OVERVIEW);
+    }
+    return this.homeApi.getOverview().pipe(
+      map((response) => toHomeOverview(response.data)),
+      catchError(() => of(INITIAL_HOME_OVERVIEW)),
+    );
   }
 }

@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { provideApiConfig } from './config/api.config';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { errorInterceptor } from './interceptors/error.interceptor';
+import { etagInterceptor } from './interceptors/etag.interceptor';
 
 export function provideCore(): EnvironmentProviders {
   return makeEnvironmentProviders([
@@ -11,7 +12,10 @@ export function provideCore(): EnvironmentProviders {
       baseUrl: environment.apiBaseUrl,
       timeoutMs: environment.apiTimeoutMs,
     }),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor, errorInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor, etagInterceptor, errorInterceptor]),
+    ),
   ]);
 }
 
