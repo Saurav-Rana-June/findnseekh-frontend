@@ -20,6 +20,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/profile/presentation/profile.routes').then((m) => m.PROFILE_ROUTES),
       },
+      {
+        path: APP_ROUTE_PATHS.teachers,
+        loadChildren: () =>
+          import('./features/teachers/presentation/teachers.routes').then((m) => m.TEACHERS_ROUTES),
+      },
     ],
   },
   {

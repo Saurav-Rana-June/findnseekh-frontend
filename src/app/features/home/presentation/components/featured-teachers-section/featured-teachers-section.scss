@@ -15,6 +15,9 @@
 .grid {
   display: grid;
   gap: 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 
   > li {
     display: flex;
@@ -28,116 +31,6 @@
 
   &--teachers {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-.t-card {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-white);
-  transition:
-    transform var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-
-    .t-card__photo app-teacher-avatar {
-      transform: scale(1.04);
-    }
-  }
-
-  &__photo {
-    position: relative;
-    display: block;
-    aspect-ratio: 16 / 11;
-    overflow: hidden;
-    background: var(--color-primary-50);
-
-    app-teacher-avatar {
-      transition: transform 500ms var(--ease);
-    }
-  }
-
-  &__tag {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 1;
-  }
-
-  &__body {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 6px;
-    padding: 18px 20px 20px;
-  }
-
-  &__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-
-  &__name {
-    font-size: 1.15rem;
-    font-weight: 600;
-  }
-
-  &__rating {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
-    padding: 3px 9px;
-    border-radius: var(--radius-pill);
-    background: var(--color-primary-50);
-    color: var(--color-primary);
-    font-size: 0.85rem;
-    font-weight: 700;
-
-    small {
-      font-weight: 500;
-      color: var(--color-muted);
-      font-size: 0.75rem;
-    }
-  }
-
-  &__skill {
-    color: var(--color-primary);
-    font-weight: 500;
-    font-size: 0.95rem;
-  }
-
-  &__meta {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin: 8px 0 16px;
-    font-size: 0.9rem;
-    color: var(--color-muted);
-
-    li {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    svg {
-      flex-shrink: 0;
-      color: var(--color-primary-300);
-    }
-  }
-
-  &__cta {
-    margin-top: auto;
-    width: 100%;
   }
 }
 
@@ -170,74 +63,9 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .grid--teachers {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .t-card {
-    border-radius: var(--radius-md);
-
-    &__tag {
-      top: 8px;
-      left: 8px;
-      --cp-pill-padding: 3px 8px;
-      --cp-pill-font-size: 0.68rem;
-    }
-
-    &__body {
-      gap: 4px;
-      padding: 12px;
-    }
-
-    &__top {
-      flex-wrap: wrap;
-      gap: 4px 6px;
-    }
-
-    &__name {
-      font-size: 0.92rem;
-      line-height: 1.25;
-    }
-
-    &__rating {
-      padding: 2px 6px;
-      font-size: 0.72rem;
-
-      svg {
-        width: 11px;
-        height: 11px;
-      }
-
-      small {
-        font-size: 0.65rem;
-      }
-    }
-
-    &__skill {
-      font-size: 0.8rem;
-    }
-
-    &__meta {
-      gap: 4px;
-      margin: 4px 0 10px;
-      font-size: 0.74rem;
-
-      li {
-        gap: 5px;
-      }
-
-      svg {
-        width: 12px;
-        height: 12px;
-      }
-    }
-
-    &__cta {
-      --cp-btn-min-height: 36px;
-      --cp-btn-padding-x: 10px;
-      --cp-btn-font-size: 0.8rem;
-    }
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }

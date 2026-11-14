@@ -1,5 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID } from '@angular/core';
+import { Router } from '@angular/router';
+import { APP_ROUTE_PATHS } from '../../../../../core/constants/app.constants';
 import {
   FeaturedTeacher,
   SkillCategory,
@@ -27,6 +29,7 @@ import { HomeStore } from '../../state/home.store';
 })
 export class HomePage {
   protected readonly store = inject(HomeStore);
+  private readonly router = inject(Router);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   protected readonly hasActiveFilter = computed(() => {
@@ -35,34 +38,36 @@ export class HomePage {
   });
 
   protected onSearchSubmitted(query: TeacherSearchQuery): void {
-    this.store.updateSearch(query);
-    this.scrollToTeachers();
+    const queryParams: Record<string, string> = {};
+    if (query.skill?.trim()) {
+      queryParams['skill'] = query.skill.trim();
+    }
+    if (query.location?.trim()) {
+      queryParams['location'] = query.location.trim();
+    }
+
+    this.router.navigate(['/' + APP_ROUTE_PATHS.teachers], { queryParams });
   }
 
   protected onPopularSkillSelected(skill: string): void {
-    this.store.selectSkill(skill);
-    this.scrollToTeachers();
+    this.router.navigate(['/' + APP_ROUTE_PATHS.teachers], {
+      queryParams: { skill: skill.trim() },
+    });
   }
 
   protected onCategorySelected(category: SkillCategory): void {
-    this.store.selectSkill(category.title);
-    this.scrollToTeachers();
+    this.router.navigate(['/' + APP_ROUTE_PATHS.teachers], {
+      queryParams: { category: category.id },
+    });
   }
 
   protected onBrowseAllClicked(): void {
-    this.store.clearSearch();
-    this.scrollToTeachers();
+    this.router.navigate(['/' + APP_ROUTE_PATHS.teachers]);
   }
 
   protected onViewProfileClicked(teacher: FeaturedTeacher): void {
-    this.store.selectSkill(teacher.specialty);
-  }
-
-  private scrollToTeachers(): void {
-    if (!this.isBrowser) {
-      return;
-    }
-
-    document.getElementById('teachers')?.scrollIntoView({ behavior: 'smooth' });
+    this.router.navigate(['/' + APP_ROUTE_PATHS.teachers], {
+      queryParams: { skill: teacher.specialty },
+    });
   }
 }

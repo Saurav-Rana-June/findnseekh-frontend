@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
-import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
+import { CustomTeacherCard } from '../../../../../shared/components/custom-teacher-card/custom-teacher-card';
 import { FeaturedTeacher } from '../../../domain/entities/home.entity';
-import { TeacherAvatarComponent } from '../teacher-avatar/teacher-avatar';
 
 @Component({
   selector: 'app-featured-teachers-section',
-  imports: [TeacherAvatarComponent, CustomPrimaryButton, CustomStatusPill],
+  imports: [CustomTeacherCard, CustomPrimaryButton],
   templateUrl: './featured-teachers-section.html',
   styleUrl: './featured-teachers-section.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -11,6 +11,7 @@ export const APP_ROUTE_PATHS = {
   login: 'login',
   register: 'register',
   profile: 'profile',
+  teachers: 'teachers',
   admin: 'admin',
 } as const;
 
