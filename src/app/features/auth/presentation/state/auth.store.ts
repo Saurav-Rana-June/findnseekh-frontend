@@ -194,6 +194,59 @@ export class AuthStore {
       });
   }
 
+  becomeTeacher(onSuccess?: (profile: TeacherProfile) => void): void {
+    this._error.set(null);
+
+    if (this.prototypeMode) {
+      const current = this._user();
+      if (current) {
+        const roles = current.roles.includes('teacher')
+          ? current.roles
+          : [...current.roles, 'teacher' as UserRole];
+        this._user.set({ ...current, roles });
+      }
+      const mockProfile: TeacherProfile = {
+        id: 1,
+        userId: 1,
+        bio: null,
+        qualification: null,
+        skills: [],
+        experienceYears: 0,
+        city: null,
+        state: null,
+        teachingMode: 'both',
+        isVerified: false,
+      };
+      this._teacherProfile.set(mockProfile);
+      this._isTeacherProfileCompleted.set(false);
+      onSuccess?.(mockProfile);
+      return;
+    }
+
+    this._isLoading.set(true);
+
+    this.becomeTeacherUseCase
+      .execute()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this._isLoading.set(false)),
+      )
+      .subscribe({
+        next: (profile) => {
+          this._teacherProfile.set(profile);
+          const current = this._user();
+          if (current && !current.roles.includes('teacher')) {
+            this._user.set({ ...current, roles: [...current.roles, 'teacher'] });
+          }
+          this._isTeacherProfileCompleted.set(false);
+          onSuccess?.(profile);
+        },
+        error: (err: ApiError) => {
+          this._error.set(err.message);
+        },
+      });
+  }
+
   clearError(): void {
     this._error.set(null);
   }

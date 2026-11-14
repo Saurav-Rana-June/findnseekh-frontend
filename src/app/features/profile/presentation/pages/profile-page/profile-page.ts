@@ -124,6 +124,63 @@ export class ProfilePage {
   );
   protected readonly teacherProfile = this.authStore.teacherProfile;
 
+  // Student profile state
+  protected readonly studentSkills = signal<string[]>(['Mathematics', 'Guitar']);
+  protected readonly studentSkillInputValue = signal('');
+  protected readonly showAllStudentSuggestions = signal(false);
+  protected readonly isStudentSavedRecently = signal(false);
+
+  protected readonly unaddedStudentSuggestions = computed(() => {
+    return this.popularSuggestions.filter((s) => !this.hasStudentSkill(s));
+  });
+
+  protected readonly visibleStudentSuggestions = computed(() => {
+    const list = this.unaddedStudentSuggestions();
+    return this.showAllStudentSuggestions() ? list : list.slice(0, 6);
+  });
+
+  protected readonly remainingStudentSuggestionsCount = computed(() => {
+    const list = this.unaddedStudentSuggestions();
+    return Math.max(0, list.length - 6);
+  });
+
+  protected readonly learningModes: ReadonlyArray<{
+    value: TeachingMode;
+    label: string;
+    hint: string;
+  }> = [
+    {
+      value: 'online',
+      label: 'Online Only',
+      hint: 'Learn remotely via video calls from anywhere',
+    },
+    {
+      value: 'offline',
+      label: 'In-Person',
+      hint: 'Meet tutor at home or their studio / academy',
+    },
+    {
+      value: 'both',
+      label: 'Flexible / Both',
+      hint: 'Open to both online and in-person sessions',
+    },
+  ];
+
+  protected readonly learningLevels = [
+    { value: 'beginner', label: 'Beginner', hint: 'Starting from scratch' },
+    { value: 'intermediate', label: 'Intermediate', hint: 'Have basics, want to improve' },
+    { value: 'advanced', label: 'Advanced', hint: 'Exam prep or mastery' },
+  ] as const;
+
+  protected readonly studentForm = this.fb.nonNullable.group({
+    phone: ['', [Validators.maxLength(20)]],
+    city: ['', [Validators.maxLength(100)]],
+    state: ['', [Validators.maxLength(100)]],
+    learningMode: ['both' as TeachingMode, [Validators.required]],
+    learningLevel: ['beginner' as 'beginner' | 'intermediate' | 'advanced'],
+    learningGoals: ['', [Validators.maxLength(1000)]],
+  });
+
   protected readonly form = this.fb.nonNullable.group({
     bio: ['', [Validators.maxLength(1000)]],
     qualification: ['', [Validators.maxLength(150)]],
@@ -153,6 +210,7 @@ export class ProfilePage {
       const user = this.user();
       if (user?.phone) {
         this.form.patchValue({ phone: user.phone });
+        this.studentForm.patchValue({ phone: user.phone });
       }
     });
   }
@@ -280,6 +338,94 @@ export class ProfilePage {
       this.isSavedRecently.set(true);
       setTimeout(() => this.isSavedRecently.set(false), 3500);
     });
+  }
+
+  // Student action handlers
+  protected setStudentLearningMode(mode: TeachingMode): void {
+    this.studentForm.controls.learningMode.setValue(mode);
+  }
+
+  protected setStudentLearningLevel(level: 'beginner' | 'intermediate' | 'advanced'): void {
+    this.studentForm.controls.learningLevel.setValue(level);
+  }
+
+  protected onStudentSkillInputChange(value: string): void {
+    this.studentSkillInputValue.set(value);
+  }
+
+  protected addStudentSkillsFromInput(): void {
+    const raw = this.studentSkillInputValue().trim();
+    if (!raw) return;
+
+    const newItems = raw
+      .split(/[,;\n|]+/)
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+
+    if (newItems.length === 0) return;
+
+    const current = this.studentSkills();
+    const currentLower = new Set(current.map((s) => s.toLowerCase()));
+    const toAdd: string[] = [];
+
+    for (const item of newItems) {
+      if (!currentLower.has(item.toLowerCase())) {
+        currentLower.add(item.toLowerCase());
+        toAdd.push(item);
+      }
+    }
+
+    if (toAdd.length > 0) {
+      this.studentSkills.set([...current, ...toAdd]);
+    }
+    this.studentSkillInputValue.set('');
+  }
+
+  protected onStudentSkillInputKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ',') {
+      event.preventDefault();
+      this.addStudentSkillsFromInput();
+    }
+  }
+
+  protected addSuggestedStudentSkill(skill: string): void {
+    const current = this.studentSkills();
+    const exists = current.some((s) => s.toLowerCase() === skill.toLowerCase());
+    if (!exists) {
+      this.studentSkills.set([...current, skill]);
+    }
+  }
+
+  protected removeStudentSkill(skillToRemove: string): void {
+    this.studentSkills.set(this.studentSkills().filter((s) => s !== skillToRemove));
+  }
+
+  protected clearAllStudentSkills(): void {
+    this.studentSkills.set([]);
+  }
+
+  protected hasStudentSkill(skill: string): boolean {
+    const target = skill.trim().toLowerCase();
+    return this.studentSkills().some((s) => s.toLowerCase() === target);
+  }
+
+  protected toggleShowAllStudentSuggestions(): void {
+    this.showAllStudentSuggestions.update((prev) => !prev);
+  }
+
+  protected onSaveStudent(): void {
+    if (this.studentForm.invalid) {
+      this.studentForm.markAllAsTouched();
+      return;
+    }
+    this.isStudentSavedRecently.set(true);
+    setTimeout(() => {
+      this.isStudentSavedRecently.set(false);
+    }, 3500);
+  }
+
+  protected onBecomeTeacher(): void {
+    this.authStore.becomeTeacher();
   }
 
   protected navigateToExplore(): void {

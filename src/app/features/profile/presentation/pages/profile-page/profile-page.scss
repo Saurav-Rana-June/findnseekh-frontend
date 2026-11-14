@@ -159,9 +159,11 @@
   border-radius: var(--radius-lg, 24px);
   box-shadow: var(--shadow-sm);
   padding: 2rem;
+  margin-bottom: 1.75rem;
 
   @media (max-width: 640px) {
     padding: 1.5rem 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   &__header {
@@ -274,7 +276,8 @@
   }
 }
 
-.teaching-modes-grid {
+.teaching-modes-grid,
+.learning-levels-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.875rem;
@@ -284,17 +287,19 @@
   }
 }
 
-.mode-card {
+.mode-card,
+.level-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
   gap: 0.375rem;
   padding: 0.875rem 1rem;
-  border-radius: var(--radius-md, 16px);
+  border-radius: var(--radius-md, 14px);
   border: 1.5px solid var(--color-border, #e4e7e0);
   background: var(--color-white, #ffffff);
   cursor: pointer;
+  transition: all var(--dur-fast, 150ms) var(--ease, ease);
 
   &:hover {
     border-color: var(--color-primary-300, #7fa894);
@@ -508,35 +513,68 @@
   }
 }
 
-.student-info-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.info-tile {
+.become-teacher-banner {
   display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  padding: 1rem 1.25rem;
-  border-radius: var(--radius-sm, 10px);
-  background: var(--color-surface, #f8fafc);
-  border: 1px solid var(--color-border, #e4e7e0);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.75rem 2rem;
+  margin-top: 1.75rem;
+  border-radius: var(--radius-md, 16px);
+  background: linear-gradient(135deg, #f4f8f5 0%, #ebf3ee 100%);
+  border: 1.5px solid var(--color-primary-200, #a3c2b0);
 
-  &__label {
-    font-size: 0.775rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--color-muted, #6b7280);
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.25rem 1.5rem;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
   }
 
-  &__value {
-    font-size: 1rem;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 36rem;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    width: fit-content;
+    padding: 0.2rem 0.625rem;
+    border-radius: var(--radius-pill, 999px);
+    background: var(--color-primary-100, #dce9e1);
+    color: var(--color-primary, #174e38);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.2rem;
     font-weight: 600;
     color: var(--color-text, #1f2937);
+  }
+
+  &__desc {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-muted, #52605b);
+  }
+
+  &__action {
+    flex-shrink: 0;
+
+    @media (max-width: 768px) {
+      width: 100%;
+
+      app-custom-primary-button {
+        width: 100%;
+      }
+    }
   }
 }

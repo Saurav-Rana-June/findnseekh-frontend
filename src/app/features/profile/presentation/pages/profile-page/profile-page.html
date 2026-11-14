@@ -225,29 +225,198 @@
       </form>
     </section>
     } @else {
-    <!-- Non-Teacher (Student) Profile View -->
+    <!-- Student Learning Profile View -->
+    @if (isStudentSavedRecently()) {
+    <div class="profile-success-toast" role="status">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      <span>Your student learning preferences have been saved successfully!</span>
+    </div>
+    }
+
+    <!-- Student Learning Profile Card -->
     <section class="profile-card" aria-labelledby="student-details-title">
       <div class="profile-card__header">
-        <h2 id="student-details-title" class="profile-card__title">Student Profile</h2>
+        <div class="profile-card__title-row">
+          <h2 id="student-details-title" class="profile-card__title">Student Profile</h2>
+          <span class="profile-card__badge">Learning Preferences</span>
+        </div>
         <p class="profile-card__subtitle">
-          You are currently registered as a Student. Explore tutors, book lessons, and send
-          learning requests.
+          Customize what you want to learn, your preferred learning format, and contact details for tutors.
         </p>
       </div>
 
-      <div class="student-info-grid">
-        <div class="info-tile">
-          <span class="info-tile__label">Full Name</span>
-          <span class="info-tile__value">{{ user()?.fullName }}</span>
+      <form class="profile-form" [formGroup]="studentForm" (ngSubmit)="onSaveStudent()" novalidate>
+        <!-- Contact Phone & City row -->
+        <div class="profile-form__row">
+          <app-custom-textfield fieldId="profile-student-phone" label="Contact Phone" type="tel" formControlName="phone"
+            placeholder="+91 98765 43210" leadingIcon="phone" />
+
+          <app-custom-textfield fieldId="profile-student-city" label="City" type="text" formControlName="city"
+            placeholder="Bengaluru" leadingIcon="location" />
         </div>
-        <div class="info-tile">
-          <span class="info-tile__label">Email</span>
-          <span class="info-tile__value">{{ user()?.email }}</span>
+
+        <!-- State row -->
+        <div class="profile-form__row">
+          <app-custom-textfield fieldId="profile-student-state" label="State / Area" type="text" formControlName="state"
+            placeholder="Karnataka / Indiranagar" leadingIcon="location" />
         </div>
-        <div class="info-tile">
-          <span class="info-tile__label">Account Role</span>
-          <span class="info-tile__value">Student</span>
+
+        <!-- Preferred Learning Mode -->
+        <div class="profile-field">
+          <span class="profile-field__label" id="learning-mode-group-label">Preferred Learning Mode</span>
+          <div class="teaching-modes-grid" role="radiogroup" aria-labelledby="learning-mode-group-label">
+            @for (mode of learningModes; track mode.value) {
+            <button type="button" class="mode-card" role="radio"
+              [attr.aria-checked]="studentForm.controls.learningMode.value === mode.value"
+              [class.is-active]="studentForm.controls.learningMode.value === mode.value"
+              (click)="setStudentLearningMode(mode.value)">
+              <div class="mode-card__top">
+                <span class="mode-card__title">{{ mode.label }}</span>
+                <span class="mode-card__radio" aria-hidden="true">
+                  @if (studentForm.controls.learningMode.value === mode.value) {
+                  <span class="mode-card__radio-dot"></span>
+                  }
+                </span>
+              </div>
+              <p class="mode-card__hint">{{ mode.hint }}</p>
+            </button>
+            }
+          </div>
         </div>
+
+        <!-- Skills & Subjects You Want to Learn -->
+        <div class="profile-field profile-skills-section">
+          <div class="profile-skills-header">
+            <div class="profile-skills-header__info">
+              <label class="profile-field__label" for="profile-student-skill-input">
+                Skills & Subjects You Want to Learn
+              </label>
+              <span class="profile-field__hint">
+                Add the subjects, instruments, or skills you're interested in learning
+              </span>
+            </div>
+            @if (studentSkills().length > 0) {
+            <div class="profile-skills-meta">
+              <app-custom-status-pill
+                [label]="studentSkills().length + (studentSkills().length === 1 ? ' skill' : ' skills')"
+                variant="neutral" size="sm" icon="spark" />
+              <button type="button" class="profile-skills-clear-btn" (click)="clearAllStudentSkills()">
+                Clear all
+              </button>
+            </div>
+            }
+          </div>
+
+          <!-- Active Skills Tags -->
+          @if (studentSkills().length > 0) {
+          <div class="profile-skills-active">
+            <div class="profile-skills-tags-grid">
+              @for (skill of studentSkills(); track skill) {
+              <app-custom-status-pill [label]="skill" variant="soft" size="md" icon="dot" fontWeight="500"
+                [removable]="true" (removed)="removeStudentSkill(skill)" />
+              }
+            </div>
+          </div>
+          } @else {
+          <div class="profile-skills-empty-hint">
+            <svg class="profile-skills-empty-hint__icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="m12 3-1.9 5.8L4 10.7l5.1 2L12 19l1.9-6.3 5.1-2-6.1-1.9Z" />
+            </svg>
+            <span>No skills added yet. Type your target subjects below or pick from quick suggestions.</span>
+          </div>
+          }
+
+          <!-- Input + Add Button -->
+          <div class="profile-skills-input-row">
+            <div class="profile-skills-input-box">
+              <app-custom-textfield fieldId="profile-student-skill-input" type="text"
+                placeholder="Add a subject or skill (e.g. Mathematics, Guitar, Python)..." leadingIcon="spark"
+                [value]="studentSkillInputValue()" (valueChange)="onStudentSkillInputChange($event)"
+                (keydown)="onStudentSkillInputKeydown($event)" />
+            </div>
+            <app-custom-primary-button type="button" variant="outline" size="md" label="+ Add"
+              [disabled]="!studentSkillInputValue().trim()" (clicked)="addStudentSkillsFromInput()" />
+          </div>
+          <span class="profile-skills-input-tip">
+            Tip: Press Enter or comma to add multiple skills
+          </span>
+
+          <!-- Suggestions -->
+          @if (visibleStudentSuggestions().length > 0) {
+          <div class="profile-skills-suggestions">
+            <span class="profile-skills-suggestions__label">Quick add:</span>
+            <div class="profile-skills-suggestions__pills">
+              @for (suggestion of visibleStudentSuggestions(); track suggestion) {
+              <app-custom-status-pill [label]="'+ ' + suggestion" variant="surface" size="sm" fontWeight="500"
+                [interactive]="true" (clicked)="addSuggestedStudentSkill(suggestion)" />
+              }
+              @if (remainingStudentSuggestionsCount() > 0 || showAllStudentSuggestions()) {
+              <button type="button" class="profile-skills-more-btn" (click)="toggleShowAllStudentSuggestions()">
+                {{ showAllStudentSuggestions() ? 'Show less' : '+' + remainingStudentSuggestionsCount() + ' more' }}
+              </button>
+              }
+            </div>
+          </div>
+          }
+        </div>
+
+        <!-- Current Learning Level -->
+        <div class="profile-field">
+          <span class="profile-field__label" id="learning-level-group-label">Current Skill / Target Level</span>
+          <div class="learning-levels-grid" role="radiogroup" aria-labelledby="learning-level-group-label">
+            @for (level of learningLevels; track level.value) {
+            <button type="button" class="level-card" role="radio"
+              [attr.aria-checked]="studentForm.controls.learningLevel.value === level.value"
+              [class.is-active]="studentForm.controls.learningLevel.value === level.value"
+              (click)="setStudentLearningLevel(level.value)">
+              <span class="level-card__title">{{ level.label }}</span>
+              <span class="level-card__hint">{{ level.hint }}</span>
+            </button>
+            }
+          </div>
+        </div>
+
+        <!-- Learning Goals / Notes -->
+        <div class="profile-field">
+          <label class="profile-field__label" for="profile-learning-goals">
+            Learning Goals & Notes
+            <span class="profile-field__hint">Tell prospective tutors about your specific goals, syllabus, or
+              timeline</span>
+          </label>
+          <textarea id="profile-learning-goals" class="profile-textarea" formControlName="learningGoals" rows="3"
+            maxlength="1000"
+            placeholder="e.g. Preparing for Class 10 board exam, or looking for beginner acoustic guitar lessons on weekends..."></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="profile-form__footer">
+          <app-custom-primary-button type="submit" variant="primary" size="lg" label="Save Learning Profile" />
+        </div>
+      </form>
+    </section>
+
+    <!-- Become a Teacher Upgrade Banner -->
+    <section class="become-teacher-banner" aria-label="Become a Teacher">
+      <div class="become-teacher-banner__content">
+        <div class="become-teacher-banner__badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+            <path d="M6 12v5c0 3 6 3 6 3s6 0 6-3v-5" />
+          </svg>
+          <span>Teach on FindnSeekh</span>
+        </div>
+        <h3 class="become-teacher-banner__title">Want to share your skills and earn?</h3>
+        <p class="become-teacher-banner__desc">
+          Join our verified network of tutors. Set your own hourly rates, schedule sessions on your terms,
+          and connect with students looking for guidance.
+        </p>
+      </div>
+      <div class="become-teacher-banner__action">
+        <app-custom-primary-button type="button" variant="primary" size="lg" label="Become a Teacher →"
+          [loading]="authStore.isLoading()" (clicked)="onBecomeTeacher()" />
       </div>
     </section>
     }
