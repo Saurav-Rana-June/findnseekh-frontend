@@ -40,6 +40,13 @@
             fontSize="0.72rem"
           />
         </app-custom-primary-button>
+        <app-custom-primary-button
+          variant="ghost"
+          size="sm"
+          label="Log Out"
+          [loading]="authStore.isLoading()"
+          (clicked)="onLogoutClick()"
+        />
       } @else {
         <app-custom-primary-button variant="ghost" label="Log In" (clicked)="onLoginClick()" />
         <app-custom-primary-button variant="primary" label="Sign Up" (clicked)="onRegisterClick()" />
@@ -96,6 +103,13 @@
               fontSize="0.75rem"
             />
           </app-custom-primary-button>
+          <app-custom-primary-button
+            variant="ghost"
+            label="Log Out"
+            [fullWidth]="true"
+            [loading]="authStore.isLoading()"
+            (clicked)="onLogoutClick()"
+          />
         } @else {
           <app-custom-primary-button
             variant="outline"

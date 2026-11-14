@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,6 +6,7 @@ import {
   effect,
   ElementRef,
   inject,
+  PLATFORM_ID,
   signal,
   viewChild,
 } from '@angular/core';
@@ -193,8 +195,12 @@ export class ProfilePage {
     state: ['', [Validators.maxLength(100)]],
   });
 
+  private readonly platformId = inject(PLATFORM_ID);
+
   constructor() {
-    this.authStore.getStudentProfile();
+    if (isPlatformBrowser(this.platformId)) {
+      this.authStore.getStudentProfile();
+    }
 
     effect(() => {
       const profile = this.teacherProfile();
@@ -462,6 +468,12 @@ export class ProfilePage {
 
   protected onBecomeTeacher(): void {
     this.authStore.becomeTeacher();
+  }
+
+  protected onLogout(): void {
+    this.authStore.logout(() => {
+      void this.router.navigate(['/', APP_ROUTE_PATHS.root]);
+    });
   }
 
   protected navigateToExplore(): void {

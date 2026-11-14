@@ -25,6 +25,8 @@ describe('LoginModalComponent', () => {
     login: ReturnType<typeof vi.fn<(credentials: LoginCredentials) => Observable<AuthUser>>>;
     getCurrentUser: ReturnType<typeof vi.fn>;
     logout: ReturnType<typeof vi.fn>;
+    getStudentProfile: ReturnType<typeof vi.fn>;
+    getTeacherProfile: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(async () => {
@@ -32,6 +34,18 @@ describe('LoginModalComponent', () => {
       login: vi.fn((_credentials: LoginCredentials) => of(mockUser)),
       getCurrentUser: vi.fn(() => of(mockUser)),
       logout: vi.fn(() => of(undefined)),
+      getStudentProfile: vi.fn(() => of({
+        id: 1,
+        userId: 1,
+        phone: null,
+        city: null,
+        state: null,
+        learningMode: 'both' as const,
+        learningLevel: 'beginner' as const,
+        learningGoals: null,
+        skillsToLearn: [],
+      })),
+      getTeacherProfile: vi.fn(() => of(null as any)),
     };
 
     await TestBed.configureTestingModule({

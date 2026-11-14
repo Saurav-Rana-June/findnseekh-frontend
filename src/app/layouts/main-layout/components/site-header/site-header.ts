@@ -136,4 +136,11 @@ export class SiteHeader {
     this.isMobileMenuOpen.set(false);
     this.registerRequested.emit();
   }
+
+  protected onLogoutClick(): void {
+    this.isMobileMenuOpen.set(false);
+    this.authStore.logout(() => {
+      void this.router.navigate(['/']);
+    });
+  }
 }

@@ -1,6 +1,14 @@
-import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  computed,
+  DestroyRef,
+  inject,
+  Injectable,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize, map, of, switchMap } from 'rxjs';
+import { catchError, finalize, map, of, switchMap } from 'rxjs';
 import { ApiError } from '../../../../core/models/api-error.model';
 import { AuthSessionService } from '../../../../core/services/auth-session.service';
 import {
@@ -14,16 +22,19 @@ import {
   UserRole,
 } from '../../domain/entities/auth.entity';
 import { BecomeTeacherUseCase } from '../../domain/use-cases/become-teacher.use-case';
+import { GetCurrentUserUseCase } from '../../domain/use-cases/get-current-user.use-case';
 import { GetStudentProfileUseCase } from '../../domain/use-cases/get-student-profile.use-case';
+import { GetTeacherProfileUseCase } from '../../domain/use-cases/get-teacher-profile.use-case';
 import { LoginUseCase } from '../../domain/use-cases/login.use-case';
+import { LogoutUseCase } from '../../domain/use-cases/logout.use-case';
 import { RegisterUseCase } from '../../domain/use-cases/register.use-case';
 import { UpdateStudentProfileUseCase } from '../../domain/use-cases/update-student-profile.use-case';
 import { UpdateTeacherProfileUseCase } from '../../domain/use-cases/update-teacher-profile.use-case';
 
 @Injectable()
 export class AuthStore {
-  /** Set to `false` when connecting to the live backend API or during tests. */
-  prototypeMode = true;
+  /** Set to `false` in production. Can be enabled in unit tests if needed. */
+  prototypeMode = false;
 
   setPrototypeMode(enabled: boolean): void {
     this.prototypeMode = enabled;
@@ -31,28 +42,94 @@ export class AuthStore {
 
   private readonly loginUseCase = inject(LoginUseCase);
   private readonly registerUseCase = inject(RegisterUseCase);
+  private readonly logoutUseCase = inject(LogoutUseCase, { optional: true });
+  private readonly getCurrentUserUseCase = inject(GetCurrentUserUseCase, { optional: true });
   private readonly becomeTeacherUseCase = inject(BecomeTeacherUseCase);
+  private readonly getTeacherProfileUseCase = inject(GetTeacherProfileUseCase, { optional: true });
   private readonly updateTeacherProfileUseCase = inject(UpdateTeacherProfileUseCase);
   private readonly getStudentProfileUseCase = inject(GetStudentProfileUseCase);
   private readonly updateStudentProfileUseCase = inject(UpdateStudentProfileUseCase);
   private readonly authSession = inject(AuthSessionService);
+  private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly _user = signal<AuthUser | null>(null);
   private readonly _teacherProfile = signal<TeacherProfile | null>(null);
   private readonly _studentProfile = signal<StudentProfile | null>(null);
   private readonly _isTeacherProfileCompleted = signal(false);
+  private readonly _isInitializing = signal(true);
   private readonly _isLoading = signal(false);
   private readonly _error = signal<string | null>(null);
 
   readonly user = this._user.asReadonly();
   readonly teacherProfile = this._teacherProfile.asReadonly();
   readonly studentProfile = this._studentProfile.asReadonly();
-  readonly needsTeacherProfileCompletion = computed(
-    () => Boolean(this._user()?.roles.includes('teacher')) && !this._isTeacherProfileCompleted(),
-  );
+  readonly isInitializing = this._isInitializing.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
   readonly error = this._error.asReadonly();
+
+  readonly isAuthenticated = computed(() =>
+    Boolean(this._user() && this.authSession.isAuthenticated()),
+  );
+
+  readonly isTeacher = computed(() =>
+    Boolean(this._user()?.roles.includes('teacher')),
+  );
+
+  readonly needsTeacherProfileCompletion = computed(() => {
+    const user = this._user();
+    if (!user || !user.roles.includes('teacher')) {
+      return false;
+    }
+    return !this._isTeacherProfileCompleted();
+  });
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.initSession();
+    } else {
+      this._isInitializing.set(false);
+    }
+  }
+
+  /**
+   * Restores authenticated user session and associated profiles on app launch.
+   */
+  initSession(): void {
+    const token = this.authSession.accessToken();
+    if (!token || !this.getCurrentUserUseCase) {
+      this._isInitializing.set(false);
+      return;
+    }
+
+    if (this.prototypeMode) {
+      this._isInitializing.set(false);
+      return;
+    }
+
+    this.getCurrentUserUseCase
+      .execute()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this._isInitializing.set(false)),
+      )
+      .subscribe({
+        next: (user) => {
+          this._user.set(user);
+          this.getStudentProfile();
+          if (user.roles.includes('teacher')) {
+            this.getTeacherProfile();
+          }
+        },
+        error: () => {
+          // Token is invalid, expired, or revoked
+          this.authSession.clearSession();
+          this._user.set(null);
+          this._studentProfile.set(null);
+          this._teacherProfile.set(null);
+        },
+      });
+  }
 
   login(credentials: LoginCredentials, onSuccess?: (user: AuthUser) => void): void {
     this._error.set(null);
@@ -82,10 +159,14 @@ export class AuthStore {
       .subscribe({
         next: (user) => {
           this._user.set(user);
+          this.getStudentProfile();
+          if (user.roles.includes('teacher')) {
+            this.getTeacherProfile();
+          }
           onSuccess?.(user);
         },
         error: (err: ApiError) => {
-          this._error.set(err.message);
+          this._error.set(err.message || 'Invalid email or password.');
         },
       });
   }
@@ -134,9 +215,12 @@ export class AuthStore {
             return this.becomeTeacherUseCase.execute().pipe(
               map((profile) => {
                 this._teacherProfile.set(profile);
+                this._isTeacherProfileCompleted.set(false);
                 return {
                   ...user,
-                  roles: user.roles.includes('teacher') ? user.roles : [...user.roles, 'teacher'],
+                  roles: user.roles.includes('teacher')
+                    ? user.roles
+                    : [...user.roles, 'teacher' as const],
                 } satisfies AuthUser;
               }),
             );
@@ -149,57 +233,42 @@ export class AuthStore {
       .subscribe({
         next: (user) => {
           this._user.set(user);
+          this.getStudentProfile();
           onSuccess?.(user);
         },
         error: (err: ApiError) => {
-          this._error.set(err.message);
+          this._error.set(err.message || 'Registration failed.');
         },
       });
   }
 
-  updateTeacherProfile(
-    payload: TeacherProfileUpdatePayload,
-    onSuccess?: (profile: TeacherProfile) => void,
-  ): void {
+  logout(onSuccess?: () => void): void {
     this._error.set(null);
+    this._isLoading.set(true);
 
-    if (this.prototypeMode) {
-      const mockProfile: TeacherProfile = {
-        id: 1,
-        userId: 1,
-        bio: payload.bio ?? null,
-        qualification: payload.qualification ?? null,
-        skills: payload.skills ?? ['Guitar', 'Music Theory'],
-        experienceYears: payload.experienceYears ?? 0,
-        city: payload.city ?? null,
-        state: payload.state ?? null,
-        teachingMode: payload.teachingMode ?? 'both',
-        isVerified: false,
-      };
-      this._teacherProfile.set(mockProfile);
-      this._isTeacherProfileCompleted.set(true);
-      onSuccess?.(mockProfile);
+    const performLocalCleanup = () => {
+      this._user.set(null);
+      this._studentProfile.set(null);
+      this._teacherProfile.set(null);
+      this._isTeacherProfileCompleted.set(false);
+      this.authSession.clearSession();
+      this._isLoading.set(false);
+      onSuccess?.();
+    };
+
+    if (this.prototypeMode || !this.logoutUseCase) {
+      performLocalCleanup();
       return;
     }
 
-    this._isLoading.set(true);
-
-    this.updateTeacherProfileUseCase
-      .execute(payload)
+    this.logoutUseCase
+      .execute()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this._isLoading.set(false)),
+        catchError(() => of(undefined)),
+        finalize(() => performLocalCleanup()),
       )
-      .subscribe({
-        next: (profile) => {
-          this._teacherProfile.set(profile);
-          this._isTeacherProfileCompleted.set(true);
-          onSuccess?.(profile);
-        },
-        error: (err: ApiError) => {
-          this._error.set(err.message);
-        },
-      });
+      .subscribe();
   }
 
   becomeTeacher(onSuccess?: (profile: TeacherProfile) => void): void {
@@ -250,7 +319,77 @@ export class AuthStore {
           onSuccess?.(profile);
         },
         error: (err: ApiError) => {
-          this._error.set(err.message);
+          this._error.set(err.message || 'Failed to activate teacher role.');
+        },
+      });
+  }
+
+  getTeacherProfile(onSuccess?: (profile: TeacherProfile) => void): void {
+    if (this.prototypeMode || !this.getTeacherProfileUseCase) {
+      return;
+    }
+
+    this.getTeacherProfileUseCase
+      .execute()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError(() => of(null)),
+      )
+      .subscribe({
+        next: (profile) => {
+          if (profile) {
+            this._teacherProfile.set(profile);
+            const isCompleted = Boolean(
+              profile.qualification && profile.skills && profile.skills.length > 0,
+            );
+            this._isTeacherProfileCompleted.set(isCompleted);
+            onSuccess?.(profile);
+          }
+        },
+      });
+  }
+
+  updateTeacherProfile(
+    payload: TeacherProfileUpdatePayload,
+    onSuccess?: (profile: TeacherProfile) => void,
+  ): void {
+    this._error.set(null);
+
+    if (this.prototypeMode) {
+      const mockProfile: TeacherProfile = {
+        id: 1,
+        userId: 1,
+        bio: payload.bio ?? null,
+        qualification: payload.qualification ?? null,
+        skills: payload.skills ?? ['Guitar', 'Music Theory'],
+        experienceYears: payload.experienceYears ?? 0,
+        city: payload.city ?? null,
+        state: payload.state ?? null,
+        teachingMode: payload.teachingMode ?? 'both',
+        isVerified: false,
+      };
+      this._teacherProfile.set(mockProfile);
+      this._isTeacherProfileCompleted.set(true);
+      onSuccess?.(mockProfile);
+      return;
+    }
+
+    this._isLoading.set(true);
+
+    this.updateTeacherProfileUseCase
+      .execute(payload)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this._isLoading.set(false)),
+      )
+      .subscribe({
+        next: (profile) => {
+          this._teacherProfile.set(profile);
+          this._isTeacherProfileCompleted.set(true);
+          onSuccess?.(profile);
+        },
+        error: (err: ApiError) => {
+          this._error.set(err.message || 'Failed to update teacher profile.');
         },
       });
   }
@@ -277,21 +416,21 @@ export class AuthStore {
       return;
     }
 
-    this._isLoading.set(true);
-
     this.getStudentProfileUseCase
       .execute()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this._isLoading.set(false)),
+        catchError(() => of(null)),
       )
       .subscribe({
         next: (profile) => {
-          this._studentProfile.set(profile);
-          onSuccess?.(profile);
+          if (profile) {
+            this._studentProfile.set(profile);
+            onSuccess?.(profile);
+          }
         },
         error: (err: ApiError) => {
-          this._error.set(err.message);
+          this._error.set(err.message || 'Failed to fetch student profile.');
         },
       });
   }
@@ -334,7 +473,7 @@ export class AuthStore {
           onSuccess?.(profile);
         },
         error: (err: ApiError) => {
-          this._error.set(err.message);
+          this._error.set(err.message || 'Failed to update student profile.');
         },
       });
   }

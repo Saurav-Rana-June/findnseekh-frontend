@@ -33,6 +33,16 @@
           <p class="profile-meta__email">{{ user()?.email }}</p>
         </div>
       </div>
+
+      <div class="profile-header__actions">
+        <app-custom-primary-button
+          variant="outline"
+          size="sm"
+          label="Log Out"
+          [loading]="authStore.isLoading()"
+          (clicked)="onLogout()"
+        />
+      </div>
     </header>
 
     @if (isTeacher()) {
