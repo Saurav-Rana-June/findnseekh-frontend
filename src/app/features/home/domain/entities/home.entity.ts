@@ -1,3 +1,5 @@
+import { TeachingMode } from '../../../../shared/components/custom-teacher-card/custom-teacher-card';
+
 export type SkillCategoryIcon =
   | 'music'
   | 'dance'
@@ -44,6 +46,11 @@ export interface FeaturedTeacher {
   readonly experienceYears: number;
   readonly rating?: { readonly value: number; readonly count: number };
   readonly avatar: TeacherAvatarSpec;
+  readonly skills?: readonly string[];
+  readonly teachingMode?: TeachingMode;
+  readonly hourlyRate?: number;
+  readonly bio?: string;
+  readonly verified?: boolean;
 }
 
 export interface HowItWorksStep {
