@@ -3,6 +3,11 @@ import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../../../../core/config/api.config';
 import { ApiResponse } from '../../../../core/models/api-response.model';
 import { ApiHttpService } from '../../../../core/services/api-http.service';
+import {
+  CategoryDto,
+  LocationSuggestionDto,
+  PopularSkillDto,
+} from '../../../home/data/models/home.dto';
 import { TeacherFilterQuery } from '../../domain/entities/teacher.entity';
 import {
   TeacherDetailDto,
@@ -37,10 +42,41 @@ export class TeachersApiService {
       params['sort'] = filter.sortBy;
     }
     params['page'] = 1;
-    params['page_size'] = 24;
+    params['page_size'] = 36;
 
     return this.api.get<ApiResponse<TeacherPaginationDto>>(API_ENDPOINTS.teachers.list, {
       params,
+    });
+  }
+
+  getCategories(): Observable<ApiResponse<readonly CategoryDto[]>> {
+    return this.api.get<ApiResponse<readonly CategoryDto[]>>(API_ENDPOINTS.categories.list);
+  }
+
+  getLocationSuggestions(
+    query?: string,
+    limit: number = 10,
+  ): Observable<ApiResponse<readonly LocationSuggestionDto[]>> {
+    return this.api.get<ApiResponse<readonly LocationSuggestionDto[]>>(
+      API_ENDPOINTS.locations.suggestions,
+      {
+        params: { q: query, limit },
+      },
+    );
+  }
+
+  getSkillSuggestions(
+    query?: string,
+    limit: number = 10,
+  ): Observable<ApiResponse<readonly PopularSkillDto[]>> {
+    return this.api.get<ApiResponse<readonly PopularSkillDto[]>>(API_ENDPOINTS.skills.suggestions, {
+      params: { query, limit },
+    });
+  }
+
+  getPopularSkills(limit: number = 10): Observable<ApiResponse<readonly PopularSkillDto[]>> {
+    return this.api.get<ApiResponse<readonly PopularSkillDto[]>>(API_ENDPOINTS.skills.popular, {
+      params: { limit },
     });
   }
 
@@ -58,3 +94,5 @@ export class TeachersApiService {
     );
   }
 }
+
+

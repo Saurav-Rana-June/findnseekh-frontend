@@ -14,3 +14,4 @@ export class SendTeacherEnquiryUseCase {
     return this.repository.sendEnquiry(teacherId, payload);
   }
 }
+

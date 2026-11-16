@@ -175,3 +175,4 @@ export function toTeacherEnquiryResult(dto: TeacherEnquiryResponseDto): TeacherE
     createdAt: dto.created_at,
   };
 }
+
