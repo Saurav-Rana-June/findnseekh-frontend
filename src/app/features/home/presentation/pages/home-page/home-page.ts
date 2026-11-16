@@ -13,6 +13,7 @@ import { FeaturedTeachersSection } from '../../components/featured-teachers-sect
 import { HomeHero } from '../../components/home-hero/home-hero';
 import { HowItWorksSection } from '../../components/how-it-works-section/how-it-works-section';
 import { HomeStore } from '../../state/home.store';
+import { AuthStore } from '../../../../auth/presentation/state/auth.store';
 
 @Component({
   selector: 'app-home-page',
@@ -29,6 +30,7 @@ import { HomeStore } from '../../state/home.store';
 })
 export class HomePage {
   protected readonly store = inject(HomeStore);
+  protected readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 

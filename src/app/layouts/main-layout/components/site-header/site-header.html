@@ -3,7 +3,7 @@
     <app-logo variant="green" [height]="38" (click)="closeMobileMenu()" />
 
     <nav class="navbar__links" aria-label="Primary">
-      @for (item of navItems; track item.label) {
+      @for (item of navItems(); track item.label) {
       @if (item.fragment) {
       <a class="navbar__link" [href]="'#' + item.fragment" [class.is-active]="isItemActive(item)"
         [attr.aria-current]="isItemActive(item) ? 'page' : null">
@@ -74,7 +74,7 @@
 
   <div id="mobile-menu" class="navbar__mobile" [hidden]="!isMobileMenuOpen()">
     <nav class="page-container navbar__mobile-inner" aria-label="Mobile">
-      @for (item of navItems; track item.label) {
+      @for (item of navItems(); track item.label) {
       @if (item.fragment) {
       <a class="navbar__mobile-link" [href]="'#' + item.fragment" [class.is-active]="isItemActive(item)"
         (click)="closeMobileMenu()">

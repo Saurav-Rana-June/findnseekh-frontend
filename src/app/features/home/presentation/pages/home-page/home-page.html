@@ -22,4 +22,6 @@
 
 <app-how-it-works-section [steps]="store.steps()" />
 
-<app-become-teacher-cta />
+@if (!authStore.isTeacher()) {
+  <app-become-teacher-cta />
+}

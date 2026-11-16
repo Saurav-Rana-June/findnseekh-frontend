@@ -3,6 +3,7 @@ import {
   afterNextRender,
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   output,
@@ -44,7 +45,12 @@ export class SiteHeader {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
 
-  protected readonly navItems = NAV_ITEMS;
+  protected readonly navItems = computed(() => {
+    if (this.authStore.isTeacher()) {
+      return NAV_ITEMS.filter((item) => item.fragment !== 'become-a-teacher');
+    }
+    return NAV_ITEMS;
+  });
   protected readonly isMobileMenuOpen = signal(false);
   protected readonly isScrolled = signal(false);
   protected readonly activeSection = signal<string | null>(null);

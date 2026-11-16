@@ -1,4 +1,4 @@
-import type { AppEnvironment } from './environment.model';
+import { type AppEnvironment, PrototypeUserRole } from './environment.model';
 
 export const environment: AppEnvironment = {
   production: false,
@@ -10,4 +10,10 @@ export const environment: AppEnvironment = {
    * without calling any backend APIs (for UI demonstrations and presentations).
    */
   prototypeMode: false,
+  /**
+   * Defines the active User Role in Prototype Mode:
+   * - `PrototypeUserRole.STUDENT` (or 'STUDENT') -> Displays student-centric UI modules
+   * - `PrototypeUserRole.TEACHER` (or 'TEACHER') -> Displays teacher-centric UI modules
+   */
+  prototypeUserRole: PrototypeUserRole.STUDENT,
 };

@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
-import { PROTOTYPE_MODE } from '../../../../core/config/api.config';
+import { PROTOTYPE_MODE, PROTOTYPE_USER_ROLE, PrototypeUserRole } from '../../../../core/config/api.config';
 import { AuthSessionService } from '../../../../core/services/auth-session.service';
 import {
   AuthUser,
@@ -66,12 +66,21 @@ export class AuthRepositoryImpl extends AuthRepository {
   private readonly authSession = inject(AuthSessionService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly prototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
+  private readonly prototypeUserRole =
+    inject(PROTOTYPE_USER_ROLE, { optional: true }) ?? PrototypeUserRole.STUDENT;
+
+  private isTeacherRole(): boolean {
+    return this.prototypeUserRole === PrototypeUserRole.TEACHER;
+  }
 
   override login(credentials: LoginCredentials): Observable<AuthUser> {
     if (this.prototypeMode) {
       this.authSession.setTokens('prototype-mock-jwt-token');
+      const isTeacher = this.isTeacherRole();
       return of({
         ...MOCK_PROTOTYPE_USER,
+        fullName: isTeacher ? 'Aarav Sharma (Teacher)' : 'Aarav Sharma',
+        roles: isTeacher ? ['student', 'teacher'] : ['student'],
         email: credentials.email.trim().toLowerCase(),
       });
     }
@@ -91,8 +100,10 @@ export class AuthRepositoryImpl extends AuthRepository {
   override register(payload: RegisterPayload): Observable<AuthUser> {
     if (this.prototypeMode) {
       this.authSession.setTokens('prototype-mock-jwt-token');
+      const isTeacher = this.isTeacherRole();
       return of({
         ...MOCK_PROTOTYPE_USER,
+        roles: isTeacher ? ['student', 'teacher'] : ['student'],
         email: payload.email.trim().toLowerCase(),
         fullName: payload.name.trim(),
       });
@@ -108,7 +119,12 @@ export class AuthRepositoryImpl extends AuthRepository {
 
   override getCurrentUser(): Observable<AuthUser> {
     if (this.prototypeMode) {
-      return of(MOCK_PROTOTYPE_USER);
+      const isTeacher = this.isTeacherRole();
+      return of({
+        ...MOCK_PROTOTYPE_USER,
+        fullName: isTeacher ? 'Aarav Sharma (Teacher)' : 'Aarav Sharma',
+        roles: isTeacher ? ['student', 'teacher'] : ['student'],
+      });
     }
 
     if (!isPlatformBrowser(this.platformId)) {
@@ -130,7 +146,7 @@ export class AuthRepositoryImpl extends AuthRepository {
 
   override getTeacherProfile(): Observable<TeacherProfile> {
     if (this.prototypeMode) {
-      return of(MOCK_PROTOTYPE_TEACHER_PROFILE);
+      return of(this.isTeacherRole() ? MOCK_PROTOTYPE_TEACHER_PROFILE : (null as any));
     }
 
     if (!isPlatformBrowser(this.platformId)) {

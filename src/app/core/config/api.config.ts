@@ -1,11 +1,15 @@
 import { HttpContextToken } from '@angular/common/http';
 import { InjectionToken, Provider } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { PrototypeUserRole } from '../../../environments/environment.model';
+
+export { PrototypeUserRole };
 
 export interface ApiConfig {
   readonly baseUrl: string;
   readonly timeoutMs: number;
   readonly prototypeMode?: boolean;
+  readonly prototypeUserRole?: PrototypeUserRole;
 }
 
 export const API_CONFIG = new InjectionToken<ApiConfig>('API_CONFIG');
@@ -17,6 +21,14 @@ export const API_CONFIG = new InjectionToken<ApiConfig>('API_CONFIG');
 export const PROTOTYPE_MODE = new InjectionToken<boolean>('PROTOTYPE_MODE', {
   providedIn: 'root',
   factory: () => environment.prototypeMode,
+});
+
+/**
+ * Injection token defining the active user role for Prototype Mode ('STUDENT' | 'TEACHER').
+ */
+export const PROTOTYPE_USER_ROLE = new InjectionToken<PrototypeUserRole>('PROTOTYPE_USER_ROLE', {
+  providedIn: 'root',
+  factory: () => environment.prototypeUserRole ?? PrototypeUserRole.STUDENT,
 });
 
 /**

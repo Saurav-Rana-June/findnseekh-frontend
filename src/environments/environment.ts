@@ -1,4 +1,4 @@
-import type { AppEnvironment } from './environment.model';
+import { type AppEnvironment, PrototypeUserRole } from './environment.model';
 
 export const environment: AppEnvironment = {
   production: true,
@@ -6,4 +6,5 @@ export const environment: AppEnvironment = {
   apiTimeoutMs: 30_000,
   appName: 'Findnseekh',
   prototypeMode: false,
+  prototypeUserRole: PrototypeUserRole.STUDENT,
 };

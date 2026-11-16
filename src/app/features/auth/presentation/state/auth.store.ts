@@ -10,7 +10,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, finalize, map, of, switchMap } from 'rxjs';
 import { ApiError } from '../../../../core/models/api-error.model';
-import { PROTOTYPE_MODE } from '../../../../core/config/api.config';
+import { PROTOTYPE_MODE, PROTOTYPE_USER_ROLE, PrototypeUserRole } from '../../../../core/config/api.config';
 import { AuthSessionService } from '../../../../core/services/auth-session.service';
 import {
   AuthUser,
@@ -35,12 +35,45 @@ import { UpdateTeacherProfileUseCase } from '../../domain/use-cases/update-teach
 @Injectable()
 export class AuthStore {
   private readonly globalPrototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
+  private readonly globalPrototypeUserRole =
+    inject(PROTOTYPE_USER_ROLE, { optional: true }) ?? PrototypeUserRole.STUDENT;
 
   /** Set to `false` in production. Controlled globally by environment.prototypeMode. */
   prototypeMode = this.globalPrototypeMode;
 
-  setPrototypeMode(enabled: boolean): void {
+  /** Active prototype user role ('STUDENT' or 'TEACHER'). */
+  readonly prototypeUserRole = signal<PrototypeUserRole>(this.globalPrototypeUserRole);
+
+  setPrototypeMode(enabled: boolean, role?: PrototypeUserRole): void {
     this.prototypeMode = enabled;
+    if (role) {
+      this.prototypeUserRole.set(role);
+      this.syncPrototypeUserRole();
+    }
+  }
+
+  setPrototypeUserRole(role: PrototypeUserRole): void {
+    this.prototypeUserRole.set(role);
+    this.syncPrototypeUserRole();
+  }
+
+  private syncPrototypeUserRole(): void {
+    if (!this.prototypeMode) return;
+    const isTeacher = this.prototypeUserRole() === PrototypeUserRole.TEACHER;
+    const user = this._user();
+    if (user) {
+      this._user.set({
+        ...user,
+        fullName: isTeacher ? 'Aarav Sharma (Teacher)' : 'Aarav Sharma',
+        roles: isTeacher ? ['student', 'teacher'] : ['student'],
+      });
+      if (isTeacher) {
+        this.getTeacherProfile();
+      } else {
+        this._teacherProfile.set(null);
+        this._isTeacherProfileCompleted.set(false);
+      }
+    }
   }
 
   private readonly loginUseCase = inject(LoginUseCase);
@@ -99,27 +132,33 @@ export class AuthStore {
    * Restores authenticated user session and associated profiles on app launch.
    */
   initSession(): void {
-    const token = this.authSession.accessToken();
-    if (!token || !this.getCurrentUserUseCase) {
-      this._isInitializing.set(false);
-      return;
-    }
-
     if (this.prototypeMode) {
       if (!this._user()) {
+        const isTeacherRole = this.prototypeUserRole() === PrototypeUserRole.TEACHER;
         const mockUser: AuthUser = {
           id: 1,
-          email: 'demo@findnseekh.com',
-          fullName: 'Aarav Sharma',
+          email: isTeacherRole ? 'teacher.demo@findnseekh.com' : 'student.demo@findnseekh.com',
+          fullName: isTeacherRole ? 'Aarav Sharma (Teacher)' : 'Aarav Sharma',
           phone: '+91 98765 43210',
-          roles: ['student', 'teacher'],
+          roles: isTeacherRole ? ['student', 'teacher'] : ['student'],
           isActive: true,
         };
         this.authSession.setTokens('prototype-mock-jwt-token');
         this._user.set(mockUser);
         this.getStudentProfile();
-        this.getTeacherProfile();
+        if (isTeacherRole) {
+          this.getTeacherProfile();
+        } else {
+          this._teacherProfile.set(null);
+          this._isTeacherProfileCompleted.set(false);
+        }
       }
+      this._isInitializing.set(false);
+      return;
+    }
+
+    const token = this.authSession.accessToken();
+    if (!token || !this.getCurrentUserUseCase) {
       this._isInitializing.set(false);
       return;
     }
@@ -152,15 +191,23 @@ export class AuthStore {
     this._error.set(null);
 
     if (this.prototypeMode) {
+      const isTeacherRole = this.prototypeUserRole() === PrototypeUserRole.TEACHER;
       const mockUser: AuthUser = {
         id: 1,
         email: credentials.email.trim().toLowerCase(),
-        fullName: 'Demo User',
+        fullName: isTeacherRole ? 'Aarav Sharma (Teacher)' : 'Aarav Sharma',
         isActive: true,
-        roles: ['student'],
+        roles: isTeacherRole ? ['student', 'teacher'] : ['student'],
       };
       this.authSession.setTokens('prototype-mock-jwt-token');
       this._user.set(mockUser);
+      this.getStudentProfile();
+      if (isTeacherRole) {
+        this.getTeacherProfile();
+      } else {
+        this._teacherProfile.set(null);
+        this._isTeacherProfileCompleted.set(false);
+      }
       onSuccess?.(mockUser);
       return;
     }
