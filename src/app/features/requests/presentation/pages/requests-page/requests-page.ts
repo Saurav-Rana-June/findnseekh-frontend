@@ -5,15 +5,18 @@ import {
   computed,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthStore } from '../../../../auth/presentation/state/auth.store';
 import { CustomAvatarComponent } from '../../../../../shared/components/custom-avatar/custom-avatar';
+import { CustomModal } from '../../../../../shared/components/custom-modal/custom.modal';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import {
   CustomStatusPill,
   StatusPillVariant,
 } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
+import { LoaderComponent } from '../../../../../shared/components/loader/loader';
 import {
   LearningRequest,
   LearningRequestStatus,
@@ -33,6 +36,8 @@ import {
     CustomPrimaryButton,
     CustomAvatarComponent,
     CustomStatusPill,
+    CustomModal,
+    LoaderComponent,
   ],
   templateUrl: './requests-page.html',
   styleUrl: './requests-page.scss',
@@ -41,6 +46,9 @@ import {
 export class RequestsPage implements OnInit {
   protected readonly store = inject(RequestsStore);
   protected readonly authStore = inject(AuthStore);
+
+  readonly isCancelModalOpen = signal<boolean>(false);
+  readonly cancelCandidate = signal<LearningRequest | null>(null);
 
   readonly isTeacher = computed(() =>
     Boolean(this.authStore.user()?.roles.includes('teacher')),
@@ -62,6 +70,23 @@ export class RequestsPage implements OnInit {
 
   onFilterChange(filter: RequestFilterOption): void {
     this.store.setStatusFilter(filter);
+  }
+
+  openCancelModal(request: LearningRequest): void {
+    this.cancelCandidate.set(request);
+    this.isCancelModalOpen.set(true);
+  }
+
+  closeCancelModal(): void {
+    this.isCancelModalOpen.set(false);
+    this.cancelCandidate.set(null);
+  }
+
+  confirmCancel(): void {
+    const candidate = this.cancelCandidate();
+    if (!candidate) return;
+    this.onCancel(candidate.id);
+    this.closeCancelModal();
   }
 
   onAccept(id: number): void {
@@ -90,8 +115,10 @@ export class RequestsPage implements OnInit {
     }
   }
 
-  getStatusLabel(status: LearningRequestStatus): string {
+  getStatusLabel(status: LearningRequestStatus | RequestFilterOption): string {
     switch (status) {
+      case 'all':
+        return 'All';
       case 'accepted':
         return 'Accepted';
       case 'rejected':
