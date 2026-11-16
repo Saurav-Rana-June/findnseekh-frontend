@@ -482,7 +482,8 @@
               id="booking-date"
               type="date"
               class="tp-modal-form__input"
-              value="2026-11-16"
+              [value]="preferredDate()"
+              (input)="onDateChange($event)"
             />
           </div>
 
@@ -492,9 +493,17 @@
               id="booking-note"
               rows="3"
               class="tp-modal-form__textarea"
+              [value]="bookingMessage()"
+              (input)="onMessageChange($event)"
               placeholder="Hi {{ teacher()!.name }}, I'm interested in starting lessons as a beginner..."
             ></textarea>
           </div>
+
+          @if (bookingError()) {
+            <div class="tp-modal-error" role="alert" style="color: #b91c1c; font-size: 13px; margin-bottom: 12px; background: #fef2f2; padding: 8px 12px; border-radius: 6px; border: 1px solid #fecaca;">
+              {{ bookingError() }}
+            </div>
+          }
 
           <div class="tp-modal-form__actions">
             <app-custom-primary-button
@@ -506,7 +515,8 @@
             <app-custom-primary-button
               variant="primary"
               size="md"
-              label="Send Enquiry"
+              [disabled]="isSubmittingBooking()"
+              [label]="isSubmittingBooking() ? 'Sending...' : 'Send Enquiry'"
               (clicked)="onConfirmBooking()"
             />
           </div>

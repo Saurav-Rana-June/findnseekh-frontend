@@ -22,6 +22,7 @@ import { TeacherAvatarComponent } from '../../../../../shared/components/teacher
 import { Teacher } from '../../../domain/entities/teacher.entity';
 import { TeachersRepository } from '../../../domain/repositories/teachers.repository';
 import { GetTeacherByIdUseCase } from '../../../domain/use-cases/get-teacher-by-id.use-case';
+import { SendTeacherEnquiryUseCase } from '../../../domain/use-cases/send-teacher-enquiry.use-case';
 
 @Component({
   selector: 'app-teacher-profile-page',
@@ -43,6 +44,7 @@ export class TeacherProfilePage implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly getTeacherById = inject(GetTeacherByIdUseCase);
+  private readonly sendTeacherEnquiry = inject(SendTeacherEnquiryUseCase);
   private readonly teachersRepo = inject(TeachersRepository);
 
   protected readonly teacher = signal<Teacher | null>(null);
@@ -53,6 +55,10 @@ export class TeacherProfilePage implements OnInit {
   // Interactive booking state
   protected readonly isBookingOpen = signal<boolean>(false);
   protected readonly bookingSuccess = signal<boolean>(false);
+  protected readonly isSubmittingBooking = signal<boolean>(false);
+  protected readonly bookingError = signal<string | null>(null);
+  protected readonly preferredDate = signal<string>('2026-11-20');
+  protected readonly bookingMessage = signal<string>('');
   protected readonly selectedSessionType = signal<'enquiry' | 'trial' | 'regular'>('enquiry');
   protected readonly selectedBookingMode = signal<TeachingMode>('online');
 
@@ -156,19 +162,62 @@ export class TeacherProfilePage implements OnInit {
   protected onOpenBooking(type: 'enquiry' | 'trial' | 'regular' = 'enquiry'): void {
     this.selectedSessionType.set(type);
     this.bookingSuccess.set(false);
+    this.bookingError.set(null);
+    this.isSubmittingBooking.set(false);
     this.isBookingOpen.set(true);
   }
 
   protected onCloseBooking(): void {
     this.isBookingOpen.set(false);
+    this.bookingError.set(null);
+    this.isSubmittingBooking.set(false);
+  }
+
+  protected onDateChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input) {
+      this.preferredDate.set(input.value);
+    }
+  }
+
+  protected onMessageChange(event: Event): void {
+    const input = event.target as HTMLTextAreaElement;
+    if (input) {
+      this.bookingMessage.set(input.value);
+    }
   }
 
   protected onConfirmBooking(): void {
-    this.bookingSuccess.set(true);
-    setTimeout(() => {
-      this.isBookingOpen.set(false);
-      this.bookingSuccess.set(false);
-    }, 2400);
+    const t = this.teacher();
+    if (!t) return;
+
+    this.isSubmittingBooking.set(true);
+    this.bookingError.set(null);
+
+    this.sendTeacherEnquiry
+      .execute(t.id, {
+        teachingMode: this.selectedBookingMode(),
+        preferredDate: this.preferredDate(),
+        message: this.bookingMessage(),
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isSubmittingBooking.set(false);
+          this.bookingSuccess.set(true);
+          this.bookingMessage.set('');
+          setTimeout(() => {
+            this.isBookingOpen.set(false);
+            this.bookingSuccess.set(false);
+          }, 2400);
+        },
+        error: (err) => {
+          this.isSubmittingBooking.set(false);
+          this.bookingError.set(
+            err?.error?.message || err?.message || 'Failed to send enquiry. Please try again.',
+          );
+        },
+      });
   }
 
   protected toggleFaq(index: number): void {

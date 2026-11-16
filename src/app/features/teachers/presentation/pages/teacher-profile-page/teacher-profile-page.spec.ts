@@ -3,6 +3,7 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { TeachersRepository } from '../../../domain/repositories/teachers.repository';
 import { GetTeacherByIdUseCase } from '../../../domain/use-cases/get-teacher-by-id.use-case';
+import { SendTeacherEnquiryUseCase } from '../../../domain/use-cases/send-teacher-enquiry.use-case';
 import { TeacherProfilePage } from './teacher-profile-page';
 
 const MOCK_TEACHER = {
@@ -55,6 +56,18 @@ describe('TeacherProfilePage', () => {
   const mockRepo = {
     getTeacherById: vi.fn().mockReturnValue(of(MOCK_TEACHER)),
     getTeachers: vi.fn().mockReturnValue(of([])),
+    sendEnquiry: vi.fn().mockReturnValue(
+      of({
+        id: 1,
+        teacherId: 101,
+        studentId: 2,
+        teachingMode: 'online',
+        preferredDate: '2026-11-20',
+        message: 'Test message',
+        status: 'pending',
+        createdAt: '2026-11-16T00:00:00Z',
+      }),
+    ),
   };
 
   beforeEach(async () => {
@@ -64,6 +77,7 @@ describe('TeacherProfilePage', () => {
         provideRouter([]),
         { provide: TeachersRepository, useValue: mockRepo },
         GetTeacherByIdUseCase,
+        SendTeacherEnquiryUseCase,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -103,6 +117,19 @@ describe('TeacherProfilePage', () => {
 
     component['onCloseBooking']();
     expect(component['isBookingOpen']()).toBe(false);
+  });
+
+  it('submits enquiry via SendTeacherEnquiryUseCase and triggers success state', () => {
+    component['onOpenBooking']('enquiry');
+    component['bookingMessage'].set('Hello Ananya, I would like to learn vocal ragas.');
+    component['onConfirmBooking']();
+
+    expect(mockRepo.sendEnquiry).toHaveBeenCalledWith('ananya-verma', {
+      teachingMode: 'online',
+      preferredDate: '2026-11-20',
+      message: 'Hello Ananya, I would like to learn vocal ragas.',
+    });
+    expect(component['bookingSuccess']()).toBe(true);
   });
 });
 

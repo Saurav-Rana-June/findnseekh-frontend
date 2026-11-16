@@ -64,3 +64,22 @@ export interface TeacherFilterQuery {
   readonly sortBy?: TeacherSortOption;
 }
 
+export interface TeacherEnquiryPayload {
+  readonly teachingMode?: TeachingMode;
+  readonly preferredDate?: string;
+  readonly message?: string;
+  readonly skillListingId?: number;
+}
+
+export interface TeacherEnquiryResult {
+  readonly id: number;
+  readonly teacherId: number;
+  readonly studentId?: number | null;
+  readonly teachingMode: string;
+  readonly preferredDate?: string | null;
+  readonly message: string;
+  readonly status: string;
+  readonly createdAt: string;
+}
+
+

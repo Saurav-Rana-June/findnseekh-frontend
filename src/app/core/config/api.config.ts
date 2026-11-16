@@ -31,6 +31,7 @@ export const API_ENDPOINTS = {
     featured: '/teachers/featured',
     list: '/teachers',
     detail: (userId: number | string) => `/teachers/${userId}`,
+    enquiry: (userId: number | string) => `/teachers/${userId}/enquiry`,
   },
   skills: {
     popular: '/skills/popular',

@@ -1,7 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Teacher, TeacherFilterQuery } from '../../domain/entities/teacher.entity';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { catchError, map, Observable, of } from 'rxjs';
+import {
+  Teacher,
+  TeacherEnquiryPayload,
+  TeacherEnquiryResult,
+  TeacherFilterQuery,
+} from '../../domain/entities/teacher.entity';
 import { TeachersRepository } from '../../domain/repositories/teachers.repository';
+import {
+  toTeacherCardEntity,
+  toTeacherDetailEntity,
+  toTeacherEnquiryResult,
+} from '../models/teacher.dto';
+import { TeachersApiService } from '../services/teachers-api.service';
 
 const MOCK_TEACHERS: readonly Teacher[] = [
   {
@@ -296,11 +308,83 @@ const MOCK_TEACHERS: readonly Teacher[] = [
 
 @Injectable()
 export class TeachersRepositoryImpl extends TeachersRepository {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly apiService = inject(TeachersApiService, { optional: true });
+
   override getTeachers(filter?: TeacherFilterQuery): Observable<readonly Teacher[]> {
+    if (isPlatformBrowser(this.platformId) && this.apiService) {
+      return this.apiService.getTeachers(filter).pipe(
+        map((res) => {
+          if (res.data?.teachers && res.data.teachers.length > 0) {
+            return res.data.teachers.map((t, idx) => toTeacherCardEntity(t, idx));
+          }
+          return this.getMockTeachers(filter);
+        }),
+        catchError(() => of(this.getMockTeachers(filter))),
+      );
+    }
+    return of(this.getMockTeachers(filter));
+  }
+
+  override getTeacherById(id: string): Observable<Teacher | null> {
+    if (isPlatformBrowser(this.platformId) && this.apiService) {
+      return this.apiService.getTeacherDetail(id).pipe(
+        map((res) => {
+          if (res.data) {
+            return toTeacherDetailEntity(res.data);
+          }
+          return this.getMockTeacherById(id);
+        }),
+        catchError(() => of(this.getMockTeacherById(id))),
+      );
+    }
+    return of(this.getMockTeacherById(id));
+  }
+
+  override sendEnquiry(
+    teacherId: string | number,
+    payload: TeacherEnquiryPayload,
+  ): Observable<TeacherEnquiryResult> {
+    if (isPlatformBrowser(this.platformId) && this.apiService) {
+      return this.apiService
+        .sendEnquiry(teacherId, {
+          teaching_mode: payload.teachingMode,
+          preferred_date: payload.preferredDate,
+          message: payload.message,
+          skill_listing_id: payload.skillListingId,
+        })
+        .pipe(
+          map((res) => toTeacherEnquiryResult(res.data)),
+          catchError(() =>
+            of({
+              id: Date.now(),
+              teacherId: Number(teacherId) || 101,
+              teachingMode: payload.teachingMode || 'online',
+              preferredDate: payload.preferredDate,
+              message: payload.message || 'Enquiry',
+              status: 'pending',
+              createdAt: new Date().toISOString(),
+            }),
+          ),
+        );
+    }
+
+    return of({
+      id: Date.now(),
+      teacherId: Number(teacherId) || 101,
+      teachingMode: payload.teachingMode || 'online',
+      preferredDate: payload.preferredDate,
+      message: payload.message || 'Enquiry',
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  private getMockTeachers(filter?: TeacherFilterQuery): readonly Teacher[] {
     let result = [...MOCK_TEACHERS];
 
     if (!filter) {
-      return of(result);
+      return result;
     }
 
     const { query, location, category, mode, minExperience, sortBy } = filter;
@@ -363,18 +447,19 @@ export class TeachersRepositoryImpl extends TeachersRepository {
           break;
         case 'recommended':
         default:
-          // Keep default curated ranking
           break;
       }
     }
 
-    return of(result);
+    return result;
   }
 
-  override getTeacherById(id: string): Observable<Teacher | null> {
-    const teacher = MOCK_TEACHERS.find((t) => t.id === id);
+  private getMockTeacherById(id: string): Teacher | null {
+    const teacher =
+      MOCK_TEACHERS.find((t) => t.id === id) ||
+      MOCK_TEACHERS.find((t) => t.id.includes(id) || id.includes(t.id));
     if (!teacher) {
-      return of(null);
+      return null;
     }
 
     const enriched: Teacher = {
@@ -427,6 +512,6 @@ export class TeachersRepositoryImpl extends TeachersRepository {
       ],
     };
 
-    return of(enriched);
+    return enriched;
   }
 }
