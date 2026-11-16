@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, timeout } from 'rxjs';
-import { API_CONFIG } from '../config/api.config';
+import { Observable, of, timeout } from 'rxjs';
+import { API_CONFIG, PROTOTYPE_MODE } from '../config/api.config';
 
 export type QueryParamValue = string | number | boolean | null | undefined;
 export type QueryParamsInput = Record<string, QueryParamValue | readonly QueryParamValue[]>;
@@ -19,8 +19,12 @@ export interface ApiRequestOptions {
 export class ApiHttpService {
   private readonly http = inject(HttpClient);
   private readonly config = inject(API_CONFIG);
+  private readonly prototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? Boolean(this.config?.prototypeMode);
 
   get<TResponse>(path: string, options?: ApiRequestOptions): Observable<TResponse> {
+    if (this.prototypeMode) {
+      return of({ data: null, message: 'Prototype Mode active' } as unknown as TResponse);
+    }
     return this.http
       .get<TResponse>(this.buildUrl(path), this.buildHttpOptions(options))
       .pipe(timeout(this.config.timeoutMs));
@@ -31,6 +35,9 @@ export class ApiHttpService {
     body: TBody,
     options?: ApiRequestOptions,
   ): Observable<TResponse> {
+    if (this.prototypeMode) {
+      return of({ data: null, message: 'Prototype Mode active' } as unknown as TResponse);
+    }
     return this.http
       .post<TResponse>(this.buildUrl(path), body, this.buildHttpOptions(options))
       .pipe(timeout(this.config.timeoutMs));
@@ -41,6 +48,9 @@ export class ApiHttpService {
     body: TBody,
     options?: ApiRequestOptions,
   ): Observable<TResponse> {
+    if (this.prototypeMode) {
+      return of({ data: null, message: 'Prototype Mode active' } as unknown as TResponse);
+    }
     return this.http
       .put<TResponse>(this.buildUrl(path), body, this.buildHttpOptions(options))
       .pipe(timeout(this.config.timeoutMs));
@@ -51,12 +61,18 @@ export class ApiHttpService {
     body: TBody,
     options?: ApiRequestOptions,
   ): Observable<TResponse> {
+    if (this.prototypeMode) {
+      return of({ data: null, message: 'Prototype Mode active' } as unknown as TResponse);
+    }
     return this.http
       .patch<TResponse>(this.buildUrl(path), body, this.buildHttpOptions(options))
       .pipe(timeout(this.config.timeoutMs));
   }
 
   delete<TResponse>(path: string, options?: ApiRequestOptions): Observable<TResponse> {
+    if (this.prototypeMode) {
+      return of({ data: null, message: 'Prototype Mode active' } as unknown as TResponse);
+    }
     return this.http
       .delete<TResponse>(this.buildUrl(path), this.buildHttpOptions(options))
       .pipe(timeout(this.config.timeoutMs));

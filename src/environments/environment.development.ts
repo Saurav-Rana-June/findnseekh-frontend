@@ -5,4 +5,9 @@ export const environment: AppEnvironment = {
   apiBaseUrl: 'http://localhost:8000/api/v1',
   apiTimeoutMs: 30_000,
   appName: 'Findnseekh',
+  /**
+   * Set `prototypeMode` to `true` to run the entire project in Prototype Mode
+   * without calling any backend APIs (for UI demonstrations and presentations).
+   */
+  prototypeMode: false,
 };

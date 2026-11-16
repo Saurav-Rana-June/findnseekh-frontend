@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
+import { PROTOTYPE_MODE } from '../../../../core/config/api.config';
 import { HomeOverview } from '../../domain/entities/home.entity';
 import { HomeRepository } from '../../domain/repositories/home.repository';
 import { toHomeOverview } from '../models/home.dto';
@@ -224,9 +225,10 @@ const INITIAL_HOME_OVERVIEW: HomeOverview = {
 export class HomeRepositoryImpl extends HomeRepository {
   private readonly homeApi = inject(HomeApiService, { optional: true });
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly prototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
 
   override getOverview(): Observable<HomeOverview> {
-    if (!isPlatformBrowser(this.platformId) || !this.homeApi) {
+    if (this.prototypeMode || !isPlatformBrowser(this.platformId) || !this.homeApi) {
       return of(INITIAL_HOME_OVERVIEW);
     }
     return this.homeApi.getOverview().pipe(

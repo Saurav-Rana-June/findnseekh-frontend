@@ -10,6 +10,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, finalize, map, of, switchMap } from 'rxjs';
 import { ApiError } from '../../../../core/models/api-error.model';
+import { PROTOTYPE_MODE } from '../../../../core/config/api.config';
 import { AuthSessionService } from '../../../../core/services/auth-session.service';
 import {
   AuthUser,
@@ -33,8 +34,10 @@ import { UpdateTeacherProfileUseCase } from '../../domain/use-cases/update-teach
 
 @Injectable()
 export class AuthStore {
-  /** Set to `false` in production. Can be enabled in unit tests if needed. */
-  prototypeMode = false;
+  private readonly globalPrototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
+
+  /** Set to `false` in production. Controlled globally by environment.prototypeMode. */
+  prototypeMode = this.globalPrototypeMode;
 
   setPrototypeMode(enabled: boolean): void {
     this.prototypeMode = enabled;
@@ -103,6 +106,20 @@ export class AuthStore {
     }
 
     if (this.prototypeMode) {
+      if (!this._user()) {
+        const mockUser: AuthUser = {
+          id: 1,
+          email: 'demo@findnseekh.com',
+          fullName: 'Aarav Sharma',
+          phone: '+91 98765 43210',
+          roles: ['student', 'teacher'],
+          isActive: true,
+        };
+        this.authSession.setTokens('prototype-mock-jwt-token');
+        this._user.set(mockUser);
+        this.getStudentProfile();
+        this.getTeacherProfile();
+      }
       this._isInitializing.set(false);
       return;
     }
@@ -325,7 +342,29 @@ export class AuthStore {
   }
 
   getTeacherProfile(onSuccess?: (profile: TeacherProfile) => void): void {
-    if (this.prototypeMode || !this.getTeacherProfileUseCase) {
+    if (this.prototypeMode) {
+      if (!this._teacherProfile()) {
+        const mockProfile: TeacherProfile = {
+          id: 1,
+          userId: 1,
+          bio: 'Passionate educator with over 7 years of teaching experience across classical and modern music.',
+          qualification: 'M.A. Music & Certified Mentor',
+          skills: ['Classical Vocals', 'Harmonium', 'Music Theory'],
+          experienceYears: 7,
+          city: 'Dehradun',
+          state: 'Uttarakhand',
+          teachingMode: 'both',
+          isVerified: true,
+          phone: '+91 98765 43210',
+        };
+        this._teacherProfile.set(mockProfile);
+        this._isTeacherProfileCompleted.set(true);
+      }
+      onSuccess?.(this._teacherProfile()!);
+      return;
+    }
+
+    if (!this.getTeacherProfileUseCase) {
       return;
     }
 

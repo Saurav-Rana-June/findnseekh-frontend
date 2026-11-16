@@ -1,7 +1,7 @@
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { provideApiConfig } from './config/api.config';
+import { PROTOTYPE_MODE, provideApiConfig } from './config/api.config';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { errorInterceptor } from './interceptors/error.interceptor';
 import { etagInterceptor } from './interceptors/etag.interceptor';
@@ -11,7 +11,12 @@ export function provideCore(): EnvironmentProviders {
     provideApiConfig({
       baseUrl: environment.apiBaseUrl,
       timeoutMs: environment.apiTimeoutMs,
+      prototypeMode: environment.prototypeMode,
     }),
+    {
+      provide: PROTOTYPE_MODE,
+      useValue: environment.prototypeMode,
+    },
     provideHttpClient(
       withFetch(),
       withInterceptors([authInterceptor, etagInterceptor, errorInterceptor]),

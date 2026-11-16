@@ -1,12 +1,23 @@
 import { HttpContextToken } from '@angular/common/http';
 import { InjectionToken, Provider } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 export interface ApiConfig {
   readonly baseUrl: string;
   readonly timeoutMs: number;
+  readonly prototypeMode?: boolean;
 }
 
 export const API_CONFIG = new InjectionToken<ApiConfig>('API_CONFIG');
+
+/**
+ * Injection token indicating whether the application is running in Prototype Mode.
+ * When `true`, all repositories return mock dummy data and zero network APIs are executed.
+ */
+export const PROTOTYPE_MODE = new InjectionToken<boolean>('PROTOTYPE_MODE', {
+  providedIn: 'root',
+  factory: () => environment.prototypeMode,
+});
 
 /**
  * Set to `true` on requests that must not carry an Authorization header

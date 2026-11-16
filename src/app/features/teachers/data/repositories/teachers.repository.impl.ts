@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
+import { PROTOTYPE_MODE } from '../../../../core/config/api.config';
 import {
   Teacher,
   TeacherEnquiryPayload,
@@ -310,8 +311,13 @@ const MOCK_TEACHERS: readonly Teacher[] = [
 export class TeachersRepositoryImpl extends TeachersRepository {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly apiService = inject(TeachersApiService, { optional: true });
+  private readonly prototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
 
   override getTeachers(filter?: TeacherFilterQuery): Observable<readonly Teacher[]> {
+    if (this.prototypeMode) {
+      return of(this.getMockTeachers(filter));
+    }
+
     if (isPlatformBrowser(this.platformId) && this.apiService) {
       return this.apiService.getTeachers(filter).pipe(
         map((res) => {
@@ -327,6 +333,10 @@ export class TeachersRepositoryImpl extends TeachersRepository {
   }
 
   override getTeacherById(id: string): Observable<Teacher | null> {
+    if (this.prototypeMode) {
+      return of(this.getMockTeacherById(id));
+    }
+
     if (isPlatformBrowser(this.platformId) && this.apiService) {
       return this.apiService.getTeacherDetail(id).pipe(
         map((res) => {
@@ -345,39 +355,39 @@ export class TeachersRepositoryImpl extends TeachersRepository {
     teacherId: string | number,
     payload: TeacherEnquiryPayload,
   ): Observable<TeacherEnquiryResult> {
-    if (isPlatformBrowser(this.platformId) && this.apiService) {
-      return this.apiService
-        .sendEnquiry(teacherId, {
-          teaching_mode: payload.teachingMode,
-          preferred_date: payload.preferredDate,
-          message: payload.message,
-          skill_listing_id: payload.skillListingId,
-        })
-        .pipe(
-          map((res) => toTeacherEnquiryResult(res.data)),
-          catchError(() =>
-            of({
-              id: Date.now(),
-              teacherId: Number(teacherId) || 101,
-              teachingMode: payload.teachingMode || 'online',
-              preferredDate: payload.preferredDate,
-              message: payload.message || 'Enquiry',
-              status: 'pending',
-              createdAt: new Date().toISOString(),
-            }),
-          ),
-        );
+    if (this.prototypeMode || !isPlatformBrowser(this.platformId) || !this.apiService) {
+      return of({
+        id: Date.now(),
+        teacherId: Number(teacherId) || 101,
+        teachingMode: payload.teachingMode || 'online',
+        preferredDate: payload.preferredDate,
+        message: payload.message || 'Enquiry',
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      });
     }
 
-    return of({
-      id: Date.now(),
-      teacherId: Number(teacherId) || 101,
-      teachingMode: payload.teachingMode || 'online',
-      preferredDate: payload.preferredDate,
-      message: payload.message || 'Enquiry',
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    });
+    return this.apiService
+      .sendEnquiry(teacherId, {
+        teaching_mode: payload.teachingMode,
+        preferred_date: payload.preferredDate,
+        message: payload.message,
+        skill_listing_id: payload.skillListingId,
+      })
+      .pipe(
+        map((res) => toTeacherEnquiryResult(res.data)),
+        catchError(() =>
+          of({
+            id: Date.now(),
+            teacherId: Number(teacherId) || 101,
+            teachingMode: payload.teachingMode || 'online',
+            preferredDate: payload.preferredDate,
+            message: payload.message || 'Enquiry',
+            status: 'pending',
+            createdAt: new Date().toISOString(),
+          }),
+        ),
+      );
   }
 
   private getMockTeachers(filter?: TeacherFilterQuery): readonly Teacher[] {

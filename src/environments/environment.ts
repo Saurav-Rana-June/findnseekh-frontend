@@ -5,4 +5,5 @@ export const environment: AppEnvironment = {
   apiBaseUrl: '/api/v1',
   apiTimeoutMs: 30_000,
   appName: 'Findnseekh',
+  prototypeMode: false,
 };
