@@ -35,6 +35,7 @@ export interface TeacherProfileUpdateRequestDto {
   readonly city?: string | null;
   readonly state?: string | null;
   readonly teaching_mode?: TeachingMode;
+  readonly phone?: string | null;
 }
 
 export interface AuthUserDto {
@@ -54,6 +55,7 @@ export interface TokenResponseDto {
 export interface TeacherProfileDto {
   readonly id: number;
   readonly user_id: number;
+  readonly phone?: string | null;
   readonly bio: string | null;
   readonly qualification?: string | null;
   readonly skills?: readonly string[] | string | null;
@@ -112,6 +114,7 @@ export function toTeacherProfileUpdateRequestDto(
     city: payload.city?.trim() || null,
     state: payload.state?.trim() || null,
     teaching_mode: payload.teachingMode ?? 'both',
+    phone: payload.phone?.trim() || null,
   };
 }
 
@@ -149,6 +152,7 @@ export function toTeacherProfile(dto: TeacherProfileDto): TeacherProfile {
   return {
     id: dto.id,
     userId: dto.user_id,
+    phone: dto.phone ?? null,
     bio: dto.bio,
     qualification: dto.qualification ?? null,
     skills: skills ?? [],

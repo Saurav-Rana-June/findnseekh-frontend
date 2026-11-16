@@ -258,6 +258,12 @@
       </div>
 
       <form class="profile-form" [formGroup]="studentForm" (ngSubmit)="onSaveStudent()" novalidate>
+        @if (authStore.error(); as error) {
+        <div class="profile-form__error" role="alert">
+          {{ error }}
+        </div>
+        }
+
         <!-- Contact Phone & City row -->
         <div class="profile-form__row">
           <app-custom-textfield fieldId="profile-student-phone" label="Contact Phone" type="tel" formControlName="phone"
@@ -403,7 +409,9 @@
 
         <!-- Submit Button -->
         <div class="profile-form__footer">
-          <app-custom-primary-button type="submit" variant="primary" size="lg" label="Save Learning Profile" />
+          <app-custom-primary-button type="submit" variant="primary" size="lg"
+            [label]="authStore.isLoading() ? 'Saving...' : 'Save Learning Profile'"
+            [loading]="authStore.isLoading()" />
         </div>
       </form>
     </section>

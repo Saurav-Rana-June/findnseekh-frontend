@@ -34,6 +34,7 @@ export interface UserProfileUpdatePayload {
 export interface TeacherProfile {
   readonly id: number;
   readonly userId: number;
+  readonly phone?: string | null;
   readonly bio: string | null;
   readonly qualification?: string | null;
   readonly skills?: readonly string[];

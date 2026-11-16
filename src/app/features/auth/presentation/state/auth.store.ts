@@ -386,6 +386,9 @@ export class AuthStore {
         next: (profile) => {
           this._teacherProfile.set(profile);
           this._isTeacherProfileCompleted.set(true);
+          if (profile.phone && this._user()) {
+            this._user.update((u) => (u ? { ...u, phone: profile.phone! } : null));
+          }
           onSuccess?.(profile);
         },
         error: (err: ApiError) => {
@@ -470,6 +473,9 @@ export class AuthStore {
       .subscribe({
         next: (profile) => {
           this._studentProfile.set(profile);
+          if (profile.phone && this._user()) {
+            this._user.update((u) => (u ? { ...u, phone: profile.phone! } : null));
+          }
           onSuccess?.(profile);
         },
         error: (err: ApiError) => {

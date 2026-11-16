@@ -200,6 +200,7 @@ export class ProfilePage {
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.authStore.getStudentProfile();
+      this.authStore.getTeacherProfile();
     }
 
     effect(() => {
@@ -213,6 +214,9 @@ export class ProfilePage {
           city: profile.city ?? '',
           state: profile.state ?? '',
         });
+        if (profile.phone) {
+          this.form.patchValue({ phone: profile.phone });
+        }
         if (profile.skills && profile.skills.length > 0) {
           this.skills.set([...profile.skills]);
         }
