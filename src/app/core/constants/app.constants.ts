@@ -12,6 +12,7 @@ export const APP_ROUTE_PATHS = {
   register: 'register',
   profile: 'profile',
   teachers: 'teachers',
+  requests: 'requests',
   admin: 'admin',
 } as const;
 

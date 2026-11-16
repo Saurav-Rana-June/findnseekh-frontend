@@ -25,6 +25,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/teachers/presentation/teachers.routes').then((m) => m.TEACHERS_ROUTES),
       },
+      {
+        path: APP_ROUTE_PATHS.requests,
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/requests/presentation/requests.routes').then((m) => m.REQUESTS_ROUTES),
+      },
     ],
   },
   {

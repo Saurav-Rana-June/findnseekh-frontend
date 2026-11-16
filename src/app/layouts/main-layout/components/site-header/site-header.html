@@ -21,6 +21,12 @@
     <div class="navbar__actions">
       @if (authStore.user(); as currentUser) {
         <app-custom-primary-button
+          variant="ghost"
+          size="sm"
+          label="My Enquiries"
+          routerLink="/requests"
+        />
+        <app-custom-primary-button
           variant="outline"
           size="sm"
           paddingInline="6px"
@@ -82,6 +88,13 @@
       }
       <div class="navbar__mobile-actions">
         @if (authStore.user(); as currentUser) {
+          <app-custom-primary-button
+            variant="ghost"
+            label="My Enquiries"
+            [fullWidth]="true"
+            routerLink="/requests"
+            (clicked)="closeMobileMenu()"
+          />
           <app-custom-primary-button
             variant="outline"
             [fullWidth]="true"

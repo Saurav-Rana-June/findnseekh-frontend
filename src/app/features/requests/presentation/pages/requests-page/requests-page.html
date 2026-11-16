@@ -1,0 +1,280 @@
+<div class="requests-page">
+  <div class="page-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
+        <li class="breadcrumb__sep" aria-hidden="true">/</li>
+        <li class="breadcrumb__current" aria-current="page">My Enquiries</li>
+      </ol>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="requests-header">
+      <div class="requests-header__content">
+        <h1 class="requests-header__title">Learning Requests &amp; Enquiries</h1>
+        <p class="requests-header__lead">
+          Keep track of enquiry requests you've sent to teachers, and manage incoming requests from students.
+        </p>
+      </div>
+    </header>
+
+    <!-- Success & Error Banners -->
+    @if (store.successMessage(); as msg) {
+      <div class="alert alert--success" role="alert">
+        <svg class="alert__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+        <span class="alert__text">{{ msg }}</span>
+      </div>
+    }
+
+    @if (store.error(); as err) {
+      <div class="alert alert--error" role="alert">
+        <svg class="alert__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span class="alert__text">{{ err }}</span>
+      </div>
+    }
+
+    <!-- Tabs (Sent vs Received) -->
+    <div class="requests-tabs-bar">
+      <div class="tabs-group" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          class="tab-btn"
+          [class.tab-btn--active]="store.activeTab() === 'sent'"
+          [attr.aria-selected]="store.activeTab() === 'sent'"
+          (click)="onTabChange('sent')"
+        >
+          <span>Sent Enquiries</span>
+          <span class="tab-badge">{{ store.sentRequests().length }}</span>
+        </button>
+
+        @if (isTeacher()) {
+          <button
+            type="button"
+            role="tab"
+            class="tab-btn"
+            [class.tab-btn--active]="store.activeTab() === 'received'"
+            [attr.aria-selected]="store.activeTab() === 'received'"
+            (click)="onTabChange('received')"
+          >
+            <span>Received Inquiries (Inbox)</span>
+            <span class="tab-badge" [class.tab-badge--highlight]="store.pendingReceivedCount() > 0">
+              {{ store.receivedRequests().length }}
+            </span>
+          </button>
+        }
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="filter-chips" role="group" aria-label="Filter requests by status">
+        <app-custom-status-pill
+          label="All"
+          [interactive]="true"
+          [active]="store.statusFilter() === 'all'"
+          size="sm"
+          (clicked)="onFilterChange('all')"
+        />
+        <app-custom-status-pill
+          label="Pending"
+          variant="warning"
+          [interactive]="true"
+          [active]="store.statusFilter() === 'pending'"
+          size="sm"
+          (clicked)="onFilterChange('pending')"
+        />
+        <app-custom-status-pill
+          label="Accepted"
+          variant="success"
+          [interactive]="true"
+          [active]="store.statusFilter() === 'accepted'"
+          size="sm"
+          (clicked)="onFilterChange('accepted')"
+        />
+        <app-custom-status-pill
+          label="Declined"
+          variant="danger"
+          [interactive]="true"
+          [active]="store.statusFilter() === 'rejected'"
+          size="sm"
+          (clicked)="onFilterChange('rejected')"
+        />
+        <app-custom-status-pill
+          label="Cancelled"
+          variant="neutral"
+          [interactive]="true"
+          [active]="store.statusFilter() === 'cancelled'"
+          size="sm"
+          (clicked)="onFilterChange('cancelled')"
+        />
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <section class="requests-content">
+      @if (store.isLoading()) {
+        <div class="loading-state">
+          <div class="spinner" aria-hidden="true"></div>
+          <p class="loading-text">Loading requests...</p>
+        </div>
+      } @else if (currentRequests().length === 0) {
+        <div class="empty-state">
+          <div class="empty-state__icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          </div>
+          <h2 class="empty-state__title">
+            {{ store.activeTab() === 'sent' ? 'No enquiries found' : 'No received inquiries yet' }}
+          </h2>
+          <p class="empty-state__desc">
+            @if (store.statusFilter() !== 'all') {
+              No requests match the selected status filter "{{ store.statusFilter() }}".
+            } @else if (store.activeTab() === 'sent') {
+              You haven't sent any learning enquiries yet. Find an expert teacher and send a request to start learning!
+            } @else {
+              Students have not sent you any inquiries yet. Complete your teacher profile so students can discover your skills!
+            }
+          </p>
+          @if (store.activeTab() === 'sent' && store.statusFilter() === 'all') {
+            <div class="empty-state__action">
+              <app-custom-primary-button
+                label="Explore Teachers"
+                routerLink="/teachers"
+                variant="primary"
+                size="md"
+              />
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="requests-grid">
+          @for (req of currentRequests(); track req.id) {
+            <article class="request-card" [attr.data-status]="req.status">
+              <!-- Card Header -->
+              <div class="request-card__header">
+                <div class="request-card__user">
+                  <app-custom-avatar
+                    size="md"
+                    customSize="42px"
+                    [name]="store.activeTab() === 'sent' ? req.teacherName : req.studentName"
+                    bgColor="var(--color-primary-50, #eef4f0)"
+                    textColor="var(--color-primary, #174e38)"
+                    borderColor="var(--color-primary-100, #dce9e1)"
+                  />
+                  <div class="request-card__names">
+                    <span class="request-card__party-role">
+                      {{ store.activeTab() === 'sent' ? 'Teacher' : 'Student' }}
+                    </span>
+                    <h3 class="request-card__party-name">
+                      {{ store.activeTab() === 'sent' ? req.teacherName : req.studentName }}
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="request-card__meta">
+                  <app-custom-status-pill
+                    [label]="getStatusLabel(req.status)"
+                    [variant]="getStatusVariant(req.status)"
+                    size="sm"
+                  />
+                  <time class="request-card__date" [attr.datetime]="req.createdAt">
+                    {{ formatDate(req.createdAt) }}
+                  </time>
+                </div>
+              </div>
+
+              <!-- Card Body -->
+              <div class="request-card__body">
+                <div class="request-card__skill">
+                  <span class="skill-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    </svg>
+                    Skill: <strong>{{ req.skillTitle }}</strong>
+                  </span>
+                </div>
+
+                <div class="request-card__message-block">
+                  <span class="request-card__message-label">Enquiry Note:</span>
+                  <p class="request-card__message-text">{{ req.message }}</p>
+                </div>
+
+                @if (req.teacherResponse) {
+                  <div class="request-card__response-block">
+                    <span class="request-card__response-label">Teacher Response:</span>
+                    <p class="request-card__response-text">{{ req.teacherResponse }}</p>
+                  </div>
+                }
+              </div>
+
+              <!-- Card Actions -->
+              <div class="request-card__actions">
+                @if (store.activeTab() === 'sent') {
+                  <div class="request-card__actions-left">
+                    <app-custom-primary-button
+                      variant="ghost"
+                      size="sm"
+                      label="View Teacher Profile"
+                      [routerLink]="['/teachers', req.teacherId]"
+                    />
+                  </div>
+
+                  @if (req.status === 'pending') {
+                    <app-custom-primary-button
+                      variant="outline"
+                      size="sm"
+                      label="Cancel Request"
+                      [loading]="store.actionLoadingId() === req.id"
+                      (clicked)="onCancel(req.id)"
+                    />
+                  }
+                } @else {
+                  @if (req.status === 'pending') {
+                    <div class="request-card__actions-group">
+                      <app-custom-primary-button
+                        variant="primary"
+                        size="sm"
+                        label="Accept Enquiry"
+                        [loading]="store.actionLoadingId() === req.id"
+                        (clicked)="onAccept(req.id)"
+                      />
+                      <app-custom-primary-button
+                        variant="outline"
+                        size="sm"
+                        label="Decline"
+                        [disabled]="store.actionLoadingId() === req.id"
+                        (clicked)="onReject(req.id)"
+                      />
+                    </div>
+                  } @else if (req.status === 'accepted') {
+                    <p class="request-card__status-note request-card__status-note--success">
+                      Enquiry accepted. You may connect with the student for scheduled lessons.
+                    </p>
+                  } @else if (req.status === 'rejected') {
+                    <p class="request-card__status-note">
+                      Enquiry declined.
+                    </p>
+                  } @else if (req.status === 'cancelled') {
+                    <p class="request-card__status-note">
+                      Student cancelled this enquiry.
+                    </p>
+                  }
+                }
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>
+

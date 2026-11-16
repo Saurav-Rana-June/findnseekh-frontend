@@ -44,6 +44,15 @@ export const API_ENDPOINTS = {
     list: '/categories',
     detail: (id: number | string) => `/categories/${id}`,
   },
+  requests: {
+    create: '/requests',
+    sent: '/requests/sent',
+    received: '/requests/received',
+    detail: (id: number | string) => `/requests/${id}`,
+    accept: (id: number | string) => `/requests/${id}/accept`,
+    reject: (id: number | string) => `/requests/${id}/reject`,
+    cancel: (id: number | string) => `/requests/${id}/cancel`,
+  },
 } as const;
 
 export function provideApiConfig(config: ApiConfig): Provider {
