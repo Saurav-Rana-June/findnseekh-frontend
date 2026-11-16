@@ -47,6 +47,20 @@ const MOCK_TEACHER = {
       answer: 'We evaluate your vocal range and goals.',
     },
   ],
+  listings: [
+    {
+      id: 101,
+      title: 'Classical Vocals Beginner',
+      description: 'Foundations of khayal singing and sargam exercises.',
+      level: 'beginner',
+      priceAmount: 700,
+      currency: 'INR',
+      priceUnit: 'session',
+      teachingMode: 'both' as const,
+      city: 'Dehradun',
+      area: 'Uttarakhand',
+    },
+  ],
 };
 
 describe('TeacherProfilePage', () => {
@@ -126,8 +140,9 @@ describe('TeacherProfilePage', () => {
 
     expect(mockRepo.sendEnquiry).toHaveBeenCalledWith('ananya-verma', {
       teachingMode: 'online',
-      preferredDate: '2026-11-20',
+      preferredDate: component['preferredDate'](),
       message: 'Hello Ananya, I would like to learn vocal ragas.',
+      skillListingId: 101,
     });
     expect(component['bookingSuccess']()).toBe(true);
   });

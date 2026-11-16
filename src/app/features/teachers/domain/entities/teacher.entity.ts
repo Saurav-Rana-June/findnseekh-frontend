@@ -24,6 +24,19 @@ export interface TeacherFaq {
   readonly answer: string;
 }
 
+export interface TeacherListing {
+  readonly id: number;
+  readonly title: string;
+  readonly description: string;
+  readonly level: string;
+  readonly priceAmount: number;
+  readonly currency: string;
+  readonly priceUnit: string;
+  readonly teachingMode: TeachingMode;
+  readonly city?: string | null;
+  readonly area?: string | null;
+}
+
 export interface Teacher {
   readonly id: string;
   readonly name: string;
@@ -46,6 +59,7 @@ export interface Teacher {
   readonly qualifications?: readonly string[];
   readonly reviews?: readonly TeacherReview[];
   readonly faqs?: readonly TeacherFaq[];
+  readonly listings?: readonly TeacherListing[];
 }
 
 export type TeacherSortOption =

@@ -4,6 +4,7 @@ import {
   TeacherEnquiryPayload,
   TeacherEnquiryResult,
   TeacherFaq,
+  TeacherListing,
   TeacherReview,
 } from '../../domain/entities/teacher.entity';
 import { TeachingMode } from '../../../../shared/components/custom-teacher-card/custom-teacher-card';
@@ -150,6 +151,22 @@ export function toTeacherDetailEntity(dto: TeacherDetailDto): Teacher {
     answer: f.answer,
   }));
 
+  const listings: TeacherListing[] = (dto.listings || []).map((l) => ({
+    id: l.id,
+    title: l.title,
+    description: l.description,
+    level: l.level,
+    priceAmount: Number(l.price_amount) || 0,
+    currency: l.currency || 'INR',
+    priceUnit: l.price_unit || 'session',
+    teachingMode:
+      l.teaching_mode === 'online' || l.teaching_mode === 'offline'
+        ? l.teaching_mode
+        : 'both',
+    city: l.city,
+    area: l.area,
+  }));
+
   return {
     ...card,
     about: dto.about || card.bio,
@@ -160,6 +177,7 @@ export function toTeacherDetailEntity(dto: TeacherDetailDto): Teacher {
         : [`${card.experienceYears}+ years of teaching & professional practice`],
     reviews,
     faqs,
+    listings,
   };
 }
 

@@ -43,6 +43,15 @@
         </nav>
       </div>
 
+      @if (isCopiedToast()) {
+        <div class="tp-toast" role="status">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span>Profile link copied to clipboard!</span>
+        </div>
+      }
+
       <!-- Hero Header Card with Forest Green Banner & Floating Avatar -->
       <header class="tp-hero-card">
         <!-- Banner with radial decorative rings -->
@@ -117,13 +126,26 @@
               />
 
               <span class="tp-mode-status-pill">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
-                <span>Online & in person</span>
+                @if (teacher()!.teachingMode === 'online') {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect width="20" height="14" x="2" y="3" rx="2" />
+                    <line x1="8" x2="16" y1="21" y2="21" />
+                    <line x1="12" x2="12" y1="17" y2="21" />
+                  </svg>
+                } @else if (teacher()!.teachingMode === 'offline') {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                } @else {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                }
+                <span>{{ modeBadge()?.label || 'Online & in person' }}</span>
               </span>
 
               @if (teacher()!.rating; as r) {
@@ -208,6 +230,45 @@
             </div>
           </section>
 
+          <!-- Section: Offered Classes & Courses -->
+          @if (teacher()!.listings && teacher()!.listings!.length > 0) {
+            <section class="tp-section" aria-labelledby="courses-heading">
+              <div class="tp-section-header-row">
+                <h2 id="courses-heading" class="tp-section-heading">Classes & courses offered</h2>
+                <span class="tp-section-badge">{{ teacher()!.listings!.length }} classes</span>
+              </div>
+              <div class="tp-courses-grid">
+                @for (listing of teacher()!.listings!; track listing.id) {
+                  <article class="tp-course-card" [class.tp-course-card--selected]="selectedListingId() === listing.id">
+                    <div class="tp-course-card__top">
+                      <div class="tp-course-card__info">
+                        <div class="tp-course-card__pills">
+                          <span class="tp-course-level-pill">{{ listing.level }}</span>
+                          <span class="tp-course-mode-pill">{{ listing.teachingMode === 'online' ? '💻 Online' : listing.teachingMode === 'offline' ? '📍 In-Person' : '💻 Online / In-Person' }}</span>
+                        </div>
+                        <h3 class="tp-course-card__title">{{ listing.title }}</h3>
+                      </div>
+                      <div class="tp-course-card__price-box">
+                        <span class="tp-course-price">₹{{ listing.priceAmount }}</span>
+                        <span class="tp-course-unit">/ {{ listing.priceUnit }}</span>
+                      </div>
+                    </div>
+                    <p class="tp-course-card__desc">{{ listing.description }}</p>
+                    <div class="tp-course-card__footer">
+                      <app-custom-primary-button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        [label]="selectedListingId() === listing.id ? '✓ Class Selected' : 'Enquire for this Class'"
+                        (clicked)="onEnquireForListing(listing)"
+                      />
+                    </div>
+                  </article>
+                }
+              </div>
+            </section>
+          }
+
           <!-- Section 3: How Lessons Work -->
           <section class="tp-section" aria-labelledby="how-lessons-work-heading">
             <h2 id="how-lessons-work-heading" class="tp-section-heading">How lessons work</h2>
@@ -275,8 +336,10 @@
                 <div class="tp-rating-summary-card">
                   <span class="tp-rating-large-score">{{ r.value.toFixed(1) }}</span>
                   <div class="tp-rating-meta-block">
-                    <div class="tp-rating-stars-row" aria-label="5 stars rating">
-                      ★★★★★
+                    <div class="tp-rating-stars-row" [attr.aria-label]="r.value + ' stars rating'">
+                      @for (star of [1, 2, 3, 4, 5]; track star) {
+                        <span class="tp-star" [class.tp-star--filled]="star <= getStarCount(r.value)" [class.tp-star--empty]="star > getStarCount(r.value)">★</span>
+                      }
                     </div>
                     <span class="tp-rating-reviews-count">Based on {{ r.count }} reviews</span>
                   </div>
@@ -291,7 +354,14 @@
                         {{ rev.studentName.charAt(0) }}
                       </span>
                       <div class="tp-review-author-info">
-                        <h4 class="tp-review-name">{{ rev.studentName }}</h4>
+                        <div class="tp-review-author-top">
+                          <h4 class="tp-review-name">{{ rev.studentName }}</h4>
+                          <div class="tp-review-stars" aria-label="Rating">
+                            @for (star of [1, 2, 3, 4, 5]; track star) {
+                              <span class="tp-review-star" [class.tp-review-star--filled]="star <= getStarCount(rev.rating)">★</span>
+                            }
+                          </div>
+                        </div>
                         <span class="tp-review-time">{{ rev.date }}</span>
                       </div>
                     </div>
@@ -341,9 +411,16 @@
           <div class="tp-sidebar-card">
             <!-- Price Block -->
             <div class="tp-price-row">
-              <span class="tp-price-amount">₹{{ teacher()!.hourlyRate }}</span>
-              <span class="tp-price-duration">/ 60 min session</span>
+              <span class="tp-price-amount">₹{{ selectedListing()?.priceAmount || teacher()!.hourlyRate }}</span>
+              <span class="tp-price-duration">/ {{ selectedListing()?.priceUnit || '60 min session' }}</span>
             </div>
+
+            @if (selectedListing(); as sel) {
+              <div class="tp-selected-listing-banner">
+                <span class="tp-selected-listing-badge">Selected Class:</span>
+                <span class="tp-selected-listing-name">{{ sel.title }}</span>
+              </div>
+            }
 
             <!-- Free Trial Badge -->
             <div class="tp-trial-badge-row">
@@ -450,6 +527,23 @@
             Send an enquiry or lesson request to <strong>{{ teacher()!.name }}</strong>.
           </p>
 
+          @if (teacher()!.listings && teacher()!.listings!.length > 0) {
+            <div class="tp-modal-form__group">
+              <label for="booking-listing" class="tp-modal-form__label">Select Class or Subject:</label>
+              <select
+                id="booking-listing"
+                class="tp-modal-form__select"
+                [value]="selectedListingId() ?? ''"
+                (change)="onSelectListing($event)"
+              >
+                <option value="">General Teacher Enquiry</option>
+                @for (l of teacher()!.listings!; track l.id) {
+                  <option [value]="l.id">{{ l.title }} (₹{{ l.priceAmount }}/{{ l.priceUnit }})</option>
+                }
+              </select>
+            </div>
+          }
+
           <div class="tp-modal-form__group">
             <label class="tp-modal-form__label">Choose Teaching Mode:</label>
             <div class="tp-modal-modes">
@@ -482,6 +576,7 @@
               id="booking-date"
               type="date"
               class="tp-modal-form__input"
+              [min]="minDate()"
               [value]="preferredDate()"
               (input)="onDateChange($event)"
             />
