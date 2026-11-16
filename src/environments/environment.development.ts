@@ -9,7 +9,7 @@ export const environment: AppEnvironment = {
    * Set `prototypeMode` to `true` to run the entire project in Prototype Mode
    * without calling any backend APIs (for UI demonstrations and presentations).
    */
-  prototypeMode: false,
+  prototypeMode: true,
   /**
    * Defines the active User Role in Prototype Mode:
    * - `PrototypeUserRole.STUDENT` (or 'STUDENT') -> Displays student-centric UI modules

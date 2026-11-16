@@ -21,6 +21,7 @@ import { AuthStore } from '../../../../features/auth/presentation/state/auth.sto
 interface NavItem {
   readonly label: string;
   readonly fragment?: string;
+  readonly route?: string;
 }
 
 const NAV_ITEMS: readonly NavItem[] = [
@@ -45,11 +46,25 @@ export class SiteHeader {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
 
-  protected readonly navItems = computed(() => {
-    if (this.authStore.isTeacher()) {
-      return NAV_ITEMS.filter((item) => item.fragment !== 'become-a-teacher');
+  protected readonly navItems = computed<readonly NavItem[]>(() => {
+    const isTeacher = this.authStore.isTeacher();
+    const user = this.authStore.user();
+
+    const items: NavItem[] = [
+      { label: 'Home' },
+      { label: 'Explore Skills', fragment: 'skills' },
+      { label: 'How It Works', fragment: 'how-it-works' },
+    ];
+
+    if (!isTeacher) {
+      items.push({ label: 'Become a Teacher', fragment: 'become-a-teacher' });
     }
-    return NAV_ITEMS;
+
+    if (user && !isTeacher) {
+      items.push({ label: 'My Enquiries', route: '/requests' });
+    }
+
+    return items;
   });
   protected readonly isMobileMenuOpen = signal(false);
   protected readonly isScrolled = signal(false);
@@ -118,9 +133,12 @@ export class SiteHeader {
   }
 
   protected isItemActive(item: NavItem): boolean {
+    if (item.route) {
+      return this.router.url.startsWith(item.route);
+    }
     const section = this.activeSection();
     if (!item.fragment) {
-      return section === null;
+      return section === null && (this.router.url === '/' || this.router.url.startsWith('/#'));
     }
     return item.fragment === section;
   }
