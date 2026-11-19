@@ -62,6 +62,9 @@ export class RequestsPage implements OnInit {
 
   ngOnInit(): void {
     this.store.loadAll();
+    if (this.isTeacher()) {
+      this.store.setActiveTab('received');
+    }
   }
 
   onTabChange(tab: RequestTab): void {

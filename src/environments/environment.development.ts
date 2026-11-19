@@ -15,5 +15,5 @@ export const environment: AppEnvironment = {
    * - `PrototypeUserRole.STUDENT` (or 'STUDENT') -> Displays student-centric UI modules
    * - `PrototypeUserRole.TEACHER` (or 'TEACHER') -> Displays teacher-centric UI modules
    */
-  prototypeUserRole: PrototypeUserRole.STUDENT,
+  prototypeUserRole: PrototypeUserRole.TEACHER,
 };

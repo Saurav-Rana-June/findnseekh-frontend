@@ -60,8 +60,11 @@ export class SiteHeader {
       items.push({ label: 'Become a Teacher', fragment: 'become-a-teacher' });
     }
 
-    if (user && !isTeacher) {
-      items.push({ label: 'My Enquiries', route: '/requests' });
+    if (user) {
+      items.push({
+        label: isTeacher ? 'Student Inquiries' : 'My Enquiries',
+        route: '/requests',
+      });
     }
 
     return items;
