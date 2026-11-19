@@ -59,6 +59,12 @@ export const API_ENDPOINTS = {
   skills: {
     popular: '/skills/popular',
     suggestions: '/skills/suggestions',
+    mySkills: '/skills/my-skills',
+    create: '/skills',
+    detail: (id: number | string) => `/skills/${id}`,
+    update: (id: number | string) => `/skills/${id}`,
+    updateStatus: (id: number | string) => `/skills/${id}/status`,
+    delete: (id: number | string) => `/skills/${id}`,
   },
   locations: {
     suggestions: '/locations/suggestions',

@@ -61,10 +61,12 @@ export class SiteHeader {
     }
 
     if (user) {
-      items.push({
-        label: isTeacher ? 'Student Inquiries' : 'My Enquiries',
-        route: '/requests',
-      });
+      if (isTeacher) {
+        items.push({ label: 'My Listings', route: '/listings' });
+        items.push({ label: 'Student Inquiries', route: '/requests' });
+      } else {
+        items.push({ label: 'My Enquiries', route: '/requests' });
+      }
     }
 
     return items;

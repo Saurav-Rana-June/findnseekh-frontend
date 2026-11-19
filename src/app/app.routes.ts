@@ -31,6 +31,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/requests/presentation/requests.routes').then((m) => m.REQUESTS_ROUTES),
       },
+      {
+        path: APP_ROUTE_PATHS.listings,
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/listings/presentation/listings.routes').then((m) => m.LISTINGS_ROUTES),
+      },
     ],
   },
   {

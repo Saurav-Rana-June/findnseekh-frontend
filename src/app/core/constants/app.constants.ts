@@ -13,6 +13,7 @@ export const APP_ROUTE_PATHS = {
   profile: 'profile',
   teachers: 'teachers',
   requests: 'requests',
+  listings: 'listings',
   admin: 'admin',
 } as const;
 
