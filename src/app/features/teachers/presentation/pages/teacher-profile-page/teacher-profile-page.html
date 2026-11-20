@@ -234,38 +234,31 @@
           @if (teacher()!.listings && teacher()!.listings!.length > 0) {
             <section class="tp-section" aria-labelledby="courses-heading">
               <div class="tp-section-header-row">
-                <h2 id="courses-heading" class="tp-section-heading">Classes & courses offered</h2>
+                <h2 id="courses-heading" class="tp-section-heading">Classes &amp; courses offered</h2>
                 <span class="tp-section-badge">{{ teacher()!.listings!.length }} classes</span>
               </div>
               <div class="tp-courses-grid">
-                @for (listing of teacher()!.listings!; track listing.id) {
-                  <article class="tp-course-card" [class.tp-course-card--selected]="selectedListingId() === listing.id">
-                    <div class="tp-course-card__top">
-                      <div class="tp-course-card__info">
-                        <div class="tp-course-card__pills">
-                          <span class="tp-course-level-pill">{{ listing.level }}</span>
-                          <span class="tp-course-mode-pill">{{ listing.teachingMode === 'online' ? '💻 Online' : listing.teachingMode === 'offline' ? '📍 In-Person' : '💻 Online / In-Person' }}</span>
-                        </div>
-                        <h3 class="tp-course-card__title">{{ listing.title }}</h3>
-                      </div>
-                      <div class="tp-course-card__price-box">
-                        <span class="tp-course-price">₹{{ listing.priceAmount }}</span>
-                        <span class="tp-course-unit">/ {{ listing.priceUnit }}</span>
-                      </div>
-                    </div>
-                    <p class="tp-course-card__desc">{{ listing.description }}</p>
-                    <div class="tp-course-card__footer">
-                      <app-custom-primary-button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        [label]="selectedListingId() === listing.id ? '✓ Class Selected' : 'Enquire for this Class'"
-                        (clicked)="onEnquireForListing(listing)"
-                      />
-                    </div>
-                  </article>
+                @for (listing of displayedCourses(); track listing.id) {
+                  <app-custom-course-card
+                    [course]="listing"
+                    [isSelected]="selectedListingId() === listing.id"
+                    (enquire)="onEnquireForListing($event)"
+                  />
                 }
               </div>
+
+              @if ((teacher()!.listings?.length || 0) > 3) {
+                <div class="tp-courses-view-all">
+                  <app-custom-primary-button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    trailingIcon="arrow-right"
+                    [label]="'View all ' + teacher()!.listings!.length + ' courses'"
+                    (clicked)="onViewAllCourses()"
+                  />
+                </div>
+              }
             </section>
           }
 

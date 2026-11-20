@@ -1,0 +1,231 @@
+<div class="teacher-courses-page">
+  <div class="page-container">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Loading teacher's courses...</p>
+      </div>
+    } @else if (notFound() || !teacher()) {
+      <div class="not-found-state">
+        <h2>Teacher Profile Not Found</h2>
+        <p>The instructor you are looking for does not exist or may have been removed.</p>
+        <app-custom-primary-button
+          variant="primary"
+          size="sm"
+          label="Browse All Teachers"
+          (clicked)="onBackToProfile()"
+        />
+      </div>
+    } @else {
+      <!-- Top Navigation: Circular Back Button & Breadcrumbs -->
+      <div class="courses-page-top-nav">
+        <app-custom-close-outlined-button
+          icon="back"
+          ariaLabel="Go back to teacher profile"
+          (clicked)="onBackToProfile()"
+        />
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
+            <li class="breadcrumb__sep" aria-hidden="true">/</li>
+            <li><a routerLink="/teachers" class="breadcrumb__link">Teachers</a></li>
+            <li class="breadcrumb__sep" aria-hidden="true">/</li>
+            <li>
+              <a [routerLink]="['/teachers', teacher()!.id]" class="breadcrumb__link">
+                {{ teacher()!.name }}
+              </a>
+            </li>
+            <li class="breadcrumb__sep" aria-hidden="true">/</li>
+            <li class="breadcrumb__current" aria-current="page">Courses &amp; Classes</li>
+          </ol>
+        </nav>
+      </div>
+
+      <!-- Instructor Summary Header -->
+      <header class="courses-header">
+        <div class="courses-header__instructor">
+          <div class="courses-header__avatar">
+            <app-teacher-avatar [spec]="teacher()!.avatar" />
+          </div>
+          <div class="courses-header__meta">
+            <div class="courses-header__instructor-row">
+              <a [routerLink]="['/teachers', teacher()!.id]" class="courses-header__instructor-name">
+                {{ teacher()!.name }}
+              </a>
+              @if (teacher()!.verified) {
+                <span class="verified-pill" title="Verified Instructor">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" stroke="#174e38" stroke-width="2" fill="#eef4f0" />
+                    <path d="m8.5 12 2.5 2.5 4.5-5" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span>Verified</span>
+                </span>
+              }
+            </div>
+            <p class="courses-header__specialty">{{ teacher()!.specialty }} &bull; {{ teacher()!.location }}</p>
+          </div>
+        </div>
+
+        <div class="courses-header__title-block">
+          <div class="courses-header__title-row">
+            <h1 class="courses-header__title">All Courses &amp; Classes</h1>
+            <span class="courses-header__badge">
+              {{ courses().length }} {{ courses().length === 1 ? 'Course' : 'Courses' }} Available
+            </span>
+          </div>
+          <p class="courses-header__subtitle">
+            Choose from all structured courses, skill workshops, and 1-on-1 personalized lessons offered by {{ teacherFirstName() }}.
+          </p>
+        </div>
+      </header>
+
+      <!-- Courses List -->
+      @if (courses().length === 0) {
+        <div class="empty-courses-state">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <rect width="20" height="14" x="2" y="3" rx="2" />
+            <line x1="8" x2="16" y1="21" y2="21" />
+            <line x1="12" x2="12" y1="17" y2="21" />
+          </svg>
+          <h3>No Courses Listed Yet</h3>
+          <p>{{ teacher()!.name }} has not published any specific courses yet. You can still reach out via direct enquiry.</p>
+          <app-custom-primary-button
+            variant="outline"
+            size="sm"
+            label="Back to Teacher Profile"
+            (clicked)="onBackToProfile()"
+          />
+        </div>
+      } @else {
+        <div class="courses-list">
+          @for (course of courses(); track course.id) {
+            <app-custom-course-card
+              [course]="course"
+              [isSelected]="selectedListingId() === course.id"
+              (enquire)="onEnquireForListing($event)"
+            />
+          }
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Interactive Enquiry Modal -->
+  @if (isBookingOpen()) {
+    <app-custom-modal
+      [open]="isBookingOpen()"
+      [title]="selectedSessionType() === 'trial' ? 'Book a Trial Class' : 'Enquire with ' + teacherFirstName()"
+      [subtitle]="selectedListing() ? selectedListing()!.title : teacher()?.specialty || ''"
+      maxWidth="500px"
+      (close)="onCloseBooking()"
+    >
+      @if (bookingSuccess()) {
+        <div class="booking-success-box">
+          <div class="booking-success-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <h3>Enquiry Sent Successfully!</h3>
+          <p>
+            {{ teacherFirstName() }} has received your enquiry and usually responds within 2 hours. Check your email and notifications for updates.
+          </p>
+          <app-custom-primary-button
+            variant="primary"
+            size="md"
+            label="Close &amp; Return"
+            (clicked)="onCloseBooking()"
+          />
+        </div>
+      } @else {
+        <form class="booking-form" (ngSubmit)="onSubmitBooking()">
+          @if (bookingError()) {
+            <div class="booking-error-alert" role="alert">
+              {{ bookingError() }}
+            </div>
+          }
+
+          <!-- Selected Class Banner -->
+          @if (selectedListing(); as listing) {
+            <div class="selected-class-banner">
+              <div class="selected-class-banner__left">
+                <span class="selected-class-banner__tag">{{ listing.level }}</span>
+                <span class="selected-class-banner__title">{{ listing.title }}</span>
+              </div>
+              <div class="selected-class-banner__rate">
+                ₹{{ listing.priceAmount }} / {{ listing.priceUnit }}
+              </div>
+            </div>
+          }
+
+          <!-- Lesson Mode -->
+          <div class="modal-form-group">
+            <label class="modal-label">Lesson Mode</label>
+            <div class="mode-options-row">
+              <button
+                type="button"
+                class="mode-btn"
+                [class.is-selected]="selectedBookingMode() === 'online'"
+                (click)="onSelectBookingMode('online')"
+              >
+                💻 Online
+              </button>
+              <button
+                type="button"
+                class="mode-btn"
+                [class.is-selected]="selectedBookingMode() === 'offline'"
+                (click)="onSelectBookingMode('offline')"
+              >
+                📍 In-Person
+              </button>
+            </div>
+          </div>
+
+          <!-- Preferred Date -->
+          <div class="modal-form-group">
+            <label class="modal-label" for="tc-booking-date">Preferred Starting Date</label>
+            <input
+              id="tc-booking-date"
+              type="date"
+              class="modal-input"
+              [value]="preferredDate()"
+              [min]="minDate()"
+              (change)="onDateChange($event)"
+            />
+          </div>
+
+          <!-- Note / Message -->
+          <div class="modal-form-group">
+            <label class="modal-label" for="tc-booking-msg">Message for {{ teacherFirstName() }}</label>
+            <textarea
+              id="tc-booking-msg"
+              class="modal-textarea"
+              rows="3"
+              placeholder="Tell {{ teacherFirstName() }} about your current skill level, availability, or any questions..."
+              [value]="bookingMessage()"
+              (input)="onMessageChange($event)"
+            ></textarea>
+          </div>
+
+          <div class="modal-form-actions">
+            <app-custom-primary-button
+              type="button"
+              variant="ghost"
+              size="md"
+              label="Cancel"
+              (clicked)="onCloseBooking()"
+            />
+            <app-custom-primary-button
+              type="submit"
+              variant="primary"
+              size="md"
+              [loading]="isSubmittingBooking()"
+              [label]="isSubmittingBooking() ? 'Sending...' : 'Send Enquiry'"
+            />
+          </div>
+        </form>
+      }
+    </app-custom-modal>
+  }
+</div>

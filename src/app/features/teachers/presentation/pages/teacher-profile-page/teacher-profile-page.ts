@@ -12,6 +12,10 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CustomCloseOutlinedButton } from '../../../../../shared/components/custom-close-outlined-button/custom.close.outlined.button';
+import {
+  CourseCardData,
+  CustomCourseCard,
+} from '../../../../../shared/components/custom-course-card/custom-course-card';
 import { CustomModal } from '../../../../../shared/components/custom-modal/custom.modal';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
@@ -33,6 +37,7 @@ import { SendTeacherEnquiryUseCase } from '../../../domain/use-cases/send-teache
     CustomCloseOutlinedButton,
     CustomPrimaryButton,
     CustomStatusPill,
+    CustomCourseCard,
     TeacherAvatarComponent,
     CustomTeacherCard,
     CustomModal,
@@ -73,6 +78,10 @@ export class TeacherProfilePage implements OnInit {
     const id = this.selectedListingId();
     if (!t?.listings || id === null) return null;
     return t.listings.find((l) => l.id === id) ?? null;
+  });
+
+  protected readonly displayedCourses = computed<readonly TeacherListing[]>(() => {
+    return (this.teacher()?.listings || []).slice(0, 3);
   });
 
   // Save & Share states
@@ -230,12 +239,19 @@ export class TeacherProfilePage implements OnInit {
     this.isSubmittingBooking.set(false);
   }
 
-  protected onEnquireForListing(listing: TeacherListing): void {
+  protected onEnquireForListing(listing: CourseCardData | TeacherListing): void {
     this.selectedListingId.set(listing.id);
     if (listing.teachingMode === 'online' || listing.teachingMode === 'offline') {
       this.selectedBookingMode.set(listing.teachingMode);
     }
     this.onOpenBooking('enquiry');
+  }
+
+  protected onViewAllCourses(): void {
+    const t = this.teacher();
+    if (t) {
+      this.router.navigate(['/teachers', t.id, 'courses']);
+    }
   }
 
   protected onSelectListing(event: Event): void {

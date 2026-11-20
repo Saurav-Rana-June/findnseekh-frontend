@@ -1,0 +1,54 @@
+<article class="course-card" [class.is-selected]="isSelected()">
+  <!-- Top Row: Title, Meta Info, Optional Badge -->
+  <div class="course-card__top">
+    <div class="course-card__main">
+      <h3 class="course-card__title">{{ course().title }}</h3>
+      <div class="course-card__meta">
+        @if (course().categoryName) {
+          <span class="course-card__category">{{ course().categoryName }}</span>
+          <span class="course-card__bullet" aria-hidden="true">&bull;</span>
+        }
+        <span class="course-card__level">{{ levelFormatted() }}</span>
+        <span class="course-card__bullet" aria-hidden="true">&bull;</span>
+        <span class="course-card__mode">
+          {{ modeFormatted() }}
+          @if (course().city) {
+            &bull; {{ course().city }}{{ course().area ? ' (' + course().area + ')' : '' }}
+          }
+        </span>
+      </div>
+    </div>
+
+    @if (badgeLabel()) {
+      <div class="course-card__badge">
+        <app-custom-status-pill
+          [label]="badgeLabel()"
+          [variant]="badgeVariant()"
+          size="sm"
+        />
+      </div>
+    }
+  </div>
+
+  <!-- Description -->
+  <p class="course-card__desc">{{ course().description }}</p>
+
+  <!-- Actions Footer: Price on left, Actions on right (matching listings-page) -->
+  <div class="course-card__footer">
+    <div class="course-card__price">
+      <span class="course-card__price-amount">{{ priceFormatted() }}</span>
+    </div>
+
+    @if (showAction()) {
+      <div class="course-card__actions-group">
+        <app-custom-primary-button
+          type="button"
+          [variant]="isSelected() ? 'primary' : actionVariant()"
+          size="sm"
+          [label]="isSelected() ? selectedLabel() : actionLabel()"
+          (clicked)="onActionClick()"
+        />
+      </div>
+    }
+  </div>
+</article>

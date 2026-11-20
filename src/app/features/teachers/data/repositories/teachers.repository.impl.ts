@@ -7,6 +7,7 @@ import {
   TeacherEnquiryPayload,
   TeacherEnquiryResult,
   TeacherFilterQuery,
+  TeacherListing,
 } from '../../domain/entities/teacher.entity';
 import { TeachersRepository } from '../../domain/repositories/teachers.repository';
 import {
@@ -520,8 +521,78 @@ export class TeachersRepositoryImpl extends TeachersRepository {
           answer: `Yes, you can easily reschedule anytime up to 6 hours before the scheduled session with no cancellation fee.`,
         },
       ],
+      listings:
+        teacher.listings && teacher.listings.length > 0
+          ? teacher.listings
+          : this.generateMockListings(teacher),
     };
 
     return enriched;
+  }
+
+  private generateMockListings(teacher: Teacher): readonly TeacherListing[] {
+    const baseRate = teacher.hourlyRate || 500;
+    const skills =
+      teacher.skills && teacher.skills.length > 0
+        ? teacher.skills
+        : [teacher.specialty];
+    const s1 = skills[0] || teacher.specialty;
+    const s2 = skills[1] || `${teacher.category} Practice`;
+    const s3 = skills[2] || `${teacher.specialty} Masterclass`;
+
+    return [
+      {
+        id: 101,
+        title: `${s1} — Beginner Foundation`,
+        description: `Step-by-step introduction to fundamentals, essential concepts, and guided weekly practice.`,
+        level: 'beginner',
+        priceAmount: baseRate,
+        currency: 'INR',
+        priceUnit: 'session',
+        teachingMode: teacher.teachingMode,
+        city: teacher.city,
+        area: teacher.location,
+        categoryName: teacher.category,
+      },
+      {
+        id: 102,
+        title: `${s2} — Intermediate Techniques`,
+        description: `Deepen your technique, refine practical execution, and build confidence in real-world scenarios.`,
+        level: 'intermediate',
+        priceAmount: Math.round(baseRate * 1.2),
+        currency: 'INR',
+        priceUnit: 'session',
+        teachingMode: teacher.teachingMode,
+        city: teacher.city,
+        area: teacher.location,
+        categoryName: teacher.category,
+      },
+      {
+        id: 103,
+        title: `${s3} — Advanced Masterclass`,
+        description: `Intensive coaching designed for performers and serious learners aiming for excellence and mastery.`,
+        level: 'advanced',
+        priceAmount: Math.round(baseRate * 1.5),
+        currency: 'INR',
+        priceUnit: 'session',
+        teachingMode: 'online',
+        city: teacher.city,
+        area: teacher.location,
+        categoryName: teacher.category,
+      },
+      {
+        id: 104,
+        title: `1-on-1 Personalized Coaching in ${teacher.specialty}`,
+        description: `Customized curriculum adapted to your specific learning speed, goals, and schedule.`,
+        level: 'all_levels',
+        priceAmount: Math.round(baseRate * 1.3),
+        currency: 'INR',
+        priceUnit: 'session',
+        teachingMode: teacher.teachingMode,
+        city: teacher.city,
+        area: teacher.location,
+        categoryName: teacher.category,
+      },
+    ];
   }
 }

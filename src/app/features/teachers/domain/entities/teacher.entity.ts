@@ -35,6 +35,7 @@ export interface TeacherListing {
   readonly teachingMode: TeachingMode;
   readonly city?: string | null;
   readonly area?: string | null;
+  readonly categoryName?: string;
 }
 
 export interface Teacher {
