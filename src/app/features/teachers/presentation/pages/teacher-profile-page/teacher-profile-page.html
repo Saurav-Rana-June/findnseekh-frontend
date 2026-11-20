@@ -260,6 +260,26 @@
                 </div>
               }
             </section>
+          } @else {
+            <section class="tp-section" aria-labelledby="courses-heading">
+              <div class="tp-section-header-row">
+                <h2 id="courses-heading" class="tp-section-heading">Classes &amp; courses offered</h2>
+              </div>
+              <div class="tp-no-courses-box">
+                <div class="tp-no-courses-info">
+                  <p class="tp-no-courses-title">Direct Lesson Enquiry</p>
+                  <p class="tp-no-courses-desc">
+                    {{ teacher()!.name }} has not published specific courses yet. You can still reach out directly to inquire about custom lessons and schedule.
+                  </p>
+                </div>
+                <app-custom-primary-button
+                  variant="primary"
+                  size="sm"
+                  label="Send Enquiry"
+                  (clicked)="onOpenBooking('enquiry')"
+                />
+              </div>
+            </section>
           }
 
           <!-- Section 3: How Lessons Work -->
@@ -398,78 +418,6 @@
             </section>
           }
         </main>
-
-        <!-- Right Sticky Booking Sidebar Card -->
-        <aside class="tp-sidebar" aria-label="Session Booking">
-          <div class="tp-sidebar-card">
-            <!-- Price Block -->
-            <div class="tp-price-row">
-              <span class="tp-price-amount">₹{{ selectedListing()?.priceAmount || teacher()!.hourlyRate }}</span>
-              <span class="tp-price-duration">/ {{ selectedListing()?.priceUnit || '60 min session' }}</span>
-            </div>
-
-            @if (selectedListing(); as sel) {
-              <div class="tp-selected-listing-banner">
-                <span class="tp-selected-listing-badge">Selected Class:</span>
-                <span class="tp-selected-listing-name">{{ sel.title }}</span>
-              </div>
-            }
-
-            <!-- Free Trial Badge -->
-            <div class="tp-trial-badge-row">
-              <span class="tp-trial-pill">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span>First 15 minutes free</span>
-              </span>
-            </div>
-
-            <div class="tp-sidebar-divider"></div>
-
-            <!-- Bullet Benefits -->
-            <ul class="tp-sidebar-perks">
-              <li>
-                <svg class="tp-perk-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span>One-on-one personalised guidance</span>
-              </li>
-              <li>
-                <svg class="tp-perk-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span>Free rescheduling up to 12 hours before</span>
-              </li>
-              <li>
-                <svg class="tp-perk-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span>Satisfaction policy on your first lesson</span>
-              </li>
-            </ul>
-
-            <!-- Action CTA -->
-            <div class="tp-sidebar-actions">
-              <app-custom-primary-button
-                variant="primary"
-                size="lg"
-                shape="pill"
-                [fullWidth]="true"
-                label="Send Enquiry"
-                (clicked)="onOpenBooking('enquiry')"
-              />
-            </div>
-
-            <!-- Guarantee Note -->
-            <div class="tp-sidebar-guarantee">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              <span>Verified instructor. Bookings are made securely through FindnSeekh.</span>
-            </div>
-          </div>
-        </aside>
       </div>
 
       <!-- More Teachers You May Like Section -->

@@ -51,9 +51,9 @@ export interface CourseCardData {
 export class CustomCourseCard {
   readonly course = input.required<CourseCardData>();
   readonly isSelected = input<boolean>(false);
-  readonly actionLabel = input<string>('Enquire for this Class');
-  readonly selectedLabel = input<string>('✓ Class Selected');
-  readonly actionVariant = input<CustomButtonVariant>('outline');
+  readonly actionLabel = input<string>('Send Enquiry');
+  readonly selectedLabel = input<string>('Send Enquiry');
+  readonly actionVariant = input<CustomButtonVariant>('primary');
   readonly showAction = input<boolean>(true);
   readonly badgeLabel = input<string>('');
   readonly badgeVariant = input<StatusPillVariant>('surface');

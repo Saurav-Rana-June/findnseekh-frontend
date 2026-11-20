@@ -43,9 +43,9 @@
       <div class="course-card__actions-group">
         <app-custom-primary-button
           type="button"
-          [variant]="isSelected() ? 'primary' : actionVariant()"
+          [variant]="actionVariant()"
           size="sm"
-          [label]="isSelected() ? selectedLabel() : actionLabel()"
+          [label]="isSelected() && selectedLabel() !== 'Send Enquiry' ? selectedLabel() : actionLabel()"
           (clicked)="onActionClick()"
         />
       </div>

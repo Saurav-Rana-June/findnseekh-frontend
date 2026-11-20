@@ -41,6 +41,7 @@ describe('CustomCourseCard', () => {
     expect(el.querySelector('.course-card__desc')?.textContent).toContain(
       'Learn swaras, alankars',
     );
+    expect(el.querySelector('button')?.textContent).toContain('Send Enquiry');
   });
 
   it('emits enquire event when action button is clicked', () => {

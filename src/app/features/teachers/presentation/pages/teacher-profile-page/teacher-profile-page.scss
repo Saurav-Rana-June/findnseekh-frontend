@@ -347,10 +347,8 @@
 
 /* Main Content Layout */
 .tp-content-layout {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 48px;
-  align-items: start;
+  display: block;
+  width: 100%;
   margin-bottom: 60px;
 }
 
@@ -632,100 +630,35 @@
   }
 }
 
-/* Right Sticky Sidebar Card */
-.tp-sidebar {
-  position: sticky;
-  top: 96px;
-}
-
-.tp-sidebar-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 24px;
-  padding: 28px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+/* No Courses Fallback Card */
+.tp-no-courses-box {
   display: flex;
-  flex-direction: column;
-}
-
-.tp-price-row {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-}
-
-.tp-price-amount {
-  font-family: var(--font-display, inherit);
-  font-size: 2.3rem;
-  font-weight: 800;
-  color: #111827;
-  line-height: 1;
-}
-
-.tp-price-duration {
-  font-size: 0.9rem;
-  color: #6b7280;
-}
-
-.tp-trial-badge-row {
-  margin-top: 12px;
-}
-
-.tp-trial-pill {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: #eef4f0;
-  color: #174e38;
-  font-size: 0.8rem;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--color-surface, #f9fafb);
+  border: 1px dashed var(--color-border, #e5e7eb);
+  border-radius: var(--radius-md, 16px);
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.tp-no-courses-title {
+  font-size: 1rem;
   font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 9999px;
+  color: var(--color-text-primary, #111827);
+  margin: 0 0 4px;
 }
 
-.tp-sidebar-divider {
-  height: 1px;
-  background: #f3f4f6;
-  margin: 20px 0;
-}
-
-.tp-sidebar-perks {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.86rem;
-    color: #374151;
-  }
-}
-
-.tp-sidebar-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.tp-sidebar-guarantee {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-top: 20px;
-  font-size: 0.76rem;
-  line-height: 1.4;
-  color: #6b7280;
-
-  svg {
-    flex-shrink: 0;
-    color: #174e38;
-    margin-top: 1px;
-  }
+.tp-no-courses-desc {
+  font-size: 0.88rem;
+  color: var(--color-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
 }
 
 /* More Teachers Section */
@@ -1031,15 +964,6 @@
 
 /* Responsive adjustments */
 @media (max-width: 980px) {
-  .tp-content-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .tp-sidebar {
-    position: static;
-    margin-top: 16px;
-  }
-
   .tp-hero-stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px 0;
