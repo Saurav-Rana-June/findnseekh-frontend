@@ -33,9 +33,7 @@ export class ListingsStore {
   private readonly _error = signal<string | null>(null);
   private readonly _successMessage = signal<string | null>(null);
 
-  // Modal states
-  private readonly _isFormModalOpen = signal<boolean>(false);
-  private readonly _activeListingForEdit = signal<TeachingListing | null>(null);
+  // Modal state (destructive delete confirmation only)
   private readonly _isDeleteModalOpen = signal<boolean>(false);
   private readonly _listingToDelete = signal<TeachingListing | null>(null);
 
@@ -48,8 +46,6 @@ export class ListingsStore {
   readonly actionLoadingId = this._actionLoadingId.asReadonly();
   readonly error = this._error.asReadonly();
   readonly successMessage = this._successMessage.asReadonly();
-  readonly isFormModalOpen = this._isFormModalOpen.asReadonly();
-  readonly activeListingForEdit = this._activeListingForEdit.asReadonly();
   readonly isDeleteModalOpen = this._isDeleteModalOpen.asReadonly();
   readonly listingToDelete = this._listingToDelete.asReadonly();
 
@@ -113,21 +109,8 @@ export class ListingsStore {
     this._searchQuery.set(query);
   }
 
-  openCreateModal(): void {
-    this._activeListingForEdit.set(null);
-    this._isFormModalOpen.set(true);
-    this._error.set(null);
-  }
-
-  openEditModal(listing: TeachingListing): void {
-    this._activeListingForEdit.set(listing);
-    this._isFormModalOpen.set(true);
-    this._error.set(null);
-  }
-
-  closeFormModal(): void {
-    this._isFormModalOpen.set(false);
-    this._activeListingForEdit.set(null);
+  getListingById(id: number): TeachingListing | undefined {
+    return this._listings().find((l) => l.id === id);
   }
 
   openDeleteModal(listing: TeachingListing): void {
@@ -140,7 +123,11 @@ export class ListingsStore {
     this._listingToDelete.set(null);
   }
 
-  saveListing(input: CreateListingInput, id?: number): void {
+  saveListing(
+    input: CreateListingInput,
+    id?: number,
+    onSuccess?: (listing: TeachingListing) => void,
+  ): void {
     this._isSaving.set(true);
     this._error.set(null);
 
@@ -171,7 +158,7 @@ export class ListingsStore {
               list.map((item) => (item.id === id ? updated : item)),
             );
             this.showSuccess('Teaching listing updated successfully.');
-            this.closeFormModal();
+            onSuccess?.(updated);
           },
           error: (err) => {
             this._error.set(err?.message || 'Failed to update teaching listing.');
@@ -193,7 +180,7 @@ export class ListingsStore {
                 ? 'Teaching listing published successfully!'
                 : 'Teaching listing saved as draft.',
             );
-            this.closeFormModal();
+            onSuccess?.(created);
           },
           error: (err) => {
             this._error.set(err?.message || 'Failed to create teaching listing.');

@@ -14,6 +14,8 @@ export const APP_ROUTE_PATHS = {
   teachers: 'teachers',
   requests: 'requests',
   listings: 'listings',
+  listingsNew: 'new',
+  listingsEdit: ':id/edit',
   admin: 'admin',
 } as const;
 

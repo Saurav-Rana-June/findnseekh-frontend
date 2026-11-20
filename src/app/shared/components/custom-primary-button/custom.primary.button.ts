@@ -14,7 +14,7 @@ export type CustomButtonVariant =
 export type CustomButtonSize = 'sm' | 'md' | 'lg';
 export type CustomButtonShape = 'pill' | 'rounded' | 'square';
 export type CustomButtonType = 'button' | 'submit' | 'reset';
-export type CustomButtonIcon = 'none' | 'search' | 'arrow-right' | 'plus' | 'user' | 'check';
+export type CustomButtonIcon = 'none' | 'search' | 'arrow-right' | 'arrow-left' | 'plus' | 'user' | 'check';
 
 /**
  * Globally reusable, dynamic primary button component supporting button, link,
@@ -97,6 +97,23 @@ export type CustomButtonIcon = 'none' | 'search' | 'arrow-right' | 'plus' | 'use
           >
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
+          </svg>
+        }
+        @case ('arrow-left') {
+          <svg
+            class="cp-btn__icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M19 12H5" />
+            <path d="m12 19-7-7 7-7" />
           </svg>
         }
         @case ('plus') {

@@ -1,0 +1,235 @@
+<div class="wizard-container">
+  <!-- Stepper Progress Header -->
+  <nav class="stepper" aria-label="Creation Steps">
+    <button
+      type="button"
+      class="stepper__step"
+      [class.is-active]="currentStep() === 1"
+      [class.is-completed]="currentStep() > 1"
+      (click)="onSelectStep(1)"
+    >
+      <span class="stepper__num">1</span>
+      <span class="stepper__label">Details</span>
+    </button>
+
+    <span class="stepper__line" aria-hidden="true"></span>
+
+    <button
+      type="button"
+      class="stepper__step"
+      [class.is-active]="currentStep() === 2"
+      [class.is-completed]="currentStep() > 2"
+      (click)="onSelectStep(2)"
+    >
+      <span class="stepper__num">2</span>
+      <span class="stepper__label">Mode &amp; Location</span>
+    </button>
+
+    <span class="stepper__line" aria-hidden="true"></span>
+
+    <button
+      type="button"
+      class="stepper__step"
+      [class.is-active]="currentStep() === 3"
+      (click)="onSelectStep(3)"
+    >
+      <span class="stepper__num">3</span>
+      <span class="stepper__label">Pricing &amp; Review</span>
+    </button>
+  </nav>
+
+  <!-- Step Forms -->
+  <form [formGroup]="form()" class="wizard-form" novalidate>
+    <!-- STEP 1: Basic Info, Category, Level, Description -->
+    @if (currentStep() === 1) {
+      <div class="wizard-step">
+        <div class="form-group">
+          <app-custom-textfield
+            label="Class / Skill Title"
+            placeholder="e.g. Python Programming, Classical Vocal"
+            [required]="true"
+            [value]="form().get('title')?.value"
+            (valueChange)="form().get('title')?.setValue($event)"
+            [invalid]="!!(form().get('title')?.touched && form().get('title')?.invalid)"
+            [errorMessage]="form().get('title')?.touched && form().get('title')?.invalid ? 'Title is required (max 140 chars)' : ''"
+          />
+        </div>
+
+        <div class="form-group">
+          <app-custom-dropdown
+            label="Category"
+            [required]="true"
+            [fullWidth]="true"
+            variant="field"
+            [options]="categoryOptions()"
+            [value]="form().get('categoryId')?.value"
+            placeholder="Select Category"
+            (valueChange)="onSelectCategory($event)"
+            [invalid]="!!(form().get('categoryId')?.touched && form().get('categoryId')?.invalid)"
+            [errorMessage]="form().get('categoryId')?.touched && form().get('categoryId')?.invalid ? 'Category is required' : ''"
+          />
+        </div>
+
+        <div class="form-group">
+          <span class="field-label">Target Student Level *</span>
+          <div class="level-pills-row" role="radiogroup" aria-label="Target student level">
+            @for (lvl of levels(); track lvl.value) {
+              <button
+                type="button"
+                class="level-chip"
+                [class.is-selected]="form().get('level')?.value === lvl.value"
+                (click)="onSelectLevel(lvl.value)"
+              >
+                {{ lvl.label }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="wizard-desc">Class Description *</label>
+          <textarea
+            id="wizard-desc"
+            class="form-textarea"
+            rows="4"
+            placeholder="Explain what students will learn, topics covered, and who this class is suitable for..."
+            [formControl]="$any(form().get('description'))"
+          ></textarea>
+          @if (form().get('description')?.touched && form().get('description')?.invalid) {
+            <span class="field-error">Description is required.</span>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- STEP 2: Teaching Mode & Location -->
+    @if (currentStep() === 2) {
+      <div class="wizard-step">
+        <div class="form-group">
+          <span class="field-label">How will you conduct lessons? *</span>
+          <div class="modes-grid" role="radiogroup" aria-label="Teaching mode">
+            @for (m of teachingModes(); track m.value) {
+              <button
+                type="button"
+                class="mode-card"
+                [class.is-selected]="form().get('teachingMode')?.value === m.value"
+                (click)="onSelectMode(m.value)"
+              >
+                <div class="mode-card__icon" aria-hidden="true">
+                  @if (m.value === 'online') {
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <rect width="20" height="14" x="2" y="3" rx="2" />
+                      <line x1="8" x2="16" y1="21" y2="21" />
+                      <line x1="12" x2="12" y1="17" y2="21" />
+                    </svg>
+                  } @else if (m.value === 'offline') {
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="10" cy="10" r="3" />
+                    </svg>
+                  } @else {
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    </svg>
+                  }
+                </div>
+                <span class="mode-card__title">{{ m.label }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        @if (form().get('teachingMode')?.value !== 'online') {
+          <div class="location-fields-box">
+            <div class="form-row">
+              <div class="form-group form-group--half">
+                <app-custom-textfield
+                  label="City"
+                  placeholder="e.g. Mumbai, Bangalore"
+                  [value]="form().get('city')?.value"
+                  (valueChange)="form().get('city')?.setValue($event)"
+                />
+              </div>
+
+              <div class="form-group form-group--half">
+                <app-custom-textfield
+                  label="Area / Neighborhood"
+                  placeholder="e.g. Bandra West, Indiranagar"
+                  [value]="form().get('area')?.value"
+                  (valueChange)="form().get('area')?.setValue($event)"
+                />
+              </div>
+            </div>
+            <p class="field-hint">
+              Helps nearby students discover your in-person classes.
+            </p>
+          </div>
+        } @else {
+          <div class="online-notice">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+            <span>Online classes are discoverable to students nationwide.</span>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- STEP 3: Pricing & Review -->
+    @if (currentStep() === 3) {
+      <div class="wizard-step">
+        <div class="form-row">
+          <div class="form-group form-group--half">
+            <app-custom-textfield
+              type="number"
+              label="Class Fee (₹ INR) *"
+              placeholder="e.g. 500"
+              [required]="true"
+              [value]="form().get('priceAmount')?.value?.toString()"
+              (valueChange)="form().get('priceAmount')?.setValue(+($event || 0))"
+            />
+          </div>
+
+          <div class="form-group form-group--half">
+            <app-custom-dropdown
+              label="Billing Unit"
+              [required]="true"
+              [fullWidth]="true"
+              variant="field"
+              [options]="priceUnitOptions()"
+              [value]="form().get('priceUnit')?.value"
+              placeholder="Select unit"
+              (valueChange)="onSelectPriceUnit($event)"
+              [invalid]="!!(form().get('priceUnit')?.touched && form().get('priceUnit')?.invalid)"
+              [errorMessage]="form().get('priceUnit')?.touched && form().get('priceUnit')?.invalid ? 'Unit is required' : ''"
+            />
+          </div>
+        </div>
+
+        <!-- Review Summary Box -->
+        <div class="review-box">
+          <div class="review-box__item">
+            <span class="review-box__label">Title:</span>
+            <span class="review-box__val">{{ form().get('title')?.value || 'Untitled' }}</span>
+          </div>
+          <div class="review-box__item">
+            <span class="review-box__label">Level:</span>
+            <span class="review-box__val review-box__val--capitalize">{{ form().get('level')?.value }}</span>
+          </div>
+          <div class="review-box__item">
+            <span class="review-box__label">Mode:</span>
+            <span class="review-box__val review-box__val--capitalize">{{ form().get('teachingMode')?.value }}</span>
+          </div>
+          <div class="review-box__item">
+            <span class="review-box__label">Fee:</span>
+            <span class="review-box__val review-box__val--price">₹{{ form().get('priceAmount')?.value }} / {{ form().get('priceUnit')?.value }}</span>
+          </div>
+        </div>
+      </div>
+    }
+  </form>
+</div>

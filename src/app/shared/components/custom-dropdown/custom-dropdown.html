@@ -1,9 +1,19 @@
-<div class="dropdown-wrapper" (focusout)="onFocusOut($event)">
+<div
+  class="dropdown-wrapper"
+  [class.is-field]="variant() === 'field'"
+  [class.is-full-width]="fullWidth()"
+  (focusout)="onFocusOut($event)"
+>
   @if (label()) {
-    <span class="dropdown-label">{{ label() }}</span>
+    <label class="dropdown-label" [attr.for]="dropdownId">
+      {{ label() }}
+      @if (required()) {
+        <span class="dropdown-required" aria-hidden="true">*</span>
+      }
+    </label>
   }
 
-  <div class="dropdown-container">
+  <div class="dropdown-container" [class.is-full-width]="fullWidth() || variant() === 'field'">
     <button
       type="button"
       class="dropdown-trigger"
@@ -13,12 +23,17 @@
       [attr.aria-controls]="listId"
       [attr.aria-label]="ariaLabel() || label() || displayLabel()"
       [attr.data-size]="size()"
+      [attr.data-variant]="variant()"
       [class.is-open]="isOpen()"
       [class.is-disabled]="disabled()"
+      [class.is-invalid]="invalid()"
+      [class.is-full-width]="fullWidth() || variant() === 'field'"
       [disabled]="disabled()"
       (click)="toggleOpen()"
     >
-      <span class="dropdown-trigger__label">{{ displayLabel() }}</span>
+      <span class="dropdown-trigger__label" [class.is-placeholder]="isPlaceholder()">
+        {{ displayLabel() }}
+      </span>
       <svg
         class="dropdown-trigger__chevron"
         [class.is-rotated]="isOpen()"
@@ -41,7 +56,9 @@
         [id]="listId"
         class="dropdown-menu"
         [attr.data-align]="align()"
-        [style.min-width]="minWidth()"
+        [attr.data-match-trigger]="shouldMatchTriggerWidth()"
+        [style.min-width]="shouldMatchTriggerWidth() ? '100%' : minWidth()"
+        [style.width]="shouldMatchTriggerWidth() ? '100%' : null"
         role="listbox"
         [attr.aria-labelledby]="dropdownId"
       >
@@ -81,5 +98,8 @@
       </ul>
     }
   </div>
-</div>
 
+  @if (errorMessage()) {
+    <p class="dropdown-error">{{ errorMessage() }}</p>
+  }
+</div>

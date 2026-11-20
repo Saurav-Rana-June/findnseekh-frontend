@@ -23,6 +23,10 @@ let nextDropdownId = 0;
   templateUrl: './custom-dropdown.html',
   styleUrl: './custom-dropdown.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.is-full-width]': 'fullWidth()',
+    '[attr.data-variant]': 'variant()',
+  },
 })
 export class CustomDropdown<T = any> {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -37,6 +41,14 @@ export class CustomDropdown<T = any> {
   readonly minWidth = input<string>('180px');
   readonly disabled = input<boolean>(false);
 
+  // Extended form-field capabilities
+  readonly variant = input<'pill' | 'field'>('pill');
+  readonly fullWidth = input<boolean>(false);
+  readonly required = input<boolean>(false);
+  readonly invalid = input<boolean>(false);
+  readonly errorMessage = input<string>('');
+  readonly menuMatchTriggerWidth = input<boolean | null>(null);
+
   readonly valueChange = output<T>();
 
   protected readonly dropdownId = `dropdown-${++nextDropdownId}`;
@@ -50,6 +62,16 @@ export class CustomDropdown<T = any> {
 
   protected readonly displayLabel = computed(() => {
     return this.selectedOption()?.label ?? this.placeholder();
+  });
+
+  protected readonly isPlaceholder = computed(() => {
+    return this.selectedOption() === null;
+  });
+
+  protected readonly shouldMatchTriggerWidth = computed(() => {
+    const explicit = this.menuMatchTriggerWidth();
+    if (explicit !== null) return explicit;
+    return this.fullWidth() || this.variant() === 'field';
   });
 
   protected toggleOpen(): void {
@@ -82,4 +104,3 @@ export class CustomDropdown<T = any> {
     this.isOpen.set(false);
   }
 }
-

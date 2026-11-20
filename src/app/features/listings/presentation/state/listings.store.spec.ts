@@ -170,20 +170,11 @@ describe('ListingsStore', () => {
     expect(store.filteredListings().length).toBe(3);
   });
 
-  it('opens and closes create and edit modals', () => {
-    expect(store.isFormModalOpen()).toBe(false);
-
-    store.openCreateModal();
-    expect(store.isFormModalOpen()).toBe(true);
-    expect(store.activeListingForEdit()).toBeNull();
-
-    store.openEditModal(mockListings[0]);
-    expect(store.isFormModalOpen()).toBe(true);
-    expect(store.activeListingForEdit()).toEqual(mockListings[0]);
-
-    store.closeFormModal();
-    expect(store.isFormModalOpen()).toBe(false);
-    expect(store.activeListingForEdit()).toBeNull();
+  it('retrieves listing by id', () => {
+    store.loadAll();
+    const listing = store.getListingById(1);
+    expect(listing?.title).toBe('Python for Beginners');
+    expect(store.getListingById(999)).toBeUndefined();
   });
 
   it('creates a new listing and prepends to the list', () => {
@@ -203,7 +194,6 @@ describe('ListingsStore', () => {
     expect(mockCreateListing.execute).toHaveBeenCalledWith(input);
     expect(store.listings().length).toBe(4);
     expect(store.listings()[0].title).toBe('Full Stack Node');
-    expect(store.isFormModalOpen()).toBe(false);
   });
 
   it('updates an existing listing in-place', () => {
@@ -223,7 +213,6 @@ describe('ListingsStore', () => {
     const updated = store.listings().find((l) => l.id === 1);
     expect(updated?.title).toBe('Python for Beginners & DS');
     expect(updated?.priceAmount).toBe(700);
-    expect(store.isFormModalOpen()).toBe(false);
   });
 
   it('toggles listing status', () => {

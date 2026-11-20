@@ -1,576 +1,175 @@
 <div class="listings-page">
   <div class="page-container">
-    <!-- Top Navigation & Breadcrumbs -->
-    <div class="listings-top-nav">
-      <app-custom-close-outlined-button
-        icon="back"
-        ariaLabel="Go back"
-        (clicked)="onBack()"
-      />
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <ol>
-          <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
-          <li class="breadcrumb__sep" aria-hidden="true">/</li>
-          <li><a routerLink="/profile" class="breadcrumb__link">Profile</a></li>
-          <li class="breadcrumb__sep" aria-hidden="true">/</li>
-          <li class="breadcrumb__current" aria-current="page">Teaching Listings</li>
-        </ol>
-      </nav>
-    </div>
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
+        <li class="breadcrumb__sep" aria-hidden="true">/</li>
+        <li><a routerLink="/profile" class="breadcrumb__link">Profile</a></li>
+        <li class="breadcrumb__sep" aria-hidden="true">/</li>
+        <li class="breadcrumb__current" aria-current="page">Teaching Listings</li>
+      </ol>
+    </nav>
 
-    <!-- Header Section -->
+    <!-- Header (matching requests-page) -->
     <header class="listings-header">
       <div class="listings-header__content">
         <h1 class="listings-header__title">My Teaching Listings</h1>
         <p class="listings-header__subtitle">
-          Create, manage, and publish the subjects and classes you offer to students on FindnSeekh.
+          Manage your published subjects, pricing, and class details.
         </p>
       </div>
 
-      <div class="listings-header__actions">
-        <app-custom-primary-button
-          variant="primary"
-          size="sm"
-          label="+ Create New Listing"
-          (clicked)="openCreateModal()"
-        />
-      </div>
+      <app-custom-primary-button variant="primary" size="sm" label="+ Create Listing" (clicked)="onCreateNew()" />
     </header>
 
-    <!-- Feedback Alerts -->
+    <!-- Alerts -->
     @if (store.successMessage(); as msg) {
-      <div class="alert alert--success" role="status">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-        <span>{{ msg }}</span>
-      </div>
+    <div class="alert alert--success" role="status">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        aria-hidden="true">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      <span>{{ msg }}</span>
+    </div>
     }
 
     @if (store.error(); as err) {
-      <div class="alert alert--error" role="alert">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
-        <span>{{ err }}</span>
-      </div>
+    <div class="alert alert--error" role="alert">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      <span>{{ err }}</span>
+    </div>
     }
 
-    <!-- Toolbar: Filter Pills & Search -->
-    <div class="listings-toolbar">
+    <!-- Filter Bar (matching requests-page) -->
+    <div class="filter-bar">
       <div class="filter-pills" role="group" aria-label="Filter listings by status">
-        <app-custom-status-pill
-          label="All"
-          [interactive]="true"
-          [active]="store.filterStatus() === 'all'"
-          size="sm"
-          (clicked)="onFilterChange('all')"
-        >
-          <span pill-trailing class="pill-count">{{ store.totalCount() }}</span>
-        </app-custom-status-pill>
-
-        <app-custom-status-pill
-          label="Published"
-          variant="success"
-          icon="dot"
-          [interactive]="true"
-          [active]="store.filterStatus() === 'published'"
-          size="sm"
-          (clicked)="onFilterChange('published')"
-        >
-          <span pill-trailing class="pill-count">{{ store.publishedCount() }}</span>
-        </app-custom-status-pill>
-
-        <app-custom-status-pill
-          label="Drafts"
-          variant="warning"
-          icon="dot"
-          [interactive]="true"
-          [active]="store.filterStatus() === 'draft'"
-          size="sm"
-          (clicked)="onFilterChange('draft')"
-        >
-          <span pill-trailing class="pill-count">{{ store.draftCount() }}</span>
-        </app-custom-status-pill>
-
-        <app-custom-status-pill
-          label="Paused"
-          variant="neutral"
-          [interactive]="true"
-          [active]="store.filterStatus() === 'paused'"
-          size="sm"
-          (clicked)="onFilterChange('paused')"
-        >
-          <span pill-trailing class="pill-count">{{ store.pausedCount() }}</span>
-        </app-custom-status-pill>
+        <app-custom-status-pill label="All" [interactive]="true" [active]="store.filterStatus() === 'all'" size="sm"
+          (clicked)="onFilterChange('all')" />
+        <app-custom-status-pill label="Published" variant="success" [interactive]="true"
+          [active]="store.filterStatus() === 'published'" size="sm" (clicked)="onFilterChange('published')" />
+        <app-custom-status-pill label="Drafts" variant="warning" [interactive]="true"
+          [active]="store.filterStatus() === 'draft'" size="sm" (clicked)="onFilterChange('draft')" />
+        <app-custom-status-pill label="Paused" variant="neutral" [interactive]="true"
+          [active]="store.filterStatus() === 'paused'" size="sm" (clicked)="onFilterChange('paused')" />
       </div>
 
       <div class="search-box">
-        <app-custom-textfield
-          size="sm"
-          leadingIcon="search"
-          placeholder="Search by class title or skill..."
-          [value]="store.searchQuery()"
-          (valueChange)="onSearchChange($event)"
-        />
+        <app-custom-textfield size="sm" leadingIcon="search" placeholder="Search by class title or skill..."
+          [value]="store.searchQuery()" (valueChange)="onSearchChange($event)" />
       </div>
     </div>
 
-    <!-- Main Content Area -->
+    <!-- Listings Content List -->
     <section class="listings-content">
       @if (store.isLoading()) {
-        <div class="loading-state">
-          <app-loader size="md" label="Loading teaching listings..." />
-        </div>
+      <div class="loading-state">
+        <app-loader size="md" label="Loading listings..." />
+      </div>
       } @else if (store.filteredListings().length === 0) {
-        <div class="empty-state">
-          <div class="empty-state__icon" aria-hidden="true">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-            </svg>
-          </div>
-          <h2 class="empty-state__title">No teaching listings found</h2>
-          <p class="empty-state__desc">
-            @if (store.searchQuery()) {
-              No classes matched your search for "{{ store.searchQuery() }}". Try a different keyword or reset filters.
-            } @else if (store.filterStatus() !== 'all') {
-              No classes found with status "{{ getStatusLabel(store.filterStatus()) }}".
-            } @else {
-              You haven't created any teaching listings yet. Add the subjects and skills you want to teach so students can discover you!
-            }
-          </p>
-
-          <div class="empty-state__action">
-            @if (store.searchQuery() || store.filterStatus() !== 'all') {
-              <app-custom-primary-button
-                label="Show All Listings"
-                variant="outline"
-                size="sm"
-                (clicked)="onFilterChange('all')"
-              />
-            } @else {
-              <app-custom-primary-button
-                label="Create Your First Listing"
-                variant="primary"
-                size="sm"
-                (clicked)="openCreateModal()"
-              />
-            }
-          </div>
+      <div class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          </svg>
         </div>
-      } @else {
-        <!-- Listings Cards Grid -->
-        <div class="listings-grid">
-          @for (listing of store.filteredListings(); track listing.id) {
-            <article class="listing-card" [attr.data-status]="listing.status">
-              <!-- Top Row: Title, Category, Level, Status Pill -->
-              <div class="listing-card__top">
-                <div class="listing-card__heading">
-                  <div class="listing-card__badges">
-                    <span class="category-tag">{{ listing.categoryName }}</span>
-                    <span class="level-tag">{{ listing.level }}</span>
-                  </div>
-                  <h3 class="listing-card__title">{{ listing.title }}</h3>
-                </div>
-
-                <div class="listing-card__status">
-                  <app-custom-status-pill
-                    [label]="getStatusLabel(listing.status)"
-                    [variant]="getStatusVariant(listing.status)"
-                    [icon]="listing.status === 'published' ? 'check' : listing.status === 'draft' ? 'dot' : 'none'"
-                    size="sm"
-                  />
-                </div>
-              </div>
-
-              <!-- Description -->
-              <p class="listing-card__desc">{{ listing.description }}</p>
-
-              <!-- Meta Features Row: Mode, Location, Price -->
-              <div class="listing-card__meta">
-                <span class="meta-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    @if (listing.teachingMode === 'online') {
-                      <rect width="20" height="14" x="2" y="3" rx="2" />
-                      <line x1="8" x2="16" y1="21" y2="21" />
-                      <line x1="12" x2="12" y1="17" y2="21" />
-                    } @else if (listing.teachingMode === 'offline') {
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    } @else {
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                    }
-                  </svg>
-                  <span>
-                    {{ listing.teachingMode === 'online' ? 'Online' : listing.teachingMode === 'offline' ? 'In-Person' : 'Online & In-Person' }}
-                  </span>
-                </span>
-
-                @if (listing.city) {
-                  <span class="meta-item">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                    <span>{{ listing.city }}{{ listing.area ? ' (' + listing.area + ')' : '' }}</span>
-                  </span>
-                }
-
-                <span class="meta-item meta-item--price">
-                  <strong>{{ formatPrice(listing.priceAmount, listing.priceUnit) }}</strong>
-                </span>
-              </div>
-
-              <!-- Footer Actions -->
-              <div class="listing-card__footer">
-                <div class="listing-card__footer-left">
-                  @if (listing.status === 'published') {
-                    <app-custom-primary-button
-                      variant="outline"
-                      size="sm"
-                      label="Pause Listing"
-                      [loading]="store.actionLoadingId() === listing.id"
-                      (clicked)="onToggleStatus(listing)"
-                    />
-                  } @else {
-                    <app-custom-primary-button
-                      variant="primary"
-                      size="sm"
-                      label="Publish Now"
-                      [loading]="store.actionLoadingId() === listing.id"
-                      (clicked)="onToggleStatus(listing)"
-                    />
-                  }
-                </div>
-
-                <div class="listing-card__footer-right">
-                  <app-custom-primary-button
-                    variant="ghost"
-                    size="sm"
-                    label="Edit"
-                    (clicked)="openEditModal(listing)"
-                  />
-                  <app-custom-primary-button
-                    variant="ghost"
-                    size="sm"
-                    label="Delete"
-                    (clicked)="openDeleteModal(listing)"
-                  />
-                </div>
-              </div>
-            </article>
+        <h2 class="empty-state__title">No listings found</h2>
+        <p class="empty-state__desc">
+          @if (store.searchQuery()) {
+          No classes match your search for "{{ store.searchQuery() }}".
+          } @else if (store.filterStatus() !== 'all') {
+          No classes under status "{{ getStatusLabel(store.filterStatus()) }}".
+          } @else {
+          You haven't created any teaching listings yet.
           }
-        </div>
+        </p>
+
+        @if (store.searchQuery() || store.filterStatus() !== 'all') {
+        <app-custom-primary-button label="Show All" variant="outline" size="sm" (clicked)="onFilterChange('all')" />
+        } @else {
+        <app-custom-primary-button label="Create Listing" variant="primary" size="sm" (clicked)="onCreateNew()" />
+        }
+      </div>
+      } @else {
+      <div class="listings-list">
+        @for (listing of store.filteredListings(); track listing.id) {
+        <article class="listing-card">
+          <!-- Top Row: Title, Meta Info, Status -->
+          <div class="listing-card__top">
+            <div class="listing-card__main">
+              <h3 class="listing-card__title">{{ listing.title }}</h3>
+              <div class="listing-card__meta">
+                <span class="listing-card__category">{{ listing.categoryName }}</span>
+                <span class="listing-card__bullet" aria-hidden="true">&bull;</span>
+                <span class="listing-card__level">{{ listing.level }}</span>
+                <span class="listing-card__bullet" aria-hidden="true">&bull;</span>
+                <span class="listing-card__mode">
+                  {{ listing.teachingMode === 'online' ? 'Online' : listing.teachingMode === 'offline' ? 'In-Person' :
+                  'Online & In-Person' }}
+                  @if (listing.city) {
+                  &bull; {{ listing.city }}{{ listing.area ? ' (' + listing.area + ')' : '' }}
+                  }
+                </span>
+              </div>
+            </div>
+
+            <div class="listing-card__status">
+              <app-custom-status-pill [label]="getStatusLabel(listing.status)"
+                [variant]="getStatusVariant(listing.status)" size="sm" />
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="listing-card__desc">{{ listing.description }}</p>
+
+          <!-- Actions Footer: Price on left, Actions on right (matching requests-page) -->
+          <div class="listing-card__footer">
+            <div class="listing-card__price">
+              <span class="listing-card__price-amount">{{ formatPrice(listing.priceAmount, listing.priceUnit) }}</span>
+            </div>
+
+            <div class="listing-card__actions-group">
+              <app-custom-primary-button variant="ghost" size="sm" label="Edit" (clicked)="onEdit(listing)" />
+
+              <app-custom-primary-button variant="ghost" size="sm" label="Delete"
+                (clicked)="openDeleteModal(listing)" />
+
+              @if (listing.status === 'published') {
+              <app-custom-primary-button variant="outline" size="sm" label="Pause"
+                [loading]="store.actionLoadingId() === listing.id" (clicked)="onToggleStatus(listing)" />
+              } @else {
+              <app-custom-primary-button variant="primary" size="sm" label="Publish"
+                [loading]="store.actionLoadingId() === listing.id" (clicked)="onToggleStatus(listing)" />
+              }
+            </div>
+          </div>
+        </article>
+        }
+      </div>
       }
     </section>
   </div>
 
-  <!-- Create & Edit Teaching Listing Modal -->
-  <app-custom-modal
-    [open]="store.isFormModalOpen()"
-    [title]="editingId() ? 'Edit Teaching Listing' : 'Create Teaching Listing'"
-    size="md"
-    (closed)="closeFormModal()"
-  >
-    <div modal-body class="wizard-modal-body">
-      <!-- Wizard Progress Steps -->
-      <nav class="stepper" aria-label="Creation Steps">
-        <button
-          type="button"
-          class="stepper__step"
-          [class.is-active]="currentStep() === 1"
-          [class.is-completed]="currentStep() > 1"
-          (click)="setStep(1)"
-        >
-          <span class="stepper__num">1</span>
-          <span class="stepper__label">Skill &amp; Details</span>
-        </button>
-
-        <span class="stepper__line" aria-hidden="true"></span>
-
-        <button
-          type="button"
-          class="stepper__step"
-          [class.is-active]="currentStep() === 2"
-          [class.is-completed]="currentStep() > 2"
-          (click)="setStep(2)"
-        >
-          <span class="stepper__num">2</span>
-          <span class="stepper__label">Mode &amp; Location</span>
-        </button>
-
-        <span class="stepper__line" aria-hidden="true"></span>
-
-        <button
-          type="button"
-          class="stepper__step"
-          [class.is-active]="currentStep() === 3"
-          (click)="setStep(3)"
-        >
-          <span class="stepper__num">3</span>
-          <span class="stepper__label">Pricing &amp; Finish</span>
-        </button>
-      </nav>
-
-      <form [formGroup]="form" class="wizard-form" novalidate>
-        <!-- STEP 1: Skill, Category, Level, Description -->
-        @if (currentStep() === 1) {
-          <div class="wizard-step">
-            <div class="form-group">
-              <app-custom-textfield
-                label="Class / Skill Title"
-                placeholder="e.g. Python Programming for Beginners, Classical Vocal"
-                [required]="true"
-                [value]="form.controls.title.value"
-                (valueChange)="form.controls.title.setValue($event)"
-                [invalid]="form.controls.title.touched && form.controls.title.invalid"
-                [errorMessage]="form.controls.title.touched && form.controls.title.invalid ? 'Title is required (max 140 chars)' : ''"
-              />
-            </div>
-
-            <div class="form-row">
-              <div class="form-group form-group--half">
-                <span class="field-label">Category *</span>
-                <app-custom-dropdown
-                  [options]="categoryOptions"
-                  [value]="form.controls.categoryId.value"
-                  placeholder="Select Category"
-                  (valueChange)="onCategorySelect($event)"
-                />
-              </div>
-
-              <div class="form-group form-group--half">
-                <span class="field-label">Target Student Level *</span>
-                <div class="level-pills-row" role="radiogroup" aria-label="Student level">
-                  @for (lvl of levels; track lvl.value) {
-                    <button
-                      type="button"
-                      class="level-chip"
-                      [class.is-selected]="form.controls.level.value === lvl.value"
-                      (click)="setLevel(lvl.value)"
-                    >
-                      {{ lvl.label }}
-                    </button>
-                  }
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="field-label" for="listing-desc">Class Description *</label>
-              <textarea
-                id="listing-desc"
-                class="form-textarea"
-                rows="4"
-                placeholder="Explain what students will learn, class syllabus, and who this class is suitable for..."
-                [formControl]="form.controls.description"
-              ></textarea>
-              @if (form.controls.description.touched && form.controls.description.invalid) {
-                <span class="field-error">Description is required.</span>
-              }
-            </div>
-          </div>
-        }
-
-        <!-- STEP 2: Teaching Mode & Location -->
-        @if (currentStep() === 2) {
-          <div class="wizard-step">
-            <div class="form-group">
-              <span class="field-label">How will you conduct lessons? *</span>
-              <div class="modes-grid" role="radiogroup" aria-label="Teaching mode">
-                @for (m of teachingModes; track m.value) {
-                  <button
-                    type="button"
-                    class="mode-card"
-                    [class.is-selected]="form.controls.teachingMode.value === m.value"
-                    (click)="setTeachingMode(m.value)"
-                  >
-                    <span class="mode-card__icon" aria-hidden="true">{{ m.icon }}</span>
-                    <span class="mode-card__title">{{ m.label }}</span>
-                  </button>
-                }
-              </div>
-            </div>
-
-            @if (form.controls.teachingMode.value !== 'online') {
-              <div class="location-fields-box">
-                <div class="form-row">
-                  <div class="form-group form-group--half">
-                    <app-custom-textfield
-                      label="City"
-                      placeholder="e.g. Mumbai, Bangalore"
-                      [value]="form.controls.city.value"
-                      (valueChange)="form.controls.city.setValue($event)"
-                    />
-                  </div>
-
-                  <div class="form-group form-group--half">
-                    <app-custom-textfield
-                      label="Neighborhood / Area"
-                      placeholder="e.g. Bandra West, Indiranagar"
-                      [value]="form.controls.area.value"
-                      (valueChange)="form.controls.area.setValue($event)"
-                    />
-                  </div>
-                </div>
-                <p class="field-hint">
-                  Your area helps nearby students discover in-person lessons around them.
-                </p>
-              </div>
-            } @else {
-              <div class="online-notice">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <rect width="20" height="14" x="2" y="3" rx="2" />
-                  <line x1="8" x2="16" y1="21" y2="21" />
-                  <line x1="12" x2="12" y1="17" y2="21" />
-                </svg>
-                <span>Online classes are discoverable to students worldwide across all cities.</span>
-              </div>
-            }
-          </div>
-        }
-
-        <!-- STEP 3: Pricing & Review -->
-        @if (currentStep() === 3) {
-          <div class="wizard-step">
-            <div class="form-row">
-              <div class="form-group form-group--half">
-                <app-custom-textfield
-                  type="number"
-                  label="Class Fee (₹ INR) *"
-                  placeholder="e.g. 500"
-                  [required]="true"
-                  [value]="form.controls.priceAmount.value.toString()"
-                  (valueChange)="form.controls.priceAmount.setValue(+($event || 0))"
-                />
-              </div>
-
-              <div class="form-group form-group--half">
-                <span class="field-label">Billing Unit *</span>
-                <app-custom-dropdown
-                  [options]="priceUnitOptions"
-                  [value]="form.controls.priceUnit.value"
-                  placeholder="Select unit"
-                  (valueChange)="onPriceUnitSelect($event)"
-                />
-              </div>
-            </div>
-
-            <!-- Summary preview card -->
-            <div class="review-box">
-              <h4 class="review-box__heading">Listing Overview</h4>
-              <div class="review-box__row">
-                <span class="review-box__label">Title:</span>
-                <span class="review-box__val">{{ form.controls.title.value || 'Untitled' }}</span>
-              </div>
-              <div class="review-box__row">
-                <span class="review-box__label">Level:</span>
-                <span class="review-box__val">{{ form.controls.level.value }}</span>
-              </div>
-              <div class="review-box__row">
-                <span class="review-box__label">Mode:</span>
-                <span class="review-box__val">{{ form.controls.teachingMode.value }}</span>
-              </div>
-              <div class="review-box__row">
-                <span class="review-box__label">Fee:</span>
-                <span class="review-box__val">₹{{ form.controls.priceAmount.value }} / {{ form.controls.priceUnit.value }}</span>
-              </div>
-            </div>
-          </div>
-        }
-      </form>
-    </div>
-
-    <!-- Modal Footer Actions -->
-    <div modal-footer class="wizard-modal-footer">
-      <div class="wizard-modal-footer__left">
-        @if (currentStep() > 1) {
-          <app-custom-primary-button
-            variant="ghost"
-            size="sm"
-            label="← Back"
-            (clicked)="prevStep()"
-          />
-        } @else {
-          <app-custom-primary-button
-            variant="ghost"
-            size="sm"
-            label="Cancel"
-            (clicked)="closeFormModal()"
-          />
-        }
-      </div>
-
-      <div class="wizard-modal-footer__right">
-        @if (currentStep() < 3) {
-          <app-custom-primary-button
-            variant="primary"
-            size="sm"
-            label="Next Step →"
-            (clicked)="nextStep()"
-          />
-        } @else {
-          <app-custom-primary-button
-            variant="outline"
-            size="sm"
-            label="Save as Draft"
-            [loading]="store.isSaving()"
-            (clicked)="onSave('draft')"
-          />
-          <app-custom-primary-button
-            variant="primary"
-            size="sm"
-            label="Publish Listing"
-            [loading]="store.isSaving()"
-            (clicked)="onSave('published')"
-          />
-        }
-      </div>
-    </div>
-  </app-custom-modal>
-
-  <!-- Delete Confirmation Modal -->
-  <app-custom-modal
-    [open]="store.isDeleteModalOpen()"
-    title="Delete Teaching Listing"
-    size="sm"
-    (closed)="closeDeleteModal()"
-  >
+  <!-- Delete Confirmation Modal (kept as modal) -->
+  <app-custom-modal [open]="store.isDeleteModalOpen()" title="Delete Teaching Listing" size="sm"
+    (closed)="closeDeleteModal()">
     <div modal-body class="delete-modal-body">
-      <div class="delete-modal-icon" aria-hidden="true">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="3 6 5 6 21 6" />
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-        </svg>
-      </div>
-      <p class="delete-modal-text">
+      <p>
         Are you sure you want to delete
         <strong>{{ store.listingToDelete()?.title }}</strong>?
-      </p>
-      <p class="delete-modal-hint">
-        This listing will be archived and removed from search results and your public profile.
       </p>
     </div>
 
     <div modal-footer class="delete-modal-footer">
-      <app-custom-primary-button
-        variant="outline"
-        size="sm"
-        label="Keep Listing"
-        (clicked)="closeDeleteModal()"
-      />
-      <app-custom-primary-button
-        variant="primary"
-        size="sm"
-        label="Yes, Delete"
-        [loading]="store.actionLoadingId() === store.listingToDelete()?.id"
-        (clicked)="confirmDelete()"
-      />
+      <app-custom-primary-button variant="ghost" size="sm" label="Keep Listing" (clicked)="closeDeleteModal()" />
+      <app-custom-primary-button variant="primary" size="sm" label="Yes, Delete"
+        [loading]="store.actionLoadingId() === store.listingToDelete()?.id" (clicked)="confirmDelete()" />
     </div>
   </app-custom-modal>
 </div>

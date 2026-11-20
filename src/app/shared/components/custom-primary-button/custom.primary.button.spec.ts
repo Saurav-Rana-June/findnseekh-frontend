@@ -32,6 +32,17 @@ describe('CustomPrimaryButton', () => {
     expect(clickedSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('renders arrow-left leading icon', () => {
+    const fixture = TestBed.createComponent(CustomPrimaryButton);
+    fixture.componentRef.setInput('label', 'Back');
+    fixture.componentRef.setInput('leadingIcon', 'arrow-left');
+    fixture.detectChanges();
+
+    const button = (fixture.nativeElement as HTMLElement).querySelector('button');
+    expect(button?.textContent).toContain('Back');
+    expect(button?.querySelector('svg')).not.toBeNull();
+  });
+
   it('renders an anchor link when routerLink is provided', () => {
     const fixture = TestBed.createComponent(CustomPrimaryButton);
     fixture.componentRef.setInput('label', 'Sign Up');

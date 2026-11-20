@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthStore } from '../../../../auth/presentation/state/auth.store';
 import { TeachingListing } from '../../../domain/entities/teaching-listing.entity';
@@ -26,6 +26,7 @@ const mockListing: TeachingListing = {
 describe('ListingsPage', () => {
   let component: ListingsPage;
   let fixture: ComponentFixture<ListingsPage>;
+  let router: Router;
   let mockStore: {
     listings: ReturnType<typeof signal>;
     filteredListings: ReturnType<typeof signal>;
@@ -40,16 +41,11 @@ describe('ListingsPage', () => {
     publishedCount: ReturnType<typeof signal>;
     draftCount: ReturnType<typeof signal>;
     pausedCount: ReturnType<typeof signal>;
-    isFormModalOpen: ReturnType<typeof signal>;
-    activeListingForEdit: ReturnType<typeof signal>;
     isDeleteModalOpen: ReturnType<typeof signal>;
     listingToDelete: ReturnType<typeof signal>;
     loadAll: ReturnType<typeof vi.fn>;
     setFilterStatus: ReturnType<typeof vi.fn>;
     setSearchQuery: ReturnType<typeof vi.fn>;
-    openCreateModal: ReturnType<typeof vi.fn>;
-    openEditModal: ReturnType<typeof vi.fn>;
-    closeFormModal: ReturnType<typeof vi.fn>;
     openDeleteModal: ReturnType<typeof vi.fn>;
     closeDeleteModal: ReturnType<typeof vi.fn>;
     saveListing: ReturnType<typeof vi.fn>;
@@ -75,16 +71,11 @@ describe('ListingsPage', () => {
       publishedCount: signal(1),
       draftCount: signal(0),
       pausedCount: signal(0),
-      isFormModalOpen: signal(false),
-      activeListingForEdit: signal(null),
       isDeleteModalOpen: signal(false),
       listingToDelete: signal(null),
       loadAll: vi.fn(),
       setFilterStatus: vi.fn(),
       setSearchQuery: vi.fn(),
-      openCreateModal: vi.fn(),
-      openEditModal: vi.fn(),
-      closeFormModal: vi.fn(),
       openDeleteModal: vi.fn(),
       closeDeleteModal: vi.fn(),
       saveListing: vi.fn(),
@@ -110,6 +101,9 @@ describe('ListingsPage', () => {
       ],
     }).compileComponents();
 
+    router = TestBed.inject(Router);
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
+
     fixture = TestBed.createComponent(ListingsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -132,43 +126,14 @@ describe('ListingsPage', () => {
     expect(mockStore.setSearchQuery).toHaveBeenCalledWith('react');
   });
 
-  it('resets form and opens create modal', () => {
-    component.openCreateModal();
-    expect(component.editingId()).toBeNull();
-    expect(component.currentStep()).toBe(1);
-    expect(mockStore.openCreateModal).toHaveBeenCalled();
+  it('navigates to create listing page on create action', () => {
+    component.onCreateNew();
+    expect(router.navigate).toHaveBeenCalledWith(['/listings', 'new']);
   });
 
-  it('populates form and opens edit modal', () => {
-    component.openEditModal(mockListing);
-    expect(component.editingId()).toBe(101);
-    expect(component.form.controls.title.value).toBe('Python for Beginners');
-    expect(component.form.controls.priceAmount.value).toBe(600);
-    expect(mockStore.openEditModal).toHaveBeenCalledWith(mockListing);
-  });
-
-  it('navigates through stepper steps with validation', () => {
-    component.openCreateModal();
-    expect(component.currentStep()).toBe(1);
-
-    // Invalid step 1 doesn't advance
-    component.form.controls.title.setValue('');
-    component.nextStep();
-    expect(component.currentStep()).toBe(1);
-
-    // Valid step 1 advances to step 2
-    component.form.controls.title.setValue('Python 101');
-    component.form.controls.description.setValue('Basics of Python');
-    component.nextStep();
-    expect(component.currentStep()).toBe(2);
-
-    // Step 2 advances to step 3
-    component.nextStep();
-    expect(component.currentStep()).toBe(3);
-
-    // Step 3 prevStep goes back to step 2
-    component.prevStep();
-    expect(component.currentStep()).toBe(2);
+  it('navigates to edit listing page on edit action', () => {
+    component.onEdit(mockListing);
+    expect(router.navigate).toHaveBeenCalledWith(['/listings', 101, 'edit']);
   });
 
   it('delegates status toggle to store', () => {

@@ -1,0 +1,135 @@
+<div class="listing-form-page">
+  <div class="page-container">
+    <div class="listing-form-page__column">
+      <!-- Back Navigation & Breadcrumbs -->
+      <div class="form-page-top-nav">
+        <app-custom-close-outlined-button
+          icon="back"
+          ariaLabel="Go back to teaching listings"
+          (clicked)="onCancel()"
+        />
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
+            <li class="breadcrumb__sep" aria-hidden="true">/</li>
+            <li><a routerLink="/profile" class="breadcrumb__link">Profile</a></li>
+            <li class="breadcrumb__sep" aria-hidden="true">/</li>
+            <li><a routerLink="/listings" class="breadcrumb__link">Teaching Listings</a></li>
+            <li class="breadcrumb__sep" aria-hidden="true">/</li>
+            <li class="breadcrumb__current" aria-current="page">
+              {{ isEditMode() ? 'Edit Listing' : 'Create Listing' }}
+            </li>
+          </ol>
+        </nav>
+      </div>
+
+      <!-- Header -->
+      <header class="form-page-header">
+        <h1 class="form-page-header__title">
+          {{ isEditMode() ? 'Edit Teaching Listing' : 'Create Teaching Listing' }}
+        </h1>
+        <p class="form-page-header__subtitle">
+          {{ isEditMode()
+            ? 'Update your class details, teaching mode, and pricing.'
+            : 'List a subject or skill you teach so students can discover and book classes with you.' }}
+        </p>
+      </header>
+
+      <!-- Error Alert -->
+      @if (store.error(); as err) {
+        <div class="alert alert--error" role="alert">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <span>{{ err }}</span>
+        </div>
+      }
+
+      <!-- Content / Wizard -->
+      @if (store.isLoading() && isEditMode() && !form.dirty && !listingNotFound()) {
+        <div class="loading-state">
+          <app-loader size="md" label="Loading listing details..." />
+        </div>
+      } @else if (listingNotFound()) {
+        <div class="not-found-state">
+          <h2>Listing Not Found</h2>
+          <p>The teaching listing you are trying to edit could not be found or has been removed.</p>
+          <app-custom-primary-button
+            variant="primary"
+            size="sm"
+            label="Back to Teaching Listings"
+            (clicked)="onCancel()"
+          />
+        </div>
+      } @else {
+        <div class="form-card">
+          <app-teaching-listing-wizard
+            [form]="form"
+            [currentStep]="currentStep()"
+            [categoryOptions]="categoryOptions"
+            [priceUnitOptions]="priceUnitOptions"
+            [levels]="levels"
+            [teachingModes]="teachingModes"
+            (stepSelected)="onStepSelected($event)"
+            (levelSelected)="onLevelSelected($event)"
+            (modeSelected)="onModeSelected($event)"
+            (categorySelected)="onCategorySelected($event)"
+            (priceUnitSelected)="onPriceUnitSelected($event)"
+          />
+
+          <!-- Form Actions Footer -->
+          <footer class="form-actions-footer">
+            <div class="form-actions-footer__left">
+              @if (currentStep() > 1) {
+                <app-custom-primary-button
+                  variant="outline"
+                  size="sm"
+                  leadingIcon="arrow-left"
+                  label="Back"
+                  (clicked)="prevStep()"
+                />
+              } @else {
+                <app-custom-primary-button
+                  variant="ghost"
+                  size="sm"
+                  label="Cancel"
+                  (clicked)="onCancel()"
+                />
+              }
+            </div>
+
+            <div class="form-actions-footer__right">
+              @if (currentStep() < 3) {
+                <app-custom-primary-button
+                  variant="primary"
+                  size="sm"
+                  trailingIcon="arrow-right"
+                  label="Next Step"
+                  (clicked)="nextStep()"
+                />
+              } @else {
+                <app-custom-primary-button
+                  variant="outline"
+                  size="sm"
+                  label="Save as Draft"
+                  [loading]="store.isSaving()"
+                  (clicked)="onSave('draft')"
+                />
+                <app-custom-primary-button
+                  variant="primary"
+                  size="sm"
+                  label="Publish Listing"
+                  [loading]="store.isSaving()"
+                  (clicked)="onSave('published')"
+                />
+              }
+            </div>
+          </footer>
+        </div>
+      }
+    </div>
+  </div>
+</div>
