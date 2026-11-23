@@ -77,6 +77,22 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
+            },
+            "github-pages": {
+              "baseHref": "/findnseekh-frontend/",
+              "outputHashing": "all",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "15kB",
+                  "maximumError": "25kB"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
