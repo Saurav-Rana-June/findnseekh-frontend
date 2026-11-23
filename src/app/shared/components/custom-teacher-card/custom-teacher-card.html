@@ -1,12 +1,12 @@
 <article class="t-card">
-  <!-- Photo Container with Soft Sage Background -->
-  <div class="t-card__photo" aria-hidden="true">
-    <app-teacher-avatar [spec]="teacher().avatar" />
+  <!-- Brand Header Banner with Radial Pattern & Floating Mode Badge (Ref: Teacher Profile Hero) -->
+  <div class="t-card__banner" aria-hidden="true">
+    <div class="t-card__banner-pattern"></div>
 
     @if (showMode() && teacher().teachingMode; as mode) {
     <div class="t-card__mode-pill" [attr.data-mode]="mode">
       @if (mode === 'online') {
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <rect width="20" height="14" x="2" y="3" rx="2" />
         <line x1="8" x2="16" y1="21" y2="21" />
@@ -14,14 +14,14 @@
       </svg>
       <span>Online</span>
       } @else if (mode === 'offline') {
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
       </svg>
       <span>In person</span>
       } @else {
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
@@ -36,6 +36,12 @@
 
   <!-- Content Body -->
   <div class="t-card__body">
+    <!-- Circular Avatar overlapping Banner (Ref: Teacher Profile Hero) -->
+    <div class="t-card__avatar-wrap" aria-hidden="true">
+      <div class="t-card__avatar-frame">
+        <app-teacher-avatar [spec]="teacher().avatar" />
+      </div>
+    </div>
     <!-- Top Row: Name + Verified Checkmark & Rating Pill -->
     <div class="t-card__top">
       <div class="t-card__name-wrapper">
