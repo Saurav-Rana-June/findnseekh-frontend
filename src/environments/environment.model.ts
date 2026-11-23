@@ -18,8 +18,8 @@ export interface AppEnvironment {
    */
   readonly prototypeMode: boolean;
   /**
-   * Defines the active User Role in Prototype Mode ('STUDENT' or 'TEACHER').
-   * All UI modules and permissions across screens adapt dynamically to this role.
+   * Optional default role in Prototype Mode (`STUDENT` | `TEACHER`).
+   * When `null`, the app starts logged out; users sign in via the UI.
    */
-  readonly prototypeUserRole: PrototypeUserRole;
+  readonly prototypeUserRole: PrototypeUserRole | null;
 }

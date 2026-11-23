@@ -36,13 +36,13 @@ import { UpdateTeacherProfileUseCase } from '../../domain/use-cases/update-teach
 export class AuthStore {
   private readonly globalPrototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
   private readonly globalPrototypeUserRole =
-    inject(PROTOTYPE_USER_ROLE, { optional: true }) ?? PrototypeUserRole.STUDENT;
+    inject(PROTOTYPE_USER_ROLE, { optional: true }) ?? null;
 
   /** Set to `false` in production. Controlled globally by environment.prototypeMode. */
   prototypeMode = this.globalPrototypeMode;
 
-  /** Active prototype user role ('STUDENT' or 'TEACHER'). */
-  readonly prototypeUserRole = signal<PrototypeUserRole>(this.globalPrototypeUserRole);
+  /** Active prototype user role; `null` = guest until login. */
+  readonly prototypeUserRole = signal<PrototypeUserRole | null>(this.globalPrototypeUserRole);
 
   setPrototypeMode(enabled: boolean, role?: PrototypeUserRole): void {
     this.prototypeMode = enabled;
@@ -133,7 +133,7 @@ export class AuthStore {
    */
   initSession(): void {
     if (this.prototypeMode) {
-      if (!this._user()) {
+      if (!this._user() && this.prototypeUserRole() !== null) {
         const isTeacherRole = this.prototypeUserRole() === PrototypeUserRole.TEACHER;
         const mockUser: AuthUser = {
           id: 1,

@@ -67,7 +67,7 @@ export class AuthRepositoryImpl extends AuthRepository {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly prototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
   private readonly prototypeUserRole =
-    inject(PROTOTYPE_USER_ROLE, { optional: true }) ?? PrototypeUserRole.STUDENT;
+    inject(PROTOTYPE_USER_ROLE, { optional: true }) ?? null;
 
   private isTeacherRole(): boolean {
     return this.prototypeUserRole === PrototypeUserRole.TEACHER;

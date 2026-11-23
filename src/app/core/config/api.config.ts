@@ -9,7 +9,7 @@ export interface ApiConfig {
   readonly baseUrl: string;
   readonly timeoutMs: number;
   readonly prototypeMode?: boolean;
-  readonly prototypeUserRole?: PrototypeUserRole;
+  readonly prototypeUserRole?: PrototypeUserRole | null;
 }
 
 export const API_CONFIG = new InjectionToken<ApiConfig>('API_CONFIG');
@@ -26,10 +26,13 @@ export const PROTOTYPE_MODE = new InjectionToken<boolean>('PROTOTYPE_MODE', {
 /**
  * Injection token defining the active user role for Prototype Mode ('STUDENT' | 'TEACHER').
  */
-export const PROTOTYPE_USER_ROLE = new InjectionToken<PrototypeUserRole>('PROTOTYPE_USER_ROLE', {
-  providedIn: 'root',
-  factory: () => environment.prototypeUserRole ?? PrototypeUserRole.STUDENT,
-});
+export const PROTOTYPE_USER_ROLE = new InjectionToken<PrototypeUserRole | null>(
+  'PROTOTYPE_USER_ROLE',
+  {
+    providedIn: 'root',
+    factory: () => environment.prototypeUserRole ?? null,
+  },
+);
 
 /**
  * Set to `true` on requests that must not carry an Authorization header

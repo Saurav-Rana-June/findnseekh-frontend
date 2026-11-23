@@ -12,7 +12,7 @@ export function provideCore(): EnvironmentProviders {
       baseUrl: environment.apiBaseUrl,
       timeoutMs: environment.apiTimeoutMs,
       prototypeMode: environment.prototypeMode,
-      prototypeUserRole: environment.prototypeUserRole,
+      prototypeUserRole: environment.prototypeUserRole ?? null,
     }),
     {
       provide: PROTOTYPE_MODE,
@@ -20,7 +20,7 @@ export function provideCore(): EnvironmentProviders {
     },
     {
       provide: PROTOTYPE_USER_ROLE,
-      useValue: environment.prototypeUserRole,
+      useValue: environment.prototypeUserRole ?? null,
     },
     provideHttpClient(
       withFetch(),
