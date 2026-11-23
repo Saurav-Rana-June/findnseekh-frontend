@@ -7,6 +7,7 @@ import {
   CategoryDto,
   LocationSuggestionDto,
   PopularSkillDto,
+  TeacherCardDto,
 } from '../../../home/data/models/home.dto';
 import { TeacherFilterQuery } from '../../domain/entities/teacher.entity';
 import {
@@ -51,6 +52,19 @@ export class TeachersApiService {
 
   getCategories(): Observable<ApiResponse<readonly CategoryDto[]>> {
     return this.api.get<ApiResponse<readonly CategoryDto[]>>(API_ENDPOINTS.categories.list);
+  }
+
+  getCategoryById(id: number | string): Observable<ApiResponse<CategoryDto>> {
+    return this.api.get<ApiResponse<CategoryDto>>(API_ENDPOINTS.categories.detail(id));
+  }
+
+  getFeaturedTeachers(
+    limit: number = 6,
+    category?: string,
+  ): Observable<ApiResponse<readonly TeacherCardDto[]>> {
+    return this.api.get<ApiResponse<readonly TeacherCardDto[]>>(API_ENDPOINTS.teachers.featured, {
+      params: { limit, category },
+    });
   }
 
   getLocationSuggestions(

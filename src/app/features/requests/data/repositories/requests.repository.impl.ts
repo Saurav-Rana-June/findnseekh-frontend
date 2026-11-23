@@ -3,7 +3,10 @@ import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { PROTOTYPE_MODE } from '../../../../core/config/api.config';
 import { LearningRequest } from '../../domain/entities/learning-request.entity';
-import { RequestsRepository } from '../../domain/repositories/requests.repository';
+import {
+  CreateLearningRequestInput,
+  RequestsRepository,
+} from '../../domain/repositories/requests.repository';
 import {
   LearningRequestPublicDto,
   toLearningRequestEntity,
@@ -110,6 +113,36 @@ export class RequestsRepositoryImpl extends RequestsRepository {
 
   private mockSent = [...MOCK_SENT_REQUESTS];
   private mockReceived = [...MOCK_RECEIVED_REQUESTS];
+
+  override createLearningRequest(input: CreateLearningRequestInput): Observable<LearningRequest> {
+    if (this.prototypeMode) {
+      const created: LearningRequest = {
+        id: Date.now(),
+        skillListingId: input.skillListingId,
+        skillTitle: 'Lesson Enquiry',
+        studentId: 1,
+        studentName: 'Student',
+        teacherId: 2,
+        teacherName: 'Instructor',
+        message: input.message,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      };
+      this.mockSent = [created, ...this.mockSent];
+      return of(created);
+    }
+
+    if (isPlatformBrowser(this.platformId) && this.apiService) {
+      return this.apiService
+        .createLearningRequest({
+          skill_listing_id: input.skillListingId,
+          message: input.message,
+        })
+        .pipe(map((res) => toLearningRequestEntity(res.data)));
+    }
+
+    throw new Error('Cannot create learning request during SSR');
+  }
 
   override getSentRequests(): Observable<readonly LearningRequest[]> {
     if (this.prototypeMode) {

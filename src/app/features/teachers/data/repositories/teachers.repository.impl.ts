@@ -15,6 +15,7 @@ import {
   toTeacherDetailEntity,
   toTeacherEnquiryResult,
 } from '../models/teacher.dto';
+import { formatEnquiryMessage } from '../../domain/utils/enquiry-message.util';
 import { TeachersApiService } from '../services/teachers-api.service';
 
 const MOCK_TEACHERS: readonly Teacher[] = [
@@ -321,13 +322,8 @@ export class TeachersRepositoryImpl extends TeachersRepository {
 
     if (isPlatformBrowser(this.platformId) && this.apiService) {
       return this.apiService.getTeachers(filter).pipe(
-        map((res) => {
-          if (res.data?.teachers && res.data.teachers.length > 0) {
-            return res.data.teachers.map((t, idx) => toTeacherCardEntity(t, idx));
-          }
-          return this.getMockTeachers(filter);
-        }),
-        catchError(() => of(this.getMockTeachers(filter))),
+        map((res) => res.data?.teachers?.map((t, idx) => toTeacherCardEntity(t, idx)) ?? []),
+        catchError(() => of([])),
       );
     }
     return of(this.getMockTeachers(filter));
@@ -340,13 +336,8 @@ export class TeachersRepositoryImpl extends TeachersRepository {
 
     if (isPlatformBrowser(this.platformId) && this.apiService) {
       return this.apiService.getTeacherDetail(id).pipe(
-        map((res) => {
-          if (res.data) {
-            return toTeacherDetailEntity(res.data);
-          }
-          return this.getMockTeacherById(id);
-        }),
-        catchError(() => of(this.getMockTeacherById(id))),
+        map((res) => (res.data ? toTeacherDetailEntity(res.data) : null)),
+        catchError(() => of(null)),
       );
     }
     return of(this.getMockTeacherById(id));
@@ -372,22 +363,11 @@ export class TeachersRepositoryImpl extends TeachersRepository {
       .sendEnquiry(teacherId, {
         teaching_mode: payload.teachingMode,
         preferred_date: payload.preferredDate,
-        message: payload.message,
+        message: formatEnquiryMessage(payload),
         skill_listing_id: payload.skillListingId,
       })
       .pipe(
         map((res) => toTeacherEnquiryResult(res.data)),
-        catchError(() =>
-          of({
-            id: Date.now(),
-            teacherId: Number(teacherId) || 101,
-            teachingMode: payload.teachingMode || 'online',
-            preferredDate: payload.preferredDate,
-            message: payload.message || 'Enquiry',
-            status: 'pending',
-            createdAt: new Date().toISOString(),
-          }),
-        ),
       );
   }
 

@@ -2,7 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../../../../core/config/api.config';
 import { ApiResponse } from '../../../../core/models/api-response.model';
-import { ApiHttpService } from '../../../../core/services/api-http.service';
+import { ApiHttpService, QueryParamsInput } from '../../../../core/services/api-http.service';
+import { CategoryDto } from '../../../home/data/models/home.dto';
 import {
   SkillListingCreateDto,
   SkillListingReadDto,
@@ -10,9 +11,43 @@ import {
   SkillListingUpdateDto,
 } from '../models/teaching-listing.dto';
 
+export type SkillListingSearchParams = QueryParamsInput;
+
 @Injectable({ providedIn: 'root' })
 export class ListingsApiService {
   private readonly api = inject(ApiHttpService);
+
+  getCategories(): Observable<ApiResponse<readonly CategoryDto[]>> {
+    return this.api.get<ApiResponse<readonly CategoryDto[]>>(API_ENDPOINTS.categories.list);
+  }
+
+  getCategoryById(id: number | string): Observable<ApiResponse<CategoryDto>> {
+    return this.api.get<ApiResponse<CategoryDto>>(API_ENDPOINTS.categories.detail(id));
+  }
+
+  browsePublishedListings(page = 1, pageSize = 20): Observable<ApiResponse<SkillListingReadDto[]>> {
+    return this.api.get<ApiResponse<SkillListingReadDto[]>>(API_ENDPOINTS.skills.list, {
+      params: { page, page_size: pageSize },
+    });
+  }
+
+  searchPublishedListings(
+    params: SkillListingSearchParams,
+  ): Observable<ApiResponse<SkillListingReadDto[]>> {
+    return this.api.get<ApiResponse<SkillListingReadDto[]>>(API_ENDPOINTS.skills.search, { params });
+  }
+
+  getTeacherPublishedListings(userId: number | string): Observable<ApiResponse<SkillListingReadDto[]>> {
+    return this.api.get<ApiResponse<SkillListingReadDto[]>>(API_ENDPOINTS.skills.byTeacher(userId));
+  }
+
+  getCategoryPublishedListings(
+    categoryId: number | string,
+  ): Observable<ApiResponse<SkillListingReadDto[]>> {
+    return this.api.get<ApiResponse<SkillListingReadDto[]>>(
+      API_ENDPOINTS.skills.byCategory(categoryId),
+    );
+  }
 
   getMyListings(): Observable<ApiResponse<SkillListingReadDto[]>> {
     return this.api.get<ApiResponse<SkillListingReadDto[]>>(API_ENDPOINTS.skills.mySkills);

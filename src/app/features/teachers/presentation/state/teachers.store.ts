@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { computed, DestroyRef, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PROTOTYPE_MODE } from '../../../../core/config/api.config';
 import { ComboOption } from '../../../../shared/components/combo-field/combo-field';
 import { TeachingMode } from '../../../../shared/components/custom-teacher-card/custom-teacher-card';
 import { TeachersApiService } from '../../data/services/teachers-api.service';
@@ -35,6 +36,7 @@ export class TeachersStore {
   private readonly apiService = inject(TeachersApiService, { optional: true });
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly prototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
 
   private readonly _allTeachers = signal<readonly Teacher[]>([]);
   private readonly _searchQuery = signal<string>('');
@@ -195,6 +197,10 @@ export class TeachersStore {
   }
 
   private initMetadata(): void {
+    if (this.prototypeMode) {
+      return;
+    }
+
     if (isPlatformBrowser(this.platformId) && this.apiService) {
       // 1. Fetch dynamic categories
       this.apiService

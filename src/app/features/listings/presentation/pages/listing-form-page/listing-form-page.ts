@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +7,7 @@ import {
   effect,
   inject,
   OnInit,
+  PLATFORM_ID,
   signal,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -21,6 +23,8 @@ import {
   TeachingListing,
   TeachingListingStatus,
 } from '../../../domain/entities/teaching-listing.entity';
+import { PROTOTYPE_MODE } from '../../../../../core/config/api.config';
+import { ListingsApiService } from '../../../data/services/listings-api.service';
 import { TeachingListingWizardComponent } from '../../components/teaching-listing-wizard/teaching-listing-wizard';
 import { ListingsStore } from '../../state/listings.store';
 
@@ -44,13 +48,16 @@ export class ListingFormPage implements OnInit {
   protected readonly store = inject(ListingsStore);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly listingsApi = inject(ListingsApiService, { optional: true });
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly prototypeMode = inject(PROTOTYPE_MODE, { optional: true }) ?? false;
 
   readonly currentStep = signal<1 | 2 | 3>(1);
   readonly listingId = signal<number | null>(null);
   readonly isEditMode = computed(() => this.listingId() !== null);
   readonly listingNotFound = signal<boolean>(false);
 
-  readonly categoryOptions: readonly CustomDropdownOption<number>[] = [
+  readonly categoryOptions = signal<readonly CustomDropdownOption<number>[]>([
     { value: 1, label: 'Music & Vocals' },
     { value: 2, label: 'Dance & Movement' },
     { value: 3, label: 'Yoga & Fitness' },
@@ -59,7 +66,7 @@ export class ListingFormPage implements OnInit {
     { value: 6, label: 'Technology & Coding' },
     { value: 7, label: 'Languages & Communication' },
     { value: 8, label: 'Photography & Film' },
-  ];
+  ]);
 
   readonly priceUnitOptions: readonly CustomDropdownOption<string>[] = [
     { value: 'session', label: 'Per Session' },
@@ -133,6 +140,8 @@ export class ListingFormPage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadCategoriesFromApi();
+
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       const id = Number(idParam);
@@ -237,6 +246,32 @@ export class ListingFormPage implements OnInit {
     const id = this.listingId() ?? undefined;
     this.store.saveListing(input, id, () => {
       this.router.navigate(['/listings']);
+    });
+  }
+
+  private loadCategoriesFromApi(): void {
+    if (this.prototypeMode || !isPlatformBrowser(this.platformId) || !this.listingsApi) {
+      return;
+    }
+
+    this.listingsApi.getCategories().subscribe({
+      next: (res) => {
+        const items = res.data?.filter((c) => c.is_active) ?? [];
+        if (items.length === 0) {
+          return;
+        }
+        this.categoryOptions.set(
+          items.map((c) => ({
+            value: c.id,
+            label: c.name,
+          })),
+        );
+        const firstId = items[0].id;
+        if (!this.isEditMode()) {
+          this.form.controls.categoryId.setValue(firstId);
+        }
+      },
+      error: () => {},
     });
   }
 }

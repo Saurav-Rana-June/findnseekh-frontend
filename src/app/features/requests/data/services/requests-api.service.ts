@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from '../../../../core/config/api.config';
 import { ApiResponse } from '../../../../core/models/api-response.model';
 import { ApiHttpService } from '../../../../core/services/api-http.service';
 import {
+  LearningRequestCreateDto,
   LearningRequestPublicDto,
   LearningRequestReadDto,
 } from '../models/learning-request.dto';
@@ -11,6 +12,15 @@ import {
 @Injectable({ providedIn: 'root' })
 export class RequestsApiService {
   private readonly api = inject(ApiHttpService);
+
+  createLearningRequest(
+    body: LearningRequestCreateDto,
+  ): Observable<ApiResponse<LearningRequestReadDto>> {
+    return this.api.post<ApiResponse<LearningRequestReadDto>, LearningRequestCreateDto>(
+      API_ENDPOINTS.requests.create,
+      body,
+    );
+  }
 
   getSentRequests(): Observable<ApiResponse<LearningRequestPublicDto[]>> {
     return this.api.get<ApiResponse<LearningRequestPublicDto[]>>(API_ENDPOINTS.requests.sent);

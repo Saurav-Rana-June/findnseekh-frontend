@@ -18,6 +18,11 @@ export interface LearningRequestPublicDto {
   readonly created_at: string;
 }
 
+export interface LearningRequestCreateDto {
+  readonly skill_listing_id: number;
+  readonly message: string;
+}
+
 export interface LearningRequestReadDto {
   readonly id: number;
   readonly skill_listing_id: number;

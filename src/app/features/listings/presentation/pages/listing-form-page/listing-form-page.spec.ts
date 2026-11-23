@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { ActivatedRoute, Router, provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ListingsApiService } from '../../../data/services/listings-api.service';
 import { TeachingListing } from '../../../domain/entities/teaching-listing.entity';
 import { ListingsStore } from '../../state/listings.store';
 import { ListingFormPage } from './listing-form-page';
@@ -61,6 +63,12 @@ describe('ListingFormPage', () => {
       providers: [
         provideRouter([]),
         { provide: ListingsStore, useValue: mockStore },
+        {
+          provide: ListingsApiService,
+          useValue: {
+            getCategories: vi.fn().mockReturnValue(of({ data: [] })),
+          },
+        },
         {
           provide: ActivatedRoute,
           useValue: {

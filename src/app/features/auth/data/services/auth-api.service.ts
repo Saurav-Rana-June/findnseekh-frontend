@@ -54,6 +54,15 @@ export class AuthApiService {
     );
   }
 
+  createTeacherProfile(
+    payload: TeacherProfileUpdateRequestDto,
+  ): Observable<ApiResponse<TeacherProfileDto>> {
+    return this.api.post<ApiResponse<TeacherProfileDto>, TeacherProfileUpdateRequestDto>(
+      API_ENDPOINTS.auth.teacherProfileCreate,
+      payload,
+    );
+  }
+
   getTeacherProfile(): Observable<ApiResponse<TeacherProfileDto>> {
     return this.api.get<ApiResponse<TeacherProfileDto>>(API_ENDPOINTS.auth.teacherProfileMe);
   }

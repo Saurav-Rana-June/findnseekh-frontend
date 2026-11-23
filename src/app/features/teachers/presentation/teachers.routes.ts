@@ -1,4 +1,8 @@
 import { Routes } from '@angular/router';
+import { RequestsRepositoryImpl } from '../../requests/data/repositories/requests.repository.impl';
+import { RequestsApiService } from '../../requests/data/services/requests-api.service';
+import { CreateLearningRequestUseCase } from '../../requests/domain/use-cases/create-learning-request.use-case';
+import { RequestsRepository } from '../../requests/domain/repositories/requests.repository';
 import { TeachersRepositoryImpl } from '../data/repositories/teachers.repository.impl';
 import { TeachersApiService } from '../data/services/teachers-api.service';
 import { TeachersRepository } from '../domain/repositories/teachers.repository';
@@ -13,9 +17,12 @@ export const TEACHERS_ROUTES: Routes = [
     path: '',
     providers: [
       TeachersApiService,
+      RequestsApiService,
       { provide: TeachersRepository, useClass: TeachersRepositoryImpl },
+      { provide: RequestsRepository, useClass: RequestsRepositoryImpl },
       GetTeachersUseCase,
       GetTeacherByIdUseCase,
+      CreateLearningRequestUseCase,
       SendTeacherEnquiryUseCase,
       TeachersStore,
     ],
