@@ -47,17 +47,25 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 10px 14px;
-    margin-top: 22px;
-    font-size: var(--text-sm);
+    gap: 8px 10px;
+    margin-top: 18px;
+    font-size: var(--text-xs);
     color: var(--color-muted);
+
+    > span {
+      font-weight: 500;
+    }
 
     ul {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
   }
+}
+
+:host ::ng-deep .hero__popular .cp-pill {
+  --cp-pill-font-weight: 500;
 }
 
 .search {
@@ -94,6 +102,12 @@
 }
 
 @media (max-width: 760px) {
+  .hero__title {
+    font-size: clamp(2.375rem, 10.5vw, 2.95rem);
+    line-height: 1.05;
+    letter-spacing: -0.032em;
+  }
+
   .hero__eyebrow {
     max-width: 100%;
   }
@@ -136,5 +150,27 @@
 
   :host ::ng-deep .search app-combo-field .field__input {
     padding: 2px 0;
+  }
+
+  .hero__popular {
+    margin-top: 14px;
+    gap: 6px 8px;
+    font-size: var(--text-xs);
+
+    > span {
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    ul {
+      gap: 6px;
+    }
+  }
+
+  :host ::ng-deep .hero__popular .cp-pill {
+    --cp-pill-font-size: var(--pill-font-sm);
+    --cp-pill-padding: var(--pill-padding-sm);
+    --cp-pill-min-height: auto;
+    --cp-pill-font-weight: 500;
   }
 }
