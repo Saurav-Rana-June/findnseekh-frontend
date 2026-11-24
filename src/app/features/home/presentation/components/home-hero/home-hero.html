@@ -1,13 +1,8 @@
 <section class="hero" aria-labelledby="hero-title">
   <div class="page-container hero__grid">
     <div class="hero__copy">
-      <app-custom-status-pill
-        class="hero__eyebrow"
-        variant="soft"
-        size="md"
-        icon="location"
-        ariaLabel="Skill teachers, right in your neighbourhood"
-      >
+      <app-custom-status-pill class="hero__eyebrow" variant="soft" size="md" icon="location"
+        ariaLabel="Skill teachers, right in your neighbourhood">
         <span class="hero__eyebrow-label hero__eyebrow-label--full" aria-hidden="true">
           Skill teachers, right in your neighbourhood
         </span>
@@ -28,24 +23,17 @@
       <div class="hero__search">
         <form class="search" role="search" aria-label="Find teachers near you" (submit)="onSubmit($event)">
           <app-combo-field fieldId="search-location" label="Location" [showLabel]="false" icon="location"
-            placeholder="Select Area" autoComplete="address-level2" freeTextPrefix="Search near" [value]="location()"
+            placeholder="City or area" autoComplete="address-level2" freeTextPrefix="Search near" [value]="location()"
             [options]="locationOptions()" (valueChange)="location.set($event)" />
 
           <span class="search__divider" aria-hidden="true"></span>
 
           <app-combo-field fieldId="search-skill" label="Skill" [showLabel]="false" icon="skill"
-            placeholder="Select Skill" freeTextPrefix="Search for" [value]="skill()" [options]="skillOptions()"
-            (valueChange)="skill.set($event)" />
+            placeholder="Guitar, yoga, Python..." freeTextPrefix="Search for" [value]="skill()"
+            [options]="skillOptions()" (valueChange)="skill.set($event)" />
 
-          <app-custom-primary-button
-            class="search__submit"
-            type="submit"
-            variant="primary"
-            size="md"
-            leadingIcon="search"
-            label="Find Teachers"
-            paddingInline="20px"
-          />
+          <app-custom-primary-button class="search__submit" type="submit" variant="primary" size="md"
+            leadingIcon="search" label="Find Teachers" paddingInline="20px" />
         </form>
       </div>
 
@@ -54,13 +42,8 @@
         <ul>
           @for (item of popularSkills(); track item.label) {
           <li>
-            <app-custom-status-pill
-              variant="neutral"
-              size="md"
-              [interactive]="true"
-              [label]="item.label"
-              (clicked)="onPopularSkillClick(item.label)"
-            />
+            <app-custom-status-pill variant="neutral" size="md" [interactive]="true" [label]="item.label"
+              (clicked)="onPopularSkillClick(item.label)" />
           </li>
           }
         </ul>

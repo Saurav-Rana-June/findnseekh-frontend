@@ -22,6 +22,27 @@
   }
 }
 
+.field__control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.field__icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.field__content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  justify-content: center;
+}
+
 .field__label {
   display: block;
   margin-bottom: 2px;
@@ -32,15 +53,10 @@
   color: var(--color-primary);
 }
 
-.field__control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .field__icon {
   flex-shrink: 0;
   color: var(--color-primary);
+  display: block;
 
   svg {
     width: var(--icon-size-md);
