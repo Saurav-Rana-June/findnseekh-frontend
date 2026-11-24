@@ -230,11 +230,11 @@ export type CustomButtonIcon = 'none' | 'search' | 'arrow-right' | 'arrow-left' 
     }
 
     .cp-btn {
-      --_height: 44px;
-      --_px: 22px;
-      --_fs: 0.95rem;
+      --_height: var(--control-height-md, 44px);
+      --_px: var(--control-padding-x-md, 22px);
+      --_fs: var(--control-font-md, 0.95rem);
       --_fw: 600;
-      --_gap: 8px;
+      --_gap: var(--control-gap, 8px);
       --_radius: var(--radius-pill, 999px);
       --_bg: var(--color-primary, #174e38);
       --_color: var(--color-cream, #f8f8f2);
@@ -272,15 +272,15 @@ export type CustomButtonIcon = 'none' | 'search' | 'arrow-right' | 'arrow-left' 
     }
 
     .cp-btn[data-size='sm'] {
-      --_height: 36px;
-      --_px: 16px;
-      --_fs: 0.86rem;
+      --_height: var(--control-height-sm, 36px);
+      --_px: var(--control-padding-x-sm, 16px);
+      --_fs: var(--control-font-sm, 0.86rem);
     }
 
     .cp-btn[data-size='lg'] {
-      --_height: 54px;
-      --_px: 30px;
-      --_fs: 1rem;
+      --_height: var(--control-height-lg, 54px);
+      --_px: var(--control-padding-x-lg, 30px);
+      --_fs: var(--control-font-lg, 1rem);
     }
 
     .cp-btn[data-shape='rounded'] {
@@ -352,6 +352,8 @@ export type CustomButtonIcon = 'none' | 'search' | 'arrow-right' | 'arrow-left' 
 
     .cp-btn__icon {
       flex-shrink: 0;
+      width: var(--icon-size-lg, 20px);
+      height: var(--icon-size-lg, 20px);
     }
 
     .cp-btn__spinner {

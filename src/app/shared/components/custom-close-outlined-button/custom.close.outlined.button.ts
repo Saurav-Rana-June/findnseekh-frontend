@@ -55,8 +55,8 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
     .cp-close-btn {
       display: grid;
       place-items: center;
-      width: var(--cp-close-size, 36px);
-      height: var(--cp-close-size, 36px);
+      width: var(--cp-close-size, var(--close-btn-size, 36px));
+      height: var(--cp-close-size, var(--close-btn-size, 36px));
       padding: 0;
       border: 1px solid var(--color-border, #e4e7e0);
       border-radius: var(--radius-pill, 999px);

@@ -6,8 +6,15 @@
         variant="soft"
         size="md"
         icon="location"
-        label="Skill teachers, right in your neighbourhood"
-      />
+        ariaLabel="Skill teachers, right in your neighbourhood"
+      >
+        <span class="hero__eyebrow-label hero__eyebrow-label--full" aria-hidden="true">
+          Skill teachers, right in your neighbourhood
+        </span>
+        <span class="hero__eyebrow-label hero__eyebrow-label--short" aria-hidden="true">
+          Teachers nearby
+        </span>
+      </app-custom-status-pill>
 
       <h1 id="hero-title" class="hero__title">
         Discover Skills. <span>Find Your Teacher.</span> Start Learning.
@@ -34,10 +41,10 @@
             class="search__submit"
             type="submit"
             variant="primary"
-            size="lg"
+            size="md"
             leadingIcon="search"
             label="Find Teachers"
-            paddingInline="26px"
+            paddingInline="20px"
           />
         </form>
       </div>

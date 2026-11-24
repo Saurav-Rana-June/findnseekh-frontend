@@ -159,11 +159,11 @@ export type StatusPillIcon = 'none' | 'location' | 'spark' | 'check' | 'dot';
 
     .cp-pill {
       --_min-height: auto;
-      --_padding: 6px 14px;
-      --_fs: 0.82rem;
+      --_padding: var(--pill-padding-md, 6px 14px);
+      --_fs: var(--pill-font-md, 0.82rem);
       --_fw: 600;
       --_ls: 0.01em;
-      --_gap: 8px;
+      --_gap: var(--pill-gap, 8px);
       --_radius: var(--radius-pill, 999px);
       --_bg: var(--color-primary-50, #eef4f0);
       --_border: var(--color-primary-100, #dce9e1);
@@ -197,17 +197,17 @@ export type StatusPillIcon = 'none' | 'location' | 'spark' | 'check' | 'dot';
     }
 
     .cp-pill[data-size='sm'] {
-      --_padding: 4px 12px;
-      --_fs: 0.78rem;
+      --_padding: var(--pill-padding-sm, 4px 12px);
+      --_fs: var(--pill-font-sm, 0.78rem);
       --_fw: 600;
       --_ls: 0;
-      --_gap: 6px;
+      --_gap: var(--pill-gap, 6px);
     }
 
     .cp-pill[data-size='lg'] {
-      --_min-height: 36px;
-      --_padding: 0 16px;
-      --_fs: 0.88rem;
+      --_min-height: var(--pill-min-height-lg, 36px);
+      --_padding: var(--pill-padding-lg, 0 16px);
+      --_fs: var(--pill-font-lg, 0.88rem);
       --_fw: 500;
       --_ls: 0;
     }
@@ -286,6 +286,8 @@ export type StatusPillIcon = 'none' | 'location' | 'spark' | 'check' | 'dot';
 
     .cp-pill__icon {
       flex-shrink: 0;
+      width: var(--icon-size-md, 15px);
+      height: var(--icon-size-md, 15px);
     }
 
     .cp-pill__dot {

@@ -16,8 +16,12 @@
     margin-bottom: 16px;
   }
 
+  &__eyebrow-label--short {
+    display: none;
+  }
+
   &__title {
-    font-size: clamp(2.5rem, 5.2vw, 4.25rem);
+    font-size: var(--text-hero);
     line-height: 1.04;
     letter-spacing: -0.035em;
     font-weight: 700;
@@ -31,7 +35,7 @@
   &__lead {
     max-width: 560px;
     margin-top: 22px;
-    font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+    font-size: var(--text-lead);
     color: var(--color-muted);
   }
 
@@ -45,7 +49,7 @@
     align-items: center;
     gap: 10px 14px;
     margin-top: 22px;
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     color: var(--color-muted);
 
     ul {
@@ -76,7 +80,6 @@
   &__submit {
     flex-shrink: 0;
     align-self: stretch;
-    --cp-btn-min-height: 46px;
   }
 }
 
@@ -91,23 +94,47 @@
 }
 
 @media (max-width: 760px) {
+  .hero__eyebrow {
+    max-width: 100%;
+  }
+
+  .hero__eyebrow-label--full {
+    display: none;
+  }
+
+  .hero__eyebrow-label--short {
+    display: inline;
+  }
+
   .search {
     flex-direction: column;
     align-items: stretch;
-    gap: 6px;
-    padding: 10px;
-    border-radius: var(--radius-lg);
+    gap: 0;
+    padding: 6px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 
     &__divider {
       width: auto;
       height: 1px;
-      margin-inline: 12px;
+      margin-inline: 10px;
     }
 
     &__submit {
       width: 100%;
-      --cp-btn-min-height: 48px;
-      margin-top: 4px;
+      margin-top: 2px;
     }
+  }
+
+  :host ::ng-deep .search app-combo-field .field {
+    border-radius: var(--radius-sm);
+  }
+
+  :host ::ng-deep .search app-combo-field .field__control {
+    gap: var(--control-gap);
+  }
+
+  :host ::ng-deep .search app-combo-field .field__input {
+    padding: 2px 0;
   }
 }

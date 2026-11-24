@@ -1,0 +1,139 @@
+// Global typography + control density tokens (desktop default, mobile compact @639px).
+//
+// Desktop (640px+)     Mobile (≤639px)
+// --control-height-md  44px              40px
+// --control-font-md    0.95rem           0.875rem
+// --pill-font-md       0.82rem           0.75rem
+// --field-min-height-md 48px             44px
+// --text-3xl           1.875rem          1.625rem
+// --text-hero          clamp(2.5rem…)    clamp(2rem…)
+
+:root {
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 1rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.125rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-display: clamp(var(--text-3xl), 3.6vw, 2.75rem);
+  --text-hero: clamp(2.5rem, 5.2vw, 4.25rem);
+  --text-lead: clamp(1.02rem, 1.4vw, 1.18rem);
+
+  --leading-tight: 1.12;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+
+  --control-height-sm: 36px;
+  --control-height-md: 44px;
+  --control-height-lg: 54px;
+  --control-padding-x-sm: 16px;
+  --control-padding-x-md: 22px;
+  --control-padding-x-lg: 30px;
+  --control-font-sm: 0.86rem;
+  --control-font-md: 0.95rem;
+  --control-font-lg: 1rem;
+  --control-gap: 8px;
+
+  --pill-font-sm: 0.78rem;
+  --pill-font-md: 0.82rem;
+  --pill-font-lg: 0.88rem;
+  --pill-padding-sm: 4px 12px;
+  --pill-padding-md: 6px 14px;
+  --pill-padding-lg: 0 16px;
+  --pill-min-height-lg: 36px;
+  --pill-gap: 8px;
+
+  --field-min-height-sm: 40px;
+  --field-min-height-md: 48px;
+  --field-min-height-lg: 54px;
+  --field-font-sm: 0.88rem;
+  --field-font-md: 0.95rem;
+  --field-font-lg: 1rem;
+  --field-padding-x-sm: 12px;
+  --field-padding-x-md: 14px;
+  --field-padding-x-lg: 16px;
+  --field-label-font: 0.85rem;
+
+  --combo-input-font: 1rem;
+  --combo-field-padding-block: 8px;
+  --combo-field-padding-inline: 20px;
+  --combo-label-font: 0.74rem;
+  --combo-option-font: 0.95rem;
+
+  --icon-size-sm: 14px;
+  --icon-size-md: 18px;
+  --icon-size-lg: 20px;
+
+  --section-padding-y-min: 64px;
+  --section-padding-y-max: 112px;
+  --section-head-margin-min: 32px;
+  --section-head-margin-max: 56px;
+
+  --eyebrow-font: 0.82rem;
+  --eyebrow-padding: 6px 14px;
+  --eyebrow-gap: 8px;
+
+  --close-btn-size: 36px;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --text-lg: 1rem;
+    --text-xl: 1.0625rem;
+    --text-2xl: 1.375rem;
+    --text-3xl: 1.625rem;
+    --text-display: clamp(1.625rem, 5vw, 2.75rem);
+    --text-hero: clamp(2rem, 8.5vw, 4.25rem);
+    --text-lead: clamp(0.9375rem, 2.5vw, 1.18rem);
+
+    --control-height-sm: 34px;
+    --control-height-md: 40px;
+    --control-height-lg: 48px;
+    --control-padding-x-sm: 14px;
+    --control-padding-x-md: 18px;
+    --control-padding-x-lg: 24px;
+    --control-font-sm: 0.8125rem;
+    --control-font-md: 0.875rem;
+    --control-font-lg: 0.9375rem;
+    --control-gap: 6px;
+
+    --pill-font-sm: 0.72rem;
+    --pill-font-md: 0.75rem;
+    --pill-font-lg: 0.8125rem;
+    --pill-padding-sm: 3px 10px;
+    --pill-padding-md: 4px 11px;
+    --pill-padding-lg: 0 14px;
+    --pill-min-height-lg: 32px;
+    --pill-gap: 6px;
+
+    --field-min-height-sm: 38px;
+    --field-min-height-md: 44px;
+    --field-min-height-lg: 48px;
+    --field-font-sm: 0.8125rem;
+    --field-font-md: 0.875rem;
+    --field-font-lg: 0.9375rem;
+    --field-label-font: 0.8125rem;
+
+    --combo-input-font: 0.9375rem;
+    --combo-field-padding-block: 6px;
+    --combo-field-padding-inline: 14px;
+    --combo-option-font: 0.875rem;
+
+    --icon-size-sm: 13px;
+    --icon-size-md: 16px;
+    --icon-size-lg: 18px;
+
+    --section-padding-y-min: 48px;
+    --section-padding-y-max: 80px;
+    --section-head-margin-min: 24px;
+    --section-head-margin-max: 40px;
+
+    --eyebrow-font: 0.75rem;
+    --eyebrow-padding: 4px 11px;
+    --eyebrow-gap: 6px;
+
+    --close-btn-size: 34px;
+  }
+}

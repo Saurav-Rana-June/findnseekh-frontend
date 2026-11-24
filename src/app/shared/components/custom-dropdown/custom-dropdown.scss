@@ -26,7 +26,7 @@
 }
 
 .dropdown-label {
-  font-size: 0.85rem;
+  font-size: var(--field-label-font);
   font-weight: 600;
   color: var(--color-text-primary, #1f2937);
   cursor: pointer;
@@ -53,9 +53,10 @@
   background: var(--color-white, #ffffff);
   border: 1.5px solid var(--color-border, #e5e7eb);
   border-radius: var(--radius-pill, 999px);
-  padding: 8px 16px;
+  padding: var(--combo-field-padding-block) var(--control-padding-x-sm);
   font-family: inherit;
-  font-size: 0.86rem;
+  font-size: var(--control-font-sm);
+  min-height: var(--control-height-sm);
   font-weight: 500;
   color: var(--color-text-primary, #1f2937);
   cursor: pointer;

@@ -252,9 +252,9 @@ let nextTextFieldId = 0;
     }
 
     .cp-tf {
-      --_min-height: 48px;
-      --_px: 14px;
-      --_fs: 0.95rem;
+      --_min-height: var(--field-min-height-md, 48px);
+      --_px: var(--field-padding-x-md, 14px);
+      --_fs: var(--field-font-md, 0.95rem);
       --_radius: var(--radius-md, 16px);
 
       display: flex;
@@ -264,20 +264,20 @@ let nextTextFieldId = 0;
     }
 
     .cp-tf[data-size='sm'] {
-      --_min-height: 40px;
-      --_px: 12px;
-      --_fs: 0.88rem;
+      --_min-height: var(--field-min-height-sm, 40px);
+      --_px: var(--field-padding-x-sm, 12px);
+      --_fs: var(--field-font-sm, 0.88rem);
       --_radius: var(--radius-sm, 10px);
     }
 
     .cp-tf[data-size='lg'] {
-      --_min-height: 54px;
-      --_px: 16px;
-      --_fs: 1rem;
+      --_min-height: var(--field-min-height-lg, 54px);
+      --_px: var(--field-padding-x-lg, 16px);
+      --_fs: var(--field-font-lg, 1rem);
     }
 
     .cp-tf__label {
-      font-size: 0.85rem;
+      font-size: var(--field-label-font, 0.85rem);
       font-weight: 600;
       color: var(--cp-tf-label-color, var(--color-text, #1f2937));
     }
@@ -318,6 +318,8 @@ let nextTextFieldId = 0;
 
     .cp-tf__icon {
       flex-shrink: 0;
+      width: var(--icon-size-md, 18px);
+      height: var(--icon-size-md, 18px);
       color: var(--cp-tf-icon-color, var(--color-primary, #174e38));
     }
 

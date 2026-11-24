@@ -8,7 +8,7 @@
   position: relative;
   width: 100%;
   min-width: 0;
-  padding: 8px 20px;
+  padding: var(--combo-field-padding-block) var(--combo-field-padding-inline);
   border-radius: var(--radius-pill);
   transition: background-color var(--dur-fast) var(--ease);
 
@@ -25,7 +25,7 @@
 .field__label {
   display: block;
   margin-bottom: 2px;
-  font-size: 0.74rem;
+  font-size: var(--combo-label-font);
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -41,6 +41,11 @@
 .field__icon {
   flex-shrink: 0;
   color: var(--color-primary);
+
+  svg {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
+  }
 }
 
 .field__input {
@@ -49,7 +54,7 @@
   padding: 4px 0;
   border: 0;
   background: transparent;
-  font-size: 1rem;
+  font-size: var(--combo-input-font);
   font-weight: 500;
   color: var(--color-text);
   text-overflow: ellipsis;
@@ -87,7 +92,7 @@
   gap: 12px;
   padding: 11px 14px;
   border-radius: var(--radius-sm);
-  font-size: 0.95rem;
+  font-size: var(--combo-option-font);
   cursor: pointer;
 
   &.is-active {
@@ -127,11 +132,11 @@
   .field {
     width: 100%;
     border-radius: var(--radius-md);
-    padding: 12px 18px;
   }
 
   .field__list {
     width: 100%;
+    max-height: min(240px, 40vh);
   }
 }
 
