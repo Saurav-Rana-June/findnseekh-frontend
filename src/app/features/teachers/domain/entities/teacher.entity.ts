@@ -1,15 +1,8 @@
+import { SkillCategoryIcon } from '../../../../shared/components/custom-skill-category-card/custom-skill-category-card';
 import { TeacherAvatarSpec } from '../../../../shared/components/teacher-avatar/teacher-avatar';
 import { TeachingMode } from '../../../../shared/components/custom-teacher-card/custom-teacher-card';
 
-export type SkillCategoryId =
-  | 'music'
-  | 'dance'
-  | 'photography'
-  | 'art-craft'
-  | 'fitness-yoga'
-  | 'cooking'
-  | 'technology'
-  | 'languages';
+export type SkillCategoryId = SkillCategoryIcon;
 
 export interface TeacherReview {
   readonly id: string;

@@ -1,14 +1,7 @@
+import { SkillCategoryIcon } from '../../../../shared/components/custom-skill-category-card/custom-skill-category-card';
 import { TeachingMode } from '../../../../shared/components/custom-teacher-card/custom-teacher-card';
 
-export type SkillCategoryIcon =
-  | 'music'
-  | 'dance'
-  | 'photography'
-  | 'art-craft'
-  | 'fitness-yoga'
-  | 'cooking'
-  | 'technology'
-  | 'languages';
+export type { SkillCategoryIcon };
 
 export interface SkillCategory {
   readonly id: SkillCategoryIcon;
