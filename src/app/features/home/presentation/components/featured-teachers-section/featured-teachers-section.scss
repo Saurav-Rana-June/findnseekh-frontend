@@ -57,6 +57,42 @@
   color: var(--color-muted);
 }
 
+.section-foot__browse {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .section-lead {
+    font-size: var(--text-lead);
+  }
+
+  .section-head__browse--desktop {
+    display: none;
+  }
+
+  .section-foot__browse {
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+  }
+
+  :host ::ng-deep .section-foot__browse app-custom-primary-button {
+    --cp-btn-min-height: var(--control-height-sm);
+    --cp-btn-padding-x: var(--control-padding-x-sm);
+    --cp-btn-font-size: var(--control-font-sm);
+    --cp-btn-gap: var(--control-gap);
+  }
+
+  :host ::ng-deep .section-foot__browse .cp-btn {
+    width: auto;
+  }
+
+  :host ::ng-deep .section-foot__browse .cp-btn__icon {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
+  }
+}
+
 @media (max-width: 1020px) {
   .grid--teachers {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomTeacherCard } from '../../../../../shared/components/custom-teacher-card/custom-teacher-card';
 import { FeaturedTeacher } from '../../../domain/entities/home.entity';
@@ -16,4 +16,8 @@ export class FeaturedTeachersSection {
 
   readonly browseAllClicked = output<void>();
   readonly viewProfileClicked = output<FeaturedTeacher>();
+
+  protected readonly browseAllLabel = computed(() =>
+    this.hasActiveFilter() ? 'Show all teachers' : 'Browse all teachers',
+  );
 }

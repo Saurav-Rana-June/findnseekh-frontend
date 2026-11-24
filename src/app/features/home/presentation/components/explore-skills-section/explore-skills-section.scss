@@ -27,6 +27,12 @@
   }
 }
 
+@media (max-width: 639px) {
+  .section-lead {
+    font-size: var(--text-lead);
+  }
+}
+
 @media (max-width: 560px) {
   .grid--cats {
     gap: 14px;

@@ -6,8 +6,14 @@
         <p class="section-lead">Featured teachers and instructors near you.</p>
       </div>
 
-      <app-custom-primary-button variant="outline" trailingIcon="arrow-right"
-        [label]="hasActiveFilter() ? 'Show all teachers' : 'Browse all teachers'" (clicked)="browseAllClicked.emit()" />
+      <app-custom-primary-button
+        class="section-head__browse section-head__browse--desktop"
+        variant="outline"
+        size="md"
+        trailingIcon="arrow-right"
+        [label]="browseAllLabel()"
+        (clicked)="browseAllClicked.emit()"
+      />
     </div>
 
     @if (teachers().length > 0) {
@@ -21,6 +27,16 @@
       </li>
       }
     </ul>
+
+    <div class="section-foot__browse">
+      <app-custom-primary-button
+        variant="outline"
+        size="md"
+        trailingIcon="arrow-right"
+        [label]="browseAllLabel()"
+        (clicked)="browseAllClicked.emit()"
+      />
+    </div>
     } @else {
     <div class="empty">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
