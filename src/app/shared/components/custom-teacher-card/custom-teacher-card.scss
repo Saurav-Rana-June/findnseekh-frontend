@@ -26,7 +26,7 @@
   }
 
   &__banner {
-    height: 76px;
+    height: 90px;
     background-color: #174e38;
     background-image: radial-gradient(circle at 85% 50%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 35%, transparent 65%);
     position: relative;
@@ -279,7 +279,7 @@
     border-radius: var(--radius-md, 14px);
 
     &__banner {
-      height: 60px;
+      height: 72px;
     }
 
     &__mode-pill {
