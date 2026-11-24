@@ -40,10 +40,6 @@
       transform: scale(1.06) rotate(-4deg);
     }
 
-    .skill-cat-card__name svg {
-      color: var(--color-primary);
-      transform: translate(2px, -2px);
-    }
   }
 
   &__art {
@@ -92,6 +88,11 @@
       transform var(--dur) var(--ease),
       background-color var(--dur) var(--ease),
       color var(--dur) var(--ease);
+
+    svg {
+      width: 34px;
+      height: 34px;
+    }
   }
 
   &__body {
@@ -103,20 +104,10 @@
   }
 
   &__name {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     font-family: var(--font-display);
     font-size: 1.2rem;
     font-weight: 550;
     color: var(--color-text);
-
-    svg {
-      color: var(--color-muted);
-      transition:
-        transform var(--dur) var(--ease),
-        color var(--dur) var(--ease);
-    }
   }
 
   &__desc {
@@ -128,7 +119,18 @@
 @media (max-width: 560px) {
   .skill-cat-card {
     &__art {
-      height: 104px;
+      height: 92px;
+    }
+
+    &__icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+
+      svg {
+        width: 26px;
+        height: 26px;
+      }
     }
 
     &__body {
@@ -140,7 +142,8 @@
     }
 
     &__desc {
-      font-size: 0.84rem;
+      font-size: 0.78rem;
+      line-height: 1.45;
     }
   }
 }
