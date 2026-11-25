@@ -52,6 +52,35 @@
   }
 }
 
+@media (max-width: 639px) {
+  .cta {
+    gap: 20px;
+    padding: clamp(24px, 5vw, 40px);
+  }
+
+  .cta h2 {
+    font-size: var(--text-2xl);
+    line-height: var(--leading-tight);
+  }
+
+  .cta p {
+    margin-top: 10px;
+    font-size: var(--text-lead);
+  }
+
+  :host ::ng-deep .cta__action {
+    --cp-btn-min-height: var(--control-height-md);
+    --cp-btn-padding-x: var(--control-padding-x-md);
+    --cp-btn-font-size: var(--control-font-md);
+    --cp-btn-gap: var(--control-gap);
+  }
+
+  :host ::ng-deep .cta__action .cp-btn__icon {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
+  }
+}
+
 @media (max-width: 560px) {
   .cta .cta__action {
     width: 100%;

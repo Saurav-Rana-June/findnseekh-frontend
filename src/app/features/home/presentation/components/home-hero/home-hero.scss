@@ -141,14 +141,15 @@
 
       ::ng-deep .cp-btn {
         width: 100%;
-        min-height: 48px;
+        min-height: var(--control-height-md);
         border-radius: var(--radius-pill, 999px);
         background: var(--color-primary, #174e38);
         color: #ffffff;
-        font-size: 0.95rem;
+        font-size: var(--control-font-md);
         font-weight: 600;
         justify-content: center;
-        gap: 8px;
+        gap: var(--control-gap);
+        padding-inline: var(--control-padding-x-md);
         box-shadow: 0 2px 8px rgba(23, 78, 56, 0.2);
 
         &:hover {
@@ -156,8 +157,8 @@
         }
 
         .cp-btn__icon {
-          width: 18px;
-          height: 18px;
+          width: var(--icon-size-md);
+          height: var(--icon-size-md);
         }
       }
     }

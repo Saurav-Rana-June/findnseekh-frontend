@@ -77,9 +77,9 @@
   }
 
   :host ::ng-deep .section-foot__browse app-custom-primary-button {
-    --cp-btn-min-height: var(--control-height-sm);
-    --cp-btn-padding-x: var(--control-padding-x-sm);
-    --cp-btn-font-size: var(--control-font-sm);
+    --cp-btn-min-height: var(--control-height-md);
+    --cp-btn-padding-x: var(--control-padding-x-md);
+    --cp-btn-font-size: var(--control-font-md);
     --cp-btn-gap: var(--control-gap);
   }
 

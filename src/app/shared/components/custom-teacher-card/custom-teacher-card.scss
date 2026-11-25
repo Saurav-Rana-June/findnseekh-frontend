@@ -401,12 +401,18 @@
 
     &__cta {
       width: 100%;
+      --cp-btn-min-height: var(--control-height-md);
+      --cp-btn-padding-x: var(--control-padding-x-md);
+      --cp-btn-font-size: var(--control-font-md);
+      --cp-btn-gap: var(--control-gap);
 
       ::ng-deep .cp-btn {
-        min-height: 36px;
-        padding-inline: 10px;
-        font-size: 0.8rem;
         width: 100%;
+
+        .cp-btn__icon {
+          width: var(--icon-size-md);
+          height: var(--icon-size-md);
+        }
       }
     }
   }
