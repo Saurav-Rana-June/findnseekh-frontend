@@ -272,7 +272,14 @@ export type StatusPillIcon = 'none' | 'location' | 'spark' | 'check' | 'dot';
       cursor: pointer;
     }
 
-    .cp-pill.is-interactive:hover:not(:disabled),
+    @media (hover: hover) and (pointer: fine) {
+      .cp-pill.is-interactive:hover:not(:disabled) {
+        border-color: var(--cp-pill-hover-border, var(--_hover-border));
+        background: var(--cp-pill-hover-bg, var(--_hover-bg));
+        color: var(--cp-pill-hover-color, var(--_hover-color));
+      }
+    }
+
     .cp-pill.is-active {
       border-color: var(--cp-pill-hover-border, var(--_hover-border));
       background: var(--cp-pill-hover-bg, var(--_hover-bg));

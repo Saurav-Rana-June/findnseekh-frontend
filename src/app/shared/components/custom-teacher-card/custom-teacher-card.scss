@@ -14,14 +14,16 @@
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 32px rgba(23, 78, 56, 0.08);
-    border-color: #cbd5e1;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 32px rgba(23, 78, 56, 0.08);
+      border-color: #cbd5e1;
 
-    .t-card__avatar-frame {
-      box-shadow: 0 6px 18px rgba(23, 78, 56, 0.2);
-      transform: scale(1.02);
+      .t-card__avatar-frame {
+        box-shadow: 0 6px 18px rgba(23, 78, 56, 0.2);
+        transform: scale(1.02);
+      }
     }
   }
 

@@ -80,6 +80,43 @@ button {
   color: var(--color-muted);
 }
 
+@media (max-width: 639px) {
+  .section-title {
+    font-size: var(--text-2xl);
+    line-height: var(--leading-tight);
+  }
+
+  .section-lead {
+    margin-top: 10px;
+    font-size: var(--text-lead);
+    line-height: 1.45;
+  }
+
+  .section-head {
+    margin-bottom: clamp(var(--section-head-margin-min), 4vw, var(--section-head-margin-max));
+  }
+
+  /* Remove default WebKit tap splash / gray focus ring on touch tap */
+  a,
+  button,
+  summary,
+  [role='button'],
+  input,
+  textarea,
+  select,
+  label {
+    -webkit-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+  }
+
+  a:focus:not(:focus-visible),
+  button:focus:not(:focus-visible),
+  summary:focus:not(:focus-visible),
+  [role='button']:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
 .eyebrow {
   display: inline-flex;
   align-items: center;

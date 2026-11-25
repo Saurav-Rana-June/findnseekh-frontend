@@ -65,7 +65,8 @@
 
   .cta p {
     margin-top: 10px;
-    font-size: var(--text-lead);
+    font-size: var(--text-sm);
+    line-height: 1.45;
   }
 
   :host ::ng-deep .cta__action {

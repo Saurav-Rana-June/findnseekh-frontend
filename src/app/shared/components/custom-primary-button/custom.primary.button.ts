@@ -334,11 +334,13 @@ export type CustomButtonIcon = 'none' | 'search' | 'arrow-right' | 'arrow-left' 
       --_hover-bg: #b91c1c;
     }
 
-    .cp-btn:hover:not(.is-disabled) {
-      background: var(--cp-btn-hover-bg, var(--_hover-bg));
-      color: var(--cp-btn-hover-color, var(--_hover-color));
-      border-color: var(--cp-btn-hover-border, var(--_hover-border));
-      box-shadow: var(--_hover-shadow);
+    @media (hover: hover) and (pointer: fine) {
+      .cp-btn:hover:not(.is-disabled) {
+        background: var(--cp-btn-hover-bg, var(--_hover-bg));
+        color: var(--cp-btn-hover-color, var(--_hover-color));
+        border-color: var(--cp-btn-hover-border, var(--_hover-border));
+        box-shadow: var(--_hover-shadow);
+      }
     }
 
     .cp-btn:active:not(.is-disabled) {
