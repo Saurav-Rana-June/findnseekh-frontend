@@ -53,6 +53,10 @@
     margin-bottom: 16px;
   }
 
+  &__icon-boundary {
+    display: inline-block;
+  }
+
   &__icon {
     position: relative;
     display: grid;
@@ -64,12 +68,81 @@
     background: linear-gradient(135deg, #f0f7f3 0%, #e2efe7 100%);
     border: 1.5px solid var(--color-primary-100, #dce9e1);
     color: var(--color-primary, #174e38);
-    box-shadow: 0 4px 12px rgba(23, 78, 56, 0.05);
+    box-shadow: 0 4px 14px rgba(23, 78, 56, 0.06);
+    will-change: transform;
+    animation: icon-float 3.6s ease-in-out infinite;
+    transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
 
-    svg {
-      color: var(--color-primary, #174e38);
-      flex-shrink: 0;
+    &[data-step='1'] {
+      animation-delay: 0s;
     }
+
+    &[data-step='2'] {
+      animation-delay: 0.6s;
+    }
+
+    &[data-step='3'] {
+      animation-delay: 1.2s;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 24px;
+      background: radial-gradient(circle, rgba(23, 78, 56, 0.09) 0%, transparent 70%);
+      z-index: -1;
+      will-change: transform, opacity;
+      animation: icon-aura 3.6s ease-in-out infinite;
+    }
+
+    &[data-step='1']::before {
+      animation-delay: 0s;
+    }
+
+    &[data-step='2']::before {
+      animation-delay: 0.6s;
+    }
+
+    &[data-step='3']::before {
+      animation-delay: 1.2s;
+    }
+  }
+
+  &__svg {
+    display: block;
+    color: var(--color-primary, #174e38);
+    flex-shrink: 0;
+
+    &--discover {
+      transform-origin: 11px 11px;
+      will-change: transform;
+      animation: discover-scan 4s ease-in-out infinite;
+    }
+
+    &--explore {
+      .how-step-tile__compass-needle {
+        transform-origin: 12px 12px;
+        will-change: transform;
+        animation: compass-needle 3.8s ease-in-out 0.5s infinite;
+      }
+    }
+
+    &--connect {
+      transform-origin: 12px 12px;
+      will-change: transform;
+      animation: connect-bounce 3.6s ease-in-out 1s infinite;
+    }
+  }
+
+  &__card:hover &__icon {
+    transform: translate3d(0, -4px, 0) scale(1.05);
+    border-color: var(--color-primary-200, #b8d5c4);
+    box-shadow: 0 10px 24px rgba(23, 78, 56, 0.12);
+  }
+
+  &__card:hover &__number {
+    transform: scale(1.12);
   }
 
   &__number {
@@ -88,6 +161,7 @@
     font-weight: 700;
     border: 2.5px solid #ffffff;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    transition: transform 200ms ease;
   }
 
   &__body {
@@ -117,27 +191,98 @@
   &__connector {
     position: absolute;
     top: 50%;
-    right: -21px;
+    right: -24px;
+    width: 20px;
+    height: 32px;
     transform: translateY(-50%);
-    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
     pointer-events: none;
   }
 
   &__connector-badge {
     display: grid;
     place-items: center;
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: #ffffff;
     border: 1.5px solid var(--color-primary-100, #dce9e1);
     color: var(--color-primary, #174e38);
-    box-shadow: 0 4px 10px rgba(23, 78, 56, 0.08);
+    box-shadow: 0 2px 8px rgba(23, 78, 56, 0.08);
 
     svg {
       width: 12px;
       height: 12px;
+      color: var(--color-primary, #174e38);
     }
+  }
+}
+
+@keyframes icon-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -3.5px, 0);
+  }
+}
+
+@keyframes icon-aura {
+  0%, 100% {
+    transform: scale(0.96);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.85;
+  }
+}
+
+@keyframes discover-scan {
+  0%, 100% {
+    transform: rotate(0deg) translate3d(0, 0, 0);
+  }
+  20% {
+    transform: rotate(-10deg) translate3d(-1px, -1px, 0);
+  }
+  45% {
+    transform: rotate(10deg) translate3d(1px, 1px, 0);
+  }
+  70% {
+    transform: rotate(-3deg) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes compass-needle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  28% {
+    transform: rotate(32deg);
+  }
+  68% {
+    transform: rotate(-22deg);
+  }
+  85% {
+    transform: rotate(6deg);
+  }
+}
+
+@keyframes connect-bounce {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.06) rotate(-4deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+  75% {
+    transform: scale(1.06) rotate(4deg);
   }
 }
 
@@ -189,7 +334,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .how-step-tile__card {
+  .how-step-tile__card,
+  .how-step-tile__icon,
+  .how-step-tile__icon::before,
+  .how-step-tile__svg--discover,
+  .how-step-tile__compass-needle,
+  .how-step-tile__svg--connect {
     transition: none !important;
+    animation: none !important;
   }
 }
