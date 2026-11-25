@@ -2,129 +2,194 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-  padding-inline: 8px;
   width: 100%;
+  height: 100%;
 }
 
 .how-step-tile {
-  &__connector {
-    position: absolute;
-    top: 39px;
-    left: calc(50% + 56px);
-    width: calc(100% - 112px + 40px);
-    height: 2px;
-    pointer-events: none;
+  &__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    background: var(--color-white, #ffffff);
+    border: 1px solid rgba(23, 78, 56, 0.1);
+    border-radius: var(--radius-xl, 22px);
+    padding: 32px 24px 28px;
+    box-shadow: 0 4px 16px rgba(23, 78, 56, 0.04);
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        transform: translateY(-4px);
+        border-color: var(--color-primary-200, #b8d5c4);
+        box-shadow: 0 16px 32px rgba(23, 78, 56, 0.08);
+      }
+    }
   }
 
-  &__connector-track {
-    display: block;
-    position: relative;
-    left: -14px;
-    width: calc(100% + 14px);
-    height: 2px;
-    background: repeating-linear-gradient(
-      90deg,
-      var(--color-primary-200) 0 7px,
-      transparent 7px 14px
-    );
-    will-change: transform;
-    animation: how-step-connector-flow 1.2s linear infinite;
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill, 999px);
+    background: var(--color-primary-50, #eef4f0);
+    border: 1px solid var(--color-primary-100, #dce9e1);
+    color: var(--color-primary, #174e38);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
   }
 
   &__icon {
     position: relative;
     display: grid;
     place-items: center;
-    width: 80px;
-    height: 80px;
-    margin-bottom: 8px;
-    border-radius: 24px;
-    background: var(--color-primary-50);
-    border: 1px solid var(--color-primary-100);
-    color: var(--color-primary);
+    width: 76px;
+    height: 76px;
+    margin-bottom: 18px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #f0f7f3 0%, #e2efe7 100%);
+    border: 1.5px solid var(--color-primary-100, #dce9e1);
+    color: var(--color-primary, #174e38);
+    box-shadow: 0 4px 12px rgba(23, 78, 56, 0.05);
 
-    b {
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      display: grid;
-      place-items: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--color-primary);
-      color: var(--color-cream);
-      font-size: 0.82rem;
-      font-family: var(--font-display);
+    svg {
+      color: var(--color-primary, #174e38);
+      flex-shrink: 0;
     }
   }
 
+  &__number {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--color-primary, #174e38);
+    color: var(--color-cream, #f8f8f2);
+    font-size: 0.78rem;
+    font-family: var(--font-display, inherit);
+    font-weight: 700;
+    border: 2.5px solid #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+
   &__title {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--color-text);
+    margin: 0 0 8px 0;
+    font-family: var(--font-display, inherit);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text, #111827);
+    line-height: 1.25;
   }
 
   &__desc {
     margin: 0;
     max-width: 280px;
     font-size: 0.92rem;
-    color: var(--color-muted);
-  }
-}
-
-@keyframes how-step-connector-flow {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(14px, 0, 0);
-  }
-}
-
-@media (max-width: 560px) {
-  :host {
-    gap: 8px;
+    line-height: 1.5;
+    color: var(--color-muted, #5f6f65);
   }
 
-  .how-step-tile__icon {
-    width: 62px;
-    height: 62px;
-    margin-bottom: 6px;
-    border-radius: 18px;
+  &__connector {
+    position: absolute;
+    top: 50%;
+    right: -21px;
+    transform: translateY(-50%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &__connector-badge {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1.5px solid var(--color-primary-100, #dce9e1);
+    color: var(--color-primary, #174e38);
+    box-shadow: 0 4px 10px rgba(23, 78, 56, 0.08);
 
     svg {
-      width: 22px;
-      height: 22px;
+      width: 12px;
+      height: 12px;
     }
-
-    b {
-      top: -8px;
-      right: -8px;
-      width: 24px;
-      height: 24px;
-      font-size: 0.75rem;
-    }
-  }
-
-  .how-step-tile__title {
-    font-size: 0.95rem;
-    font-weight: 550;
-  }
-
-  .how-step-tile__desc {
-    font-size: var(--text-xs);
-    line-height: 1.45;
   }
 }
 
 @media (max-width: 760px) {
-  .how-step-tile__connector {
-    display: none;
+  .how-step-tile {
+    &__connector {
+      display: none;
+    }
+
+    &__card {
+      padding: 24px 20px;
+      border-radius: var(--radius-lg, 18px);
+    }
+  }
+}
+
+@media (max-width: 560px) {
+  .how-step-tile {
+    &__icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 14px;
+      border-radius: 18px;
+
+      svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+
+    &__number {
+      top: -5px;
+      right: -5px;
+      width: 23px;
+      height: 23px;
+      font-size: 0.72rem;
+      border-width: 2px;
+    }
+
+    &__title {
+      font-size: 1.05rem;
+    }
+
+    &__desc {
+      font-size: var(--text-xs, 0.75rem);
+      line-height: 1.45;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .how-step-tile__card {
+    transition: none !important;
   }
 }

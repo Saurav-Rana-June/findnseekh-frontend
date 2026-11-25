@@ -1,28 +1,64 @@
-<section id="become-a-teacher" class="section section--white section--tight" aria-labelledby="cta-title">
+<section id="become-a-teacher" class="section section--become-teacher" aria-labelledby="cta-title">
   <div class="page-container">
     <div class="cta">
-      <svg class="cta__mark" viewBox="0 0 200 200" aria-hidden="true">
-        <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="1.5" />
-        <circle cx="100" cy="100" r="64" fill="none" stroke="currentColor" stroke-width="1.5" />
-        <circle cx="100" cy="100" r="32" fill="currentColor" />
+      <!-- Background decorative rings & constellation aura -->
+      <div class="cta__bg-glow" aria-hidden="true"></div>
+
+      <svg class="cta__mark" viewBox="0 0 240 240" aria-hidden="true">
+        <circle cx="120" cy="120" r="115" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 4" />
+        <circle cx="120" cy="120" r="90" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="120" cy="120" r="62" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="120" cy="120" r="34" fill="currentColor" opacity="0.3" />
+        <circle cx="120" cy="120" r="12" fill="currentColor" opacity="0.8" />
       </svg>
 
       <div class="cta__copy">
+        <span class="cta__badge" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+          Teach on FindnSeekh
+        </span>
+
         <h2 id="cta-title">Share Your Skills. Inspire Someone.</h2>
         <p>
-          Are you passionate about teaching? Join FindnSeekh and help people discover and learn new
-          skills.
+          Are you passionate about teaching? Join FindnSeekh to connect with motivated learners in your neighborhood or online.
         </p>
+
+        <!-- Value chips / checklist -->
+        <ul class="cta__features" aria-label="Teacher benefits">
+          <li class="cta__feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            <span>Free to join</span>
+          </li>
+          <li class="cta__feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            <span>Set your own schedule</span>
+          </li>
+          <li class="cta__feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            <span>Direct student enquiries</span>
+          </li>
+        </ul>
       </div>
 
-      <app-custom-primary-button
-        class="cta__action"
-        variant="cream"
-        size="lg" 
-        trailingIcon="arrow-right"
-        label="Become a Teacher"
-        (clicked)="openTeacherRegister()"
-      />
+      <div class="cta__action-wrap">
+        <app-custom-primary-button
+          class="cta__action"
+          variant="cream"
+          size="lg" 
+          trailingIcon="arrow-right"
+          label="Become a Teacher"
+          (clicked)="openTeacherRegister()"
+        />
+        <span class="cta__micro-note">No credit card required &bull; 2 min signup</span>
+      </div>
     </div>
   </div>
 </section>
