@@ -7,45 +7,9 @@
 
     <ol class="steps">
       @for (step of steps(); track step.stepNumber; let last = $last) {
-      <li class="step">
-        @if (!last) {
-        <app-repaint-boundary class="step__connector" [clip]="true" aria-hidden="true">
-          <span class="step__connector-track"></span>
-        </app-repaint-boundary>
-        }
-        <span class="step__icon">
-          @switch (step.icon) {
-          @case ('discover') {
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            aria-hidden="true">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-          }
-          @case ('explore') {
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            aria-hidden="true">
-            <circle cx="12" cy="12" r="10" />
-            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-          </svg>
-          }
-          @case ('connect') {
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="m11 17 2 2a1 1 0 1 0 3-3" />
-            <path
-              d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />
-            <path d="m21 3 1 11h-2" />
-            <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />
-            <path d="M3 4h8" />
-          </svg>
-          }
-          }
-          <b aria-hidden="true">{{ step.stepNumber }}</b>
-        </span>
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.description }}</p>
-      </li>
+        <li>
+          <app-custom-how-it-works-step-tile [step]="step" [showConnector]="!last" />
+        </li>
       }
     </ol>
   </div>

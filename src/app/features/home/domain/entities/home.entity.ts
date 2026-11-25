@@ -1,3 +1,4 @@
+import type { HowItWorksStepTileData } from '../../../../shared/components/custom-how-it-works-step-tile/custom-how-it-works-step-tile';
 import { SkillCategoryIcon } from '../../../../shared/components/custom-skill-category-card/custom-skill-category-card';
 import { TeachingMode } from '../../../../shared/components/custom-teacher-card/custom-teacher-card';
 
@@ -46,12 +47,7 @@ export interface FeaturedTeacher {
   readonly verified?: boolean;
 }
 
-export interface HowItWorksStep {
-  readonly stepNumber: number;
-  readonly icon: 'discover' | 'explore' | 'connect';
-  readonly title: string;
-  readonly description: string;
-}
+export type HowItWorksStep = HowItWorksStepTileData;
 
 export interface HomeOverview {
   readonly popularSkills: readonly SkillSuggestion[];
