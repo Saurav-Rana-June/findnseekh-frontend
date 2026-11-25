@@ -199,11 +199,17 @@
 
 .tp-hero-name {
   font-family: var(--font-display, inherit);
-  font-size: clamp(1.6rem, 2.8vw, 2.05rem);
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: #111827;
   margin: 0;
   letter-spacing: -0.015em;
+}
+
+@media (max-width: 639px) {
+  .tp-hero-name {
+    font-size: var(--text-xl);
+  }
 }
 
 .tp-verified-pill {

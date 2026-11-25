@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { BreadcrumbItem, CustomBreadcrumb } from '../../../../../shared/components/custom-breadcrumb/custom-breadcrumb';
 import { CustomCloseOutlinedButton } from '../../../../../shared/components/custom-close-outlined-button/custom.close.outlined.button';
 import {
   CourseCardData,
@@ -27,6 +28,7 @@ import { SendTeacherEnquiryUseCase } from '../../../domain/use-cases/send-teache
   standalone: true,
   imports: [
     RouterLink,
+    CustomBreadcrumb,
     CustomCloseOutlinedButton,
     CustomPrimaryButton,
     CustomCourseCard,
@@ -45,6 +47,16 @@ export class TeacherCoursesPage implements OnInit {
   private readonly sendTeacherEnquiry = inject(SendTeacherEnquiryUseCase);
 
   protected readonly teacher = signal<Teacher | null>(null);
+
+  protected readonly courseCrumbs = computed((): readonly BreadcrumbItem[] => {
+    const teacher = this.teacher();
+    return [
+      { label: 'Home', route: '/' },
+      { label: 'Teachers', route: '/teachers' },
+      ...(teacher ? [{ label: teacher.name, route: ['/teachers', teacher.id] as const }] : []),
+      { label: 'Courses & Classes' },
+    ];
+  });
   protected readonly isLoading = signal<boolean>(true);
   protected readonly notFound = signal<boolean>(false);
 

@@ -3,13 +3,7 @@
   <header class="teachers-hero" aria-labelledby="teachers-hero-title">
     <div class="page-container">
       <!-- Breadcrumb Navigation -->
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <ol>
-          <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
-          <li aria-hidden="true" class="breadcrumb__sep">/</li>
-          <li aria-current="page" class="breadcrumb__current">Teachers</li>
-        </ol>
-      </nav>
+      <app-custom-breadcrumb [items]="breadcrumbs" />
 
       <div class="teachers-hero__content">
         <h1 id="teachers-hero-title" class="teachers-hero__title">

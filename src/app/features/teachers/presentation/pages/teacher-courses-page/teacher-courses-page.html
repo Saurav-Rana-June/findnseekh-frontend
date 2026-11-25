@@ -25,21 +25,7 @@
           (clicked)="onBackToProfile()"
         />
 
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <ol>
-            <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
-            <li class="breadcrumb__sep" aria-hidden="true">/</li>
-            <li><a routerLink="/teachers" class="breadcrumb__link">Teachers</a></li>
-            <li class="breadcrumb__sep" aria-hidden="true">/</li>
-            <li>
-              <a [routerLink]="['/teachers', teacher()!.id]" class="breadcrumb__link">
-                {{ teacher()!.name }}
-              </a>
-            </li>
-            <li class="breadcrumb__sep" aria-hidden="true">/</li>
-            <li class="breadcrumb__current" aria-current="page">Courses &amp; Classes</li>
-          </ol>
-        </nav>
+        <app-custom-breadcrumb [flush]="true" [items]="courseCrumbs()" />
       </div>
 
       <!-- Instructor Summary Header -->

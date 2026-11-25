@@ -60,9 +60,11 @@
     transform var(--dur-fast, 150ms) var(--ease, ease),
     background-color var(--dur-fast, 150ms) var(--ease, ease);
 
-  &:hover {
-    background: var(--color-primary-hover, #123e2d);
-    transform: scale(1.08);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: var(--color-primary-hover, #123e2d);
+      transform: scale(1.08);
+    }
   }
 
   &:focus-visible {

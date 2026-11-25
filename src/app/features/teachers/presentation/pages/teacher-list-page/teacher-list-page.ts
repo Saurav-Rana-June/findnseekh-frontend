@@ -9,7 +9,8 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BreadcrumbItem, CustomBreadcrumb } from '../../../../../shared/components/custom-breadcrumb/custom-breadcrumb';
 import { ComboFieldComponent } from '../../../../../shared/components/combo-field/combo-field';
 import { CustomDropdown, CustomDropdownOption } from '../../../../../shared/components/custom-dropdown/custom-dropdown';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
@@ -27,7 +28,7 @@ import { TeachersStore } from '../../state/teachers.store';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RouterLink,
+    CustomBreadcrumb,
     CustomTeacherCard,
     ComboFieldComponent,
     CustomDropdown,
@@ -39,6 +40,10 @@ import { TeachersStore } from '../../state/teachers.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeacherListPage implements OnInit {
+  protected readonly breadcrumbs: readonly BreadcrumbItem[] = [
+    { label: 'Home', route: '/' },
+    { label: 'Teachers' },
+  ];
   protected readonly store = inject(TeachersStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);

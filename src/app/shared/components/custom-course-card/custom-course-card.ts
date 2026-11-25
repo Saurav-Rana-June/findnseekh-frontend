@@ -57,6 +57,10 @@ export class CustomCourseCard {
   readonly showAction = input<boolean>(true);
   readonly badgeLabel = input<string>('');
   readonly badgeVariant = input<StatusPillVariant>('surface');
+  /** When true, the actions area is the projected `[course-actions]` content. */
+  readonly customActions = input<boolean>(false);
+  /** Optional price string. Falls back to the built-in currency formatter. */
+  readonly priceLabel = input<string>('');
 
   readonly enquire = output<CourseCardData>();
 
@@ -79,6 +83,10 @@ export class CustomCourseCard {
   });
 
   protected readonly priceFormatted = computed(() => {
+    const override = this.priceLabel();
+    if (override) {
+      return override;
+    }
     const c = this.course();
     const curr = c.currency === 'USD' ? '$' : '₹';
     const unit = c.priceUnit ? ` / ${c.priceUnit}` : '';

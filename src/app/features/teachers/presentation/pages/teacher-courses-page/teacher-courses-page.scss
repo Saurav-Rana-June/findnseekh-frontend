@@ -11,42 +11,6 @@
   gap: 14px;
   margin-bottom: 24px;
 
-  .breadcrumb {
-    margin-bottom: 0;
-  }
-}
-
-/* Breadcrumb */
-.breadcrumb {
-  ol {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 0.84rem;
-    color: var(--color-muted, #6b7280);
-  }
-
-  &__link {
-    color: var(--color-muted, #6b7280);
-    text-decoration: none;
-    transition: color var(--dur-fast, 150ms) ease;
-
-    &:hover {
-      color: var(--color-primary, #174e38);
-    }
-  }
-
-  &__sep {
-    color: #d1d5db;
-  }
-
-  &__current {
-    color: var(--color-text-primary, #111827);
-    font-weight: 600;
-  }
 }
 
 /* Header */

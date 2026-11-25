@@ -6,9 +6,13 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthStore } from '../../../../auth/presentation/state/auth.store';
+import { CustomBreadcrumb, BreadcrumbItem } from '../../../../../shared/components/custom-breadcrumb/custom-breadcrumb';
+import { CustomCourseCard } from '../../../../../shared/components/custom-course-card/custom-course-card';
+import { CustomInlineAlert } from '../../../../../shared/components/custom-inline-alert/custom-inline-alert';
 import { CustomModal } from '../../../../../shared/components/custom-modal/custom.modal';
+import { CustomPageHeader } from '../../../../../shared/components/custom-page-header/custom-page-header';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import {
   CustomStatusPill,
@@ -27,7 +31,10 @@ import { ListingFilterOption, ListingsStore } from '../../state/listings.store';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
+    CustomBreadcrumb,
+    CustomPageHeader,
+    CustomInlineAlert,
+    CustomCourseCard,
     CustomPrimaryButton,
     CustomStatusPill,
     CustomTextField,
@@ -43,6 +50,12 @@ export class ListingsPage implements OnInit {
   protected readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+
+  protected readonly breadcrumbs: readonly BreadcrumbItem[] = [
+    { label: 'Home', route: '/' },
+    { label: 'Profile', route: '/profile' },
+    { label: 'Teaching Listings' },
+  ];
 
   readonly isTeacher = computed(() =>
     Boolean(this.authStore.user()?.roles.includes('teacher')),

@@ -1,49 +1,22 @@
 <div class="listings-page">
   <div class="page-container">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <ol>
-        <li><a routerLink="/" class="breadcrumb__link">Home</a></li>
-        <li class="breadcrumb__sep" aria-hidden="true">/</li>
-        <li><a routerLink="/profile" class="breadcrumb__link">Profile</a></li>
-        <li class="breadcrumb__sep" aria-hidden="true">/</li>
-        <li class="breadcrumb__current" aria-current="page">Teaching Listings</li>
-      </ol>
-    </nav>
+    <app-custom-breadcrumb [items]="breadcrumbs" />
 
-    <!-- Header (matching requests-page) -->
-    <header class="listings-header">
-      <div class="listings-header__content">
-        <h1 class="listings-header__title">My Teaching Listings</h1>
-        <p class="listings-header__subtitle">
-          Manage your published subjects, pricing, and class details.
-        </p>
-      </div>
-
+    <app-custom-page-header
+      title="My Teaching Listings"
+      subtitle="Manage your published subjects, pricing, and class details."
+    >
       <app-custom-primary-button variant="primary" size="sm" label="+ Create Listing" (clicked)="onCreateNew()" />
-    </header>
+    </app-custom-page-header>
 
     <!-- Alerts -->
     @if (store.successMessage(); as msg) {
-    <div class="alert alert--success" role="status">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        aria-hidden="true">
-        <polyline points="20 6 9 17 4 12" />
-      </svg>
-      <span>{{ msg }}</span>
-    </div>
+      <app-custom-inline-alert variant="success" [message]="msg" />
     }
 
     @if (store.error(); as err) {
-    <div class="alert alert--error" role="alert">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="12" y1="8" x2="12" y2="12" />
-        <line x1="12" y1="16" x2="12.01" y2="16" />
-      </svg>
-      <span>{{ err }}</span>
-    </div>
+      <app-custom-inline-alert variant="error" [message]="err" />
     }
 
     <!-- Filter Bar (matching requests-page) -->
@@ -99,57 +72,35 @@
       } @else {
       <div class="listings-list">
         @for (listing of store.filteredListings(); track listing.id) {
-        <article class="listing-card">
-          <!-- Top Row: Title, Meta Info, Status -->
-          <div class="listing-card__top">
-            <div class="listing-card__main">
-              <h3 class="listing-card__title">{{ listing.title }}</h3>
-              <div class="listing-card__meta">
-                <span class="listing-card__category">{{ listing.categoryName }}</span>
-                <span class="listing-card__bullet" aria-hidden="true">&bull;</span>
-                <span class="listing-card__level">{{ listing.level }}</span>
-                <span class="listing-card__bullet" aria-hidden="true">&bull;</span>
-                <span class="listing-card__mode">
-                  {{ listing.teachingMode === 'online' ? 'Online' : listing.teachingMode === 'offline' ? 'In-Person' :
-                  'Online & In-Person' }}
-                  @if (listing.city) {
-                  &bull; {{ listing.city }}{{ listing.area ? ' (' + listing.area + ')' : '' }}
-                  }
-                </span>
-              </div>
-            </div>
-
-            <div class="listing-card__status">
-              <app-custom-status-pill [label]="getStatusLabel(listing.status)"
-                [variant]="getStatusVariant(listing.status)" size="sm" />
-            </div>
-          </div>
-
-          <!-- Description -->
-          <p class="listing-card__desc">{{ listing.description }}</p>
-
-          <!-- Actions Footer: Price on left, Actions on right (matching requests-page) -->
-          <div class="listing-card__footer">
-            <div class="listing-card__price">
-              <span class="listing-card__price-amount">{{ formatPrice(listing.priceAmount, listing.priceUnit) }}</span>
-            </div>
-
-            <div class="listing-card__actions-group">
-              <app-custom-primary-button variant="ghost" size="sm" label="Edit" (clicked)="onEdit(listing)" />
-
-              <app-custom-primary-button variant="ghost" size="sm" label="Delete"
-                (clicked)="openDeleteModal(listing)" />
-
-              @if (listing.status === 'published') {
-              <app-custom-primary-button variant="outline" size="sm" label="Pause"
-                [loading]="store.actionLoadingId() === listing.id" (clicked)="onToggleStatus(listing)" />
-              } @else {
-              <app-custom-primary-button variant="primary" size="sm" label="Publish"
-                [loading]="store.actionLoadingId() === listing.id" (clicked)="onToggleStatus(listing)" />
-              }
-            </div>
-          </div>
-        </article>
+        <app-custom-course-card
+          [course]="listing"
+          [customActions]="true"
+          [priceLabel]="formatPrice(listing.priceAmount, listing.priceUnit)"
+          [badgeLabel]="getStatusLabel(listing.status)"
+          [badgeVariant]="getStatusVariant(listing.status)"
+        >
+          <app-custom-primary-button course-actions variant="ghost" size="sm" label="Edit" (clicked)="onEdit(listing)" />
+          <app-custom-primary-button course-actions variant="ghost" size="sm" label="Delete" (clicked)="openDeleteModal(listing)" />
+          @if (listing.status === 'published') {
+            <app-custom-primary-button
+              course-actions
+              variant="outline"
+              size="sm"
+              label="Pause"
+              [loading]="store.actionLoadingId() === listing.id"
+              (clicked)="onToggleStatus(listing)"
+            />
+          } @else {
+            <app-custom-primary-button
+              course-actions
+              variant="primary"
+              size="sm"
+              label="Publish"
+              [loading]="store.actionLoadingId() === listing.id"
+              (clicked)="onToggleStatus(listing)"
+            />
+          }
+        </app-custom-course-card>
         }
       </div>
       }

@@ -11,7 +11,10 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BreadcrumbItem, CustomBreadcrumb } from '../../../../../shared/components/custom-breadcrumb/custom-breadcrumb';
+import { CustomInlineAlert } from '../../../../../shared/components/custom-inline-alert/custom-inline-alert';
+import { CustomPageHeader } from '../../../../../shared/components/custom-page-header/custom-page-header';
 import { CustomDropdownOption } from '../../../../../shared/components/custom-dropdown/custom-dropdown';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomCloseOutlinedButton } from '../../../../../shared/components/custom-close-outlined-button/custom.close.outlined.button';
@@ -34,7 +37,9 @@ import { ListingsStore } from '../../state/listings.store';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
+    CustomBreadcrumb,
+    CustomPageHeader,
+    CustomInlineAlert,
     CustomPrimaryButton,
     CustomCloseOutlinedButton,
     LoaderComponent,
@@ -55,6 +60,13 @@ export class ListingFormPage implements OnInit {
   readonly currentStep = signal<1 | 2 | 3>(1);
   readonly listingId = signal<number | null>(null);
   readonly isEditMode = computed(() => this.listingId() !== null);
+
+  readonly formCrumbs = computed((): readonly BreadcrumbItem[] => [
+    { label: 'Home', route: '/' },
+    { label: 'Profile', route: '/profile' },
+    { label: 'Teaching Listings', route: '/listings' },
+    { label: this.isEditMode() ? 'Edit Listing' : 'Create Listing' },
+  ]);
   readonly listingNotFound = signal<boolean>(false);
 
   readonly categoryOptions = signal<readonly CustomDropdownOption<number>[]>([

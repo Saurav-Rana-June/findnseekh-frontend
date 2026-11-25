@@ -10,6 +10,9 @@ import {
 import { RouterLink } from '@angular/router';
 import { AuthStore } from '../../../../auth/presentation/state/auth.store';
 import { CustomAvatarComponent } from '../../../../../shared/components/custom-avatar/custom-avatar';
+import { BreadcrumbItem, CustomBreadcrumb } from '../../../../../shared/components/custom-breadcrumb/custom-breadcrumb';
+import { CustomInlineAlert } from '../../../../../shared/components/custom-inline-alert/custom-inline-alert';
+import { CustomPageHeader } from '../../../../../shared/components/custom-page-header/custom-page-header';
 import { CustomModal } from '../../../../../shared/components/custom-modal/custom.modal';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import {
@@ -33,6 +36,9 @@ import {
   imports: [
     CommonModule,
     RouterLink,
+    CustomBreadcrumb,
+    CustomPageHeader,
+    CustomInlineAlert,
     CustomPrimaryButton,
     CustomAvatarComponent,
     CustomStatusPill,
@@ -44,6 +50,10 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestsPage implements OnInit {
+  protected readonly breadcrumbs: readonly BreadcrumbItem[] = [
+    { label: 'Home', route: '/' },
+    { label: 'My Enquiries' },
+  ];
   protected readonly store = inject(RequestsStore);
   protected readonly authStore = inject(AuthStore);
 

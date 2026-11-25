@@ -39,15 +39,19 @@
       <span class="course-card__price-amount">{{ priceFormatted() }}</span>
     </div>
 
-    @if (showAction()) {
+    @if (showAction() || customActions()) {
       <div class="course-card__actions-group">
-        <app-custom-primary-button
-          type="button"
-          [variant]="actionVariant()"
-          size="sm"
-          [label]="isSelected() && selectedLabel() !== 'Send Enquiry' ? selectedLabel() : actionLabel()"
-          (clicked)="onActionClick()"
-        />
+        @if (customActions()) {
+          <ng-content select="[course-actions]" />
+        } @else if (showAction()) {
+          <app-custom-primary-button
+            type="button"
+            [variant]="actionVariant()"
+            size="sm"
+            [label]="isSelected() && selectedLabel() !== 'Send Enquiry' ? selectedLabel() : actionLabel()"
+            (clicked)="onActionClick()"
+          />
+        }
       </div>
     }
   </div>
