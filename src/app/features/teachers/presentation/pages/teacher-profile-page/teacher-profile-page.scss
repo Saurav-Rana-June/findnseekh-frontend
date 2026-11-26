@@ -539,9 +539,12 @@
   align-items: baseline;
 }
 
-.tp-review-name {
-  font-size: var(--text-md);
+h4.tp-review-name {
+  font-family: var(--font-body, inherit);
+  font-size: var(--text-sm);
   font-weight: 600;
+  letter-spacing: normal;
+  line-height: var(--leading-normal, 1.5);
   color: #111827;
   margin: 0;
 }
@@ -553,8 +556,8 @@
 }
 
 .tp-review-comment {
-  font-size: var(--text-md);
-  line-height: var(--leading-relaxed, 1.6);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed, 1.55);
   color: #4b5563;
   margin: 0;
 }
@@ -679,6 +682,12 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+}
+
+.tp-more-teachers-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
 }
 
 /* Modal Form Styles */
@@ -847,7 +856,8 @@
   gap: 12px;
 }
 
-.tp-courses-view-all {
+.tp-courses-view-all,
+.tp-reviews-view-all {
   display: flex;
   justify-content: center;
   margin-top: 18px;
@@ -1119,6 +1129,10 @@
     margin-bottom: 18px;
   }
 
+  .tp-more-teachers-header-action {
+    display: none;
+  }
+
   .tp-more-teachers-title {
     font-size: var(--text-2xl);
   }
@@ -1128,14 +1142,25 @@
     gap: 16px;
   }
 
+  .tp-more-teachers-footer {
+    margin-top: 24px;
+    width: 100%;
+
+    app-custom-primary-button {
+      width: 100%;
+    }
+  }
+
   .tp-not-found__card {
     padding: 36px 22px;
   }
 
   :host ::ng-deep .tp-not-found__card app-custom-primary-button,
   :host ::ng-deep .tp-courses-view-all app-custom-primary-button,
+  :host ::ng-deep .tp-reviews-view-all app-custom-primary-button,
   :host ::ng-deep .tp-no-courses-box app-custom-primary-button,
   :host ::ng-deep .tp-more-teachers-header app-custom-primary-button,
+  :host ::ng-deep .tp-more-teachers-footer app-custom-primary-button,
   :host ::ng-deep .tp-modal-form__actions app-custom-primary-button {
     --cp-btn-min-height: var(--control-height-md);
     --cp-btn-padding-x: var(--control-padding-x-md);
@@ -1144,7 +1169,9 @@
   }
 
   :host ::ng-deep .tp-courses-view-all .cp-btn__icon,
-  :host ::ng-deep .tp-more-teachers-header .cp-btn__icon {
+  :host ::ng-deep .tp-reviews-view-all .cp-btn__icon,
+  :host ::ng-deep .tp-more-teachers-header .cp-btn__icon,
+  :host ::ng-deep .tp-more-teachers-footer .cp-btn__icon {
     width: var(--icon-size-md);
     height: var(--icon-size-md);
   }

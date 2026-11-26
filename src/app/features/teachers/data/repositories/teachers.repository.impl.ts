@@ -486,6 +486,20 @@ export class TeachersRepositoryImpl extends TeachersRepository {
           date: '2 months ago',
           comment: `Great guidance and step-by-step methodology. Always on time and very encouraging.`,
         },
+        {
+          id: 'rev-4',
+          studentName: 'Ananya Iyer',
+          rating: 5,
+          date: '2 months ago',
+          comment: `She is an incredible mentor who simplifies difficult concepts. Lessons are always engaging and tailored to my pace.`,
+        },
+        {
+          id: 'rev-5',
+          studentName: 'Vikram Malhotra',
+          rating: 4.9,
+          date: '3 months ago',
+          comment: `Dedicated, punctual, and highly skilled. The practice routines shared after sessions have been immensely helpful.`,
+        },
       ],
       faqs: teacher.faqs || [
         {

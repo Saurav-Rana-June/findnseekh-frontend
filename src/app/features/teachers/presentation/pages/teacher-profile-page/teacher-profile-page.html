@@ -334,7 +334,7 @@
           }
 
           <div class="tp-reviews-feed">
-            @for (rev of reviews; track rev.id) {
+            @for (rev of displayedReviews(); track rev.id) {
             <article class="tp-review-entry">
               <div class="tp-review-entry__user">
                 <span class="tp-review-avatar" aria-hidden="true">
@@ -357,6 +357,14 @@
             </article>
             }
           </div>
+
+          @if (reviews.length > 2) {
+          <div class="tp-reviews-view-all">
+            <app-custom-primary-button type="button" variant="outline" size="sm" trailingIcon="arrow-right"
+              [label]="isAllReviewsExpanded() ? 'Show fewer reviews' : ('View all ' + reviews.length + ' reviews')"
+              (clicked)="onToggleAllReviews()" />
+          </div>
+          }
 
           <p class="tp-reviews-disclaimer">
             Sample reviews for demonstration, not real platform data.
@@ -399,15 +407,22 @@
         <h2 id="more-teachers-heading" class="tp-more-teachers-title">
           More teachers you may like
         </h2>
-        <app-custom-primary-button variant="outline" trailingIcon="arrow-right"
-          [label]="'Browse all ' + teacher()!.category + ' teachers'" routerLink="/teachers"
-          [queryParams]="{ category: teacher()!.categoryId }" />
+        <div class="tp-more-teachers-header-action">
+          <app-custom-primary-button variant="outline" trailingIcon="arrow-right"
+            [label]="'Browse all ' + teacher()!.category + ' teachers'" routerLink="/teachers"
+            [queryParams]="{ category: teacher()!.categoryId }" />
+        </div>
       </div>
 
       <div class="tp-more-teachers-grid">
         @for (sim of similarTeachers(); track sim.id) {
         <app-custom-teacher-card [teacher]="sim" (viewProfile)="onViewTeacher($event)" />
         }
+      </div>
+
+      <div class="tp-more-teachers-footer">
+        <app-custom-primary-button variant="outline" size="md" trailingIcon="arrow-right"
+          label="Browse all teachers" routerLink="/teachers" />
       </div>
     </section>
     }

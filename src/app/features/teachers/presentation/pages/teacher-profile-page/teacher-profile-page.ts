@@ -29,7 +29,7 @@ import {
   TeachingMode,
 } from '../../../../../shared/components/custom-teacher-card/custom-teacher-card';
 import { TeacherAvatarComponent } from '../../../../../shared/components/teacher-avatar/teacher-avatar';
-import { Teacher, TeacherListing } from '../../../domain/entities/teacher.entity';
+import { Teacher, TeacherListing, TeacherReview } from '../../../domain/entities/teacher.entity';
 import { TeachersRepository } from '../../../domain/repositories/teachers.repository';
 import { GetTeacherByIdUseCase } from '../../../domain/use-cases/get-teacher-by-id.use-case';
 import { SendTeacherEnquiryUseCase } from '../../../domain/use-cases/send-teacher-enquiry.use-case';
@@ -87,6 +87,17 @@ export class TeacherProfilePage implements OnInit {
 
   protected readonly displayedCourses = computed<readonly TeacherListing[]>(() => {
     return (this.teacher()?.listings || []).slice(0, 3);
+  });
+
+  // Reviews state
+  protected readonly isAllReviewsExpanded = signal<boolean>(false);
+
+  protected readonly displayedReviews = computed<readonly TeacherReview[]>(() => {
+    const revs = this.teacher()?.reviews || [];
+    if (this.isAllReviewsExpanded()) {
+      return revs;
+    }
+    return revs.slice(0, 2);
   });
 
   // Save & Share states
@@ -266,6 +277,10 @@ export class TeacherProfilePage implements OnInit {
     if (t) {
       this.router.navigate(['/teachers', t.id, 'courses']);
     }
+  }
+
+  protected onToggleAllReviews(): void {
+    this.isAllReviewsExpanded.update((expanded) => !expanded);
   }
 
   protected onSelectListing(event: Event): void {

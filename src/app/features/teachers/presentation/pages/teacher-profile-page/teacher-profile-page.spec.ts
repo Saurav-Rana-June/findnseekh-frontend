@@ -146,5 +146,30 @@ describe('TeacherProfilePage', () => {
     });
     expect(component['bookingSuccess']()).toBe(true);
   });
+
+  it('toggles reviews expansion between top 2 and all reviews', () => {
+    expect(component['displayedReviews']().length).toBe(1);
+    expect(component['isAllReviewsExpanded']()).toBe(false);
+
+    const teacherWith3Reviews = {
+      ...MOCK_TEACHER,
+      reviews: [
+        { id: 'r1', studentName: 'Aarav', rating: 5, date: '1w', comment: 'Great' },
+        { id: 'r2', studentName: 'Pooja', rating: 5, date: '2w', comment: 'Awesome' },
+        { id: 'r3', studentName: 'Rohan', rating: 4, date: '3w', comment: 'Good' },
+      ],
+    };
+    component['teacher'].set(teacherWith3Reviews);
+    fixture.detectChanges();
+
+    expect(component['displayedReviews']().length).toBe(2);
+    component['onToggleAllReviews']();
+    expect(component['isAllReviewsExpanded']()).toBe(true);
+    expect(component['displayedReviews']().length).toBe(3);
+
+    component['onToggleAllReviews']();
+    expect(component['isAllReviewsExpanded']()).toBe(false);
+    expect(component['displayedReviews']().length).toBe(2);
+  });
 });
 
