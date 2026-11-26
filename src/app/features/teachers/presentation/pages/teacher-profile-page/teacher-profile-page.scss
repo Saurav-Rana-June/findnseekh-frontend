@@ -59,16 +59,18 @@
     }
 
     h2 {
-      font-size: 1.4rem;
+      font-family: var(--font-display, inherit);
+      font-size: var(--text-2xl);
       font-weight: 700;
       color: var(--color-text-primary, #111827);
       margin: 0;
     }
 
     p {
+      font-size: var(--text-md);
       color: var(--color-muted, #6b7280);
       margin: 0;
-      line-height: 1.5;
+      line-height: var(--leading-normal, 1.5);
     }
   }
 }
@@ -79,37 +81,11 @@
   align-items: center;
   gap: 14px;
   margin-bottom: 20px;
-}
+  min-width: 0;
 
-.tp-breadcrumb {
-  ol {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 0.86rem;
-    color: var(--color-muted, #6b7280);
-  }
-
-  &__link {
-    color: var(--color-muted, #6b7280);
-    text-decoration: none;
-    transition: color 150ms ease;
-
-    &:hover {
-      color: var(--color-primary, #174e38);
-    }
-  }
-
-  &__sep {
-    color: #d1d5db;
-  }
-
-  &__current {
-    color: var(--color-text-primary, #111827);
-    font-weight: 600;
+  app-custom-breadcrumb {
+    flex: 1;
+    min-width: 0;
   }
 }
 
@@ -199,16 +175,17 @@
 
 .tp-hero-name {
   font-family: var(--font-display, inherit);
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   font-weight: 700;
   color: #111827;
   margin: 0;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
+  line-height: var(--leading-tight, 1.15);
 }
 
 @media (max-width: 639px) {
   .tp-hero-name {
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
   }
 }
 
@@ -220,7 +197,7 @@
   color: #174e38;
   padding: 4px 11px;
   border-radius: 9999px;
-  font-size: 0.78rem;
+  font-size: var(--pill-font-sm, 0.78rem);
   font-weight: 600;
   border: 1px solid #dce8e1;
 }
@@ -240,14 +217,16 @@
   color: #1f2937;
   padding: 6px 16px;
   border-radius: 9999px;
-  font-size: 0.84rem;
+  font-size: var(--pill-font-md, 0.82rem);
   font-weight: 500;
   cursor: pointer;
   transition: all 150ms ease;
 
-  &:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+    }
   }
 
   &--active {
@@ -258,10 +237,11 @@
 }
 
 .tp-hero-specialty {
-  font-size: 1.05rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: #174e38;
   margin: 0;
+  line-height: var(--leading-normal, 1.4);
 }
 
 .tp-hero-pills {
@@ -280,7 +260,7 @@
   border: 1px solid #e5e7eb;
   padding: 5px 12px;
   border-radius: 9999px;
-  font-size: 0.82rem;
+  font-size: var(--pill-font-md, 0.82rem);
   font-weight: 500;
   color: #374151;
 }
@@ -293,12 +273,12 @@
   border: 1px solid #e5e7eb;
   padding: 5px 12px;
   border-radius: 9999px;
-  font-size: 0.82rem;
+  font-size: var(--pill-font-md, 0.82rem);
   color: #111827;
 
   .tp-star {
     color: #f59e0b;
-    font-size: 0.95rem;
+    font-size: var(--text-md);
   }
 
   strong {
@@ -307,7 +287,7 @@
 
   .tp-rating-count {
     color: #6b7280;
-    font-size: 0.8rem;
+    font-size: var(--text-xs);
   }
 }
 
@@ -338,14 +318,15 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.72rem;
-    font-weight: 600;
+    font-size: var(--text-xs);
+    font-weight: 500;
     color: #9ca3af;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   &__value {
-    font-size: 0.95rem;
+    font-size: var(--text-md);
     font-weight: 600;
     color: #111827;
   }
@@ -369,16 +350,17 @@
 
 .tp-section-heading {
   font-family: var(--font-display, inherit);
-  font-size: 1.35rem;
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: #111827;
   margin: 0 0 16px;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+  line-height: var(--leading-tight, 1.25);
 }
 
 .tp-section-paragraph {
-  font-size: 0.95rem;
-  line-height: 1.68;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed, 1.68);
   color: #4b5563;
   margin: 0;
 }
@@ -393,9 +375,9 @@
 .tp-skill-pill {
   background: #eef4f0;
   color: #174e38;
-  font-size: 0.88rem;
+  font-size: var(--pill-font-md, 0.82rem);
   font-weight: 500;
-  padding: 7px 18px;
+  padding: 6px 16px;
   border-radius: 9999px;
   border: 1px solid #dce8e1;
 }
@@ -429,25 +411,27 @@
   }
 
   &__title {
-    font-size: 1.05rem;
+    font-size: var(--text-lg);
     font-weight: 700;
     color: #111827;
     margin: 0;
+    line-height: var(--leading-tight, 1.3);
   }
 
   &__desc {
-    font-size: 0.88rem;
-    line-height: 1.5;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal, 1.5);
     color: #6b7280;
     margin: 0;
     flex: 1;
   }
 
   &__tag {
-    font-size: 0.84rem;
+    font-size: var(--text-xs);
     font-weight: 600;
     color: #174e38;
     margin-top: 4px;
+    letter-spacing: 0.02em;
   }
 }
 
@@ -464,8 +448,9 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 0.95rem;
-    color: #1f2937;
+    font-size: var(--text-md);
+    color: #4b5563;
+    line-height: var(--leading-relaxed, 1.68);
   }
 }
 
@@ -493,7 +478,8 @@
 }
 
 .tp-rating-large-score {
-  font-size: 2.6rem;
+  font-family: var(--font-display, inherit);
+  font-size: var(--text-display);
   font-weight: 800;
   color: #111827;
   line-height: 1;
@@ -507,13 +493,13 @@
 
 .tp-rating-stars-row {
   color: #f59e0b;
-  font-size: 1.15rem;
+  font-size: var(--text-lg);
   letter-spacing: 2px;
   line-height: 1;
 }
 
 .tp-rating-reviews-count {
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: #6b7280;
 }
 
@@ -541,7 +527,7 @@
   background: #dce8e1;
   color: #174e38;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: var(--text-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -554,27 +540,27 @@
 }
 
 .tp-review-name {
-  font-size: 0.92rem;
+  font-size: var(--text-md);
   font-weight: 600;
   color: #111827;
   margin: 0;
 }
 
 .tp-review-time {
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   color: #9ca3af;
   margin-left: 8px;
 }
 
 .tp-review-comment {
-  font-size: 0.92rem;
-  line-height: 1.55;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed, 1.68);
   color: #4b5563;
   margin: 0;
 }
 
 .tp-reviews-disclaimer {
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   color: #9ca3af;
   margin-top: 18px;
 }
@@ -606,13 +592,15 @@
   border: none;
   cursor: pointer;
   text-align: left;
-  font-size: 0.95rem;
+  font-size: var(--text-md);
   font-weight: 600;
   color: #111827;
   transition: color 150ms ease;
 
-  &:hover {
-    color: #174e38;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: #174e38;
+    }
   }
 }
 
@@ -627,8 +615,8 @@
 
 .tp-faq-answer {
   padding: 0 24px 20px;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed, 1.6);
   color: #4b5563;
 
   p {
@@ -646,25 +634,20 @@
   background: var(--color-surface, #f9fafb);
   border: 1px dashed var(--color-border, #e5e7eb);
   border-radius: var(--radius-md, 16px);
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 .tp-no-courses-title {
-  font-size: 1rem;
+  font-size: var(--text-md);
   font-weight: 600;
   color: var(--color-text-primary, #111827);
   margin: 0 0 4px;
 }
 
 .tp-no-courses-desc {
-  font-size: 0.88rem;
+  font-size: var(--text-sm);
   color: var(--color-muted, #6b7280);
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--leading-normal, 1.5);
 }
 
 /* More Teachers Section */
@@ -684,11 +667,12 @@
 
 .tp-more-teachers-title {
   font-family: var(--font-display, inherit);
-  font-size: 1.45rem;
+  font-size: var(--text-2xl);
   font-weight: 700;
   color: #111827;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
+  line-height: var(--leading-tight, 1.2);
 }
 
 .tp-more-teachers-grid {
@@ -712,7 +696,7 @@
     border-radius: 50%;
     background: #eef4f0;
     color: #174e38;
-    font-size: 1.6rem;
+    font-size: var(--text-2xl);
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -720,16 +704,17 @@
   }
 
   h3 {
-    font-size: 1.25rem;
+    font-family: var(--font-display, inherit);
+    font-size: var(--text-xl);
     font-weight: 700;
     color: #111827;
     margin: 0;
   }
 
   p {
-    font-size: 0.92rem;
+    font-size: var(--text-sm);
     color: #6b7280;
-    line-height: 1.5;
+    line-height: var(--leading-normal, 1.5);
     margin: 0;
     max-width: 380px;
   }
@@ -741,9 +726,9 @@
   gap: 18px;
 
   &__intro {
-    font-size: 0.92rem;
+    font-size: var(--text-sm);
     color: #4b5563;
-    line-height: 1.5;
+    line-height: var(--leading-normal, 1.5);
     margin: 0;
   }
 
@@ -754,7 +739,7 @@
   }
 
   &__label {
-    font-size: 0.86rem;
+    font-size: var(--field-label-font, 0.85rem);
     font-weight: 600;
     color: #374151;
   }
@@ -766,7 +751,7 @@
     padding: 10px 14px;
     border: 1px solid #d1d5db;
     border-radius: 10px;
-    font-size: 0.9rem;
+    font-size: var(--field-font-md, 0.95rem);
     color: #111827;
     background: #ffffff;
     font-family: inherit;
@@ -800,7 +785,7 @@
   border: 1px solid #d1d5db;
   background: #ffffff;
   color: #374151;
-  font-size: 0.84rem;
+  font-size: var(--pill-font-md, 0.82rem);
   font-weight: 500;
   cursor: pointer;
   transition: all 150ms ease;
@@ -813,6 +798,17 @@
   }
 }
 
+.tp-modal-error {
+  color: #b91c1c;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal, 1.4);
+  margin-bottom: 12px;
+  background: #fef2f2;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+}
+
 .tp-toast {
   display: inline-flex;
   align-items: center;
@@ -821,7 +817,7 @@
   color: #fff;
   padding: 6px 14px;
   border-radius: 9999px;
-  font-size: 0.82rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   margin-bottom: 14px;
   box-shadow: 0 4px 12px rgba(23, 78, 56, 0.2);
@@ -837,7 +833,7 @@
 }
 
 .tp-section-badge {
-  font-size: 0.76rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   color: #174e38;
   background: #eef4f0;
@@ -864,10 +860,14 @@
   padding: 16px 18px;
   transition: all 150ms ease;
 
-  &:hover, &--selected {
-    border-color: #174e38;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border-color: #174e38;
+    }
   }
+
   &--selected {
+    border-color: #174e38;
     background: #fbfdfc;
   }
   &__top {
@@ -882,7 +882,7 @@
     margin-bottom: 4px;
   }
   &__title {
-    font-size: 1rem;
+    font-size: var(--text-lg);
     font-weight: 700;
     color: #111827;
     margin: 0;
@@ -892,9 +892,9 @@
     white-space: nowrap;
   }
   &__desc {
-    font-size: 0.86rem;
+    font-size: var(--text-sm);
     color: #4b5563;
-    line-height: 1.45;
+    line-height: var(--leading-normal, 1.5);
     margin: 0 0 12px;
   }
   &__footer {
@@ -904,7 +904,7 @@
 }
 
 .tp-course-level-pill, .tp-course-mode-pill {
-  font-size: 0.72rem;
+  font-size: var(--text-xs);
   font-weight: 600;
   padding: 2px 7px;
   border-radius: 6px;
@@ -919,12 +919,12 @@
   background: #eef4f0;
 }
 .tp-course-price {
-  font-size: 1.1rem;
+  font-size: var(--text-xl);
   font-weight: 800;
   color: #174e38;
 }
 .tp-course-unit {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: #6b7280;
 }
 
@@ -939,7 +939,7 @@
 .tp-review-stars {
   display: inline-flex;
   gap: 1px;
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
 }
 
 .tp-selected-listing-banner {
@@ -947,7 +947,7 @@
   border-radius: 6px;
   padding: 5px 8px;
   margin-top: 8px;
-  font-size: 0.78rem;
+  font-size: var(--text-xs);
   display: flex;
   gap: 6px;
   .tp-selected-listing-badge { color: #174e38; font-weight: 600; }
@@ -959,7 +959,7 @@
   padding: 9px 12px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
-  font-size: 0.9rem;
+  font-size: var(--field-font-md, 0.95rem);
   color: #111827;
   background: #fff;
   outline: none;
@@ -989,7 +989,25 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
+  .tp-page {
+    padding-bottom: 64px;
+  }
+
+  .tp-container {
+    padding-top: 16px;
+  }
+
+  .tp-top-nav {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .tp-hero-card {
+    margin-bottom: 28px;
+    border-radius: 20px;
+  }
+
   .tp-hero-body {
     flex-direction: column;
     align-items: center;
@@ -1013,6 +1031,10 @@
     justify-content: center;
   }
 
+  .tp-hero-specialty {
+    font-size: var(--text-md);
+  }
+
   .tp-hero-stats {
     grid-template-columns: 1fr;
     padding: 16px 20px;
@@ -1024,12 +1046,107 @@
     }
   }
 
+  .tp-content-layout {
+    margin-bottom: 40px;
+  }
+
+  .tp-section {
+    margin-bottom: 28px;
+  }
+
+  .tp-section-heading {
+    font-size: var(--text-2xl);
+    margin-bottom: 12px;
+  }
+
+  .tp-section-paragraph,
+  .tp-credentials-list li,
+  .tp-review-comment {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed, 1.55);
+  }
+
+  .tp-credentials-list {
+    gap: 12px;
+  }
+
   .tp-lesson-cards-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tp-lesson-card {
+    padding: 18px;
+
+    &__title {
+      font-size: var(--text-md);
+    }
+
+    &__desc {
+      font-size: var(--text-sm);
+      line-height: var(--leading-normal, 1.45);
+    }
+  }
+
+  .tp-faq-trigger {
+    padding: 16px 18px;
+    font-size: var(--text-sm);
+  }
+
+  .tp-faq-answer {
+    padding: 0 18px 16px;
+    font-size: var(--text-sm);
+  }
+
+  .tp-no-courses-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .tp-no-courses-desc {
+    font-size: var(--text-sm);
+  }
+
+  .tp-more-teachers-section {
+    padding-top: 28px;
+  }
+
+  .tp-more-teachers-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .tp-more-teachers-title {
+    font-size: var(--text-2xl);
   }
 
   .tp-more-teachers-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
+  }
+
+  .tp-not-found__card {
+    padding: 36px 22px;
+  }
+
+  :host ::ng-deep .tp-not-found__card app-custom-primary-button,
+  :host ::ng-deep .tp-courses-view-all app-custom-primary-button,
+  :host ::ng-deep .tp-no-courses-box app-custom-primary-button,
+  :host ::ng-deep .tp-more-teachers-header app-custom-primary-button,
+  :host ::ng-deep .tp-modal-form__actions app-custom-primary-button {
+    --cp-btn-min-height: var(--control-height-md);
+    --cp-btn-padding-x: var(--control-padding-x-md);
+    --cp-btn-font-size: var(--control-font-md);
+    --cp-btn-gap: var(--control-gap);
+  }
+
+  :host ::ng-deep .tp-courses-view-all .cp-btn__icon,
+  :host ::ng-deep .tp-more-teachers-header .cp-btn__icon {
+    width: var(--icon-size-md);
+    height: var(--icon-size-md);
   }
 }

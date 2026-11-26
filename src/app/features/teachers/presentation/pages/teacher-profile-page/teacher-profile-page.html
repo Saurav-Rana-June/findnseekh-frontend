@@ -1,563 +1,493 @@
 <div class="tp-page">
   @if (isLoading()) {
-    <div class="tp-loading">
-      <div class="tp-spinner" aria-hidden="true"></div>
-      <p>Loading teacher profile...</p>
-    </div>
+  <div class="tp-loading">
+    <div class="tp-spinner" aria-hidden="true"></div>
+    <p>Loading teacher profile...</p>
+  </div>
   } @else if (notFound() || !teacher()) {
-    <div class="page-container tp-not-found">
-      <div class="tp-not-found__card">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
-        <h2>Teacher Profile Not Found</h2>
-        <p>The instructor profile you are looking for does not exist or may have been moved.</p>
-        <app-custom-primary-button
-          variant="primary"
-          size="md"
-          label="Browse All Teachers"
-          (clicked)="onBack()"
-        />
-      </div>
+  <div class="page-container tp-not-found">
+    <div class="tp-not-found__card">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      <h2>Teacher Profile Not Found</h2>
+      <p>The instructor profile you are looking for does not exist or may have been moved.</p>
+      <app-custom-primary-button variant="primary" size="md" label="Browse All Teachers" (clicked)="onBack()" />
     </div>
+  </div>
   } @else {
-    <div class="page-container tp-container">
-      <!-- Back Navigation & Breadcrumbs -->
-      <div class="tp-top-nav">
-        <app-custom-close-outlined-button
-          icon="back"
-          ariaLabel="Go back to teachers list"
-          (clicked)="onBack()"
-        />
+  <div class="page-container tp-container">
+    <!-- Back Navigation & Breadcrumbs -->
+    <div class="tp-top-nav">
+      <app-custom-close-outlined-button icon="back" ariaLabel="Go back to teachers list" (clicked)="onBack()" />
 
-        <nav class="tp-breadcrumb" aria-label="Breadcrumb">
-          <ol>
-            <li><a routerLink="/" class="tp-breadcrumb__link">Home</a></li>
-            <li aria-hidden="true" class="tp-breadcrumb__sep">/</li>
-            <li><a routerLink="/teachers" class="tp-breadcrumb__link">Teachers</a></li>
-            <li aria-hidden="true" class="tp-breadcrumb__sep">/</li>
-            <li aria-current="page" class="tp-breadcrumb__current">{{ teacher()!.name }}</li>
-          </ol>
-        </nav>
+      <app-custom-breadcrumb [flush]="true" [items]="profileCrumbs()" />
+    </div>
+
+    @if (isCopiedToast()) {
+    <div class="tp-toast" role="status">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+      <span>Profile link copied to clipboard!</span>
+    </div>
+    }
+
+    <!-- Hero Header Card with Forest Green Banner & Floating Avatar -->
+    <header class="tp-hero-card">
+      <!-- Banner with radial decorative rings -->
+      <div class="tp-hero-banner" aria-hidden="true">
+        <div class="tp-hero-banner__pattern"></div>
       </div>
 
-      @if (isCopiedToast()) {
-        <div class="tp-toast" role="status">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-          <span>Profile link copied to clipboard!</span>
-        </div>
-      }
-
-      <!-- Hero Header Card with Forest Green Banner & Floating Avatar -->
-      <header class="tp-hero-card">
-        <!-- Banner with radial decorative rings -->
-        <div class="tp-hero-banner" aria-hidden="true">
-          <div class="tp-hero-banner__pattern"></div>
-        </div>
-
-        <!-- Main Body -->
-        <div class="tp-hero-body">
-          <div class="tp-hero-avatar-wrap">
-            <div class="tp-hero-avatar">
-              <app-teacher-avatar [spec]="teacher()!.avatar" />
-            </div>
+      <!-- Main Body -->
+      <div class="tp-hero-body">
+        <div class="tp-hero-avatar-wrap">
+          <div class="tp-hero-avatar">
+            <app-teacher-avatar [spec]="teacher()!.avatar" />
           </div>
+        </div>
 
-          <div class="tp-hero-info">
-            <div class="tp-hero-info__header">
-              <div class="tp-hero-title-group">
-                <h1 class="tp-hero-name">{{ teacher()!.name }}</h1>
-                @if (teacher()!.verified) {
-                  <span class="tp-verified-pill" title="Verified by FindnSeekh">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <circle cx="12" cy="12" r="10" stroke="#174e38" stroke-width="2" fill="#eef4f0" />
-                      <path d="m8.5 12 2.5 2.5 4.5-5" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>Verified</span>
-                  </span>
-                }
-              </div>
-
-              <!-- Save & Share Action Buttons -->
-              <div class="tp-hero-actions">
-                <button
-                  type="button"
-                  class="tp-action-pill"
-                  [class.tp-action-pill--active]="isSaved()"
-                  (click)="onToggleSave()"
-                  aria-label="Save this teacher"
-                >
-                  <svg width="15" height="15" viewBox="0 0 24 24" [attr.fill]="isSaved() ? '#174e38' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                  <span>{{ isSaved() ? 'Saved' : 'Save' }}</span>
-                </button>
-
-                <button
-                  type="button"
-                  class="tp-action-pill"
-                  (click)="onShare()"
-                  aria-label="Share profile"
-                >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="18" cy="5" r="3" />
-                    <circle cx="6" cy="12" r="3" />
-                    <circle cx="18" cy="19" r="3" />
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                  </svg>
-                  <span>Share</span>
-                </button>
-              </div>
-            </div>
-
-            <p class="tp-hero-specialty">{{ teacher()!.specialty }}</p>
-
-            <!-- Pills Row -->
-            <div class="tp-hero-pills">
-              <app-custom-status-pill
-                variant="surface"
-                size="md"
-                [label]="teacher()!.category"
-              />
-
-              <span class="tp-mode-status-pill">
-                @if (teacher()!.teachingMode === 'online') {
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <rect width="20" height="14" x="2" y="3" rx="2" />
-                    <line x1="8" x2="16" y1="21" y2="21" />
-                    <line x1="12" x2="12" y1="17" y2="21" />
-                  </svg>
-                } @else if (teacher()!.teachingMode === 'offline') {
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                } @else {
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                }
-                <span>{{ modeBadge()?.label || 'Online & in person' }}</span>
+        <div class="tp-hero-info">
+          <div class="tp-hero-info__header">
+            <div class="tp-hero-title-group">
+              <h1 class="tp-hero-name">{{ teacher()!.name }}</h1>
+              @if (teacher()!.verified) {
+              <span class="tp-verified-pill" title="Verified by FindnSeekh">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" stroke="#174e38" stroke-width="2" fill="#eef4f0" />
+                  <path d="m8.5 12 2.5 2.5 4.5-5" stroke="#174e38" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                <span>Verified</span>
               </span>
-
-              @if (teacher()!.rating; as r) {
-                <div class="tp-hero-rating-pill">
-                  <span class="tp-star" aria-hidden="true">★</span>
-                  <strong>{{ r.value.toFixed(1) }}</strong>
-                  <span class="tp-rating-count">({{ r.count }} reviews)</span>
-                </div>
               }
             </div>
-          </div>
-        </div>
 
-        <!-- Bottom Stats Strip (4 columns) -->
-        <div class="tp-hero-stats">
-          <div class="tp-stat-col">
-            <div class="tp-stat-col__label">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <rect width="20" height="14" x="2" y="6" rx="2" />
-                <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-              </svg>
-              <span>EXPERIENCE</span>
+            <!-- Save & Share Action Buttons -->
+            <div class="tp-hero-actions">
+              <button type="button" class="tp-action-pill" [class.tp-action-pill--active]="isSaved()"
+                (click)="onToggleSave()" aria-label="Save this teacher">
+                <svg width="15" height="15" viewBox="0 0 24 24" [attr.fill]="isSaved() ? '#174e38' : 'none'"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true">
+                  <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                <span>{{ isSaved() ? 'Saved' : 'Save' }}</span>
+              </button>
+
+              <button type="button" class="tp-action-pill" (click)="onShare()" aria-label="Share profile">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="18" cy="5" r="3" />
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="19" r="3" />
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
+                <span>Share</span>
+              </button>
             </div>
-            <div class="tp-stat-col__value">{{ teacher()!.experienceYears }} years</div>
           </div>
 
-          <div class="tp-stat-col">
-            <div class="tp-stat-col__label">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <p class="tp-hero-specialty">{{ teacher()!.specialty }}</p>
+
+          <!-- Pills Row -->
+          <div class="tp-hero-pills">
+            <app-custom-status-pill variant="surface" size="md" [label]="teacher()!.category" />
+
+            <span class="tp-mode-status-pill">
+              @if (teacher()!.teachingMode === 'online') {
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <rect width="20" height="14" x="2" y="3" rx="2" />
+                <line x1="8" x2="16" y1="21" y2="21" />
+                <line x1="12" x2="12" y1="17" y2="21" />
+              </svg>
+              } @else if (teacher()!.teachingMode === 'offline') {
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              <span>LOCATION</span>
-            </div>
-            <div class="tp-stat-col__value">{{ teacher()!.location }}</div>
-          </div>
-
-          <div class="tp-stat-col">
-            <div class="tp-stat-col__label">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="2" x2="22" y1="12" y2="12" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              } @else {
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
               </svg>
-              <span>LANGUAGES</span>
-            </div>
-            <div class="tp-stat-col__value">
-              {{ teacher()!.languages ? teacher()!.languages!.join(', ') : 'English, Hindi' }}
-            </div>
-          </div>
+              }
+              <span>{{ modeBadge()?.label || 'Online & in person' }}</span>
+            </span>
 
-          <div class="tp-stat-col">
-            <div class="tp-stat-col__label">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              <span>RESPONSE</span>
+            @if (teacher()!.rating; as r) {
+            <div class="tp-hero-rating-pill">
+              <span class="tp-star" aria-hidden="true">★</span>
+              <strong>{{ r.value.toFixed(1) }}</strong>
+              <span class="tp-rating-count">({{ r.count }} reviews)</span>
             </div>
-            <div class="tp-stat-col__value">within 2 hours</div>
+            }
           </div>
         </div>
-      </header>
-
-      <!-- Main Two-Column Layout -->
-      <div class="tp-content-layout">
-        <!-- Left Content Column -->
-        <main class="tp-main-content">
-          <!-- Section 1: About [Teacher] -->
-          <section class="tp-section" aria-labelledby="about-heading">
-            <h2 id="about-heading" class="tp-section-heading">About {{ teacherFirstName() }}</h2>
-            <p class="tp-section-paragraph">{{ teacher()!.about }}</p>
-          </section>
-
-          <!-- Section 2: Skills & Topics -->
-          <section class="tp-section" aria-labelledby="skills-heading">
-            <h2 id="skills-heading" class="tp-section-heading">Skills & topics</h2>
-            <div class="tp-skills-pill-list">
-              @for (skill of teacher()!.skills; track skill) {
-                <span class="tp-skill-pill">{{ skill }}</span>
-              }
-            </div>
-          </section>
-
-          <!-- Section: Offered Classes & Courses -->
-          @if (teacher()!.listings && teacher()!.listings!.length > 0) {
-            <section class="tp-section" aria-labelledby="courses-heading">
-              <div class="tp-section-header-row">
-                <h2 id="courses-heading" class="tp-section-heading">Classes &amp; courses offered</h2>
-                <span class="tp-section-badge">{{ teacher()!.listings!.length }} classes</span>
-              </div>
-              <div class="tp-courses-grid">
-                @for (listing of displayedCourses(); track listing.id) {
-                  <app-custom-course-card
-                    [course]="listing"
-                    [isSelected]="selectedListingId() === listing.id"
-                    (enquire)="onEnquireForListing($event)"
-                  />
-                }
-              </div>
-
-              @if ((teacher()!.listings?.length || 0) > 3) {
-                <div class="tp-courses-view-all">
-                  <app-custom-primary-button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    trailingIcon="arrow-right"
-                    [label]="'View all ' + teacher()!.listings!.length + ' courses'"
-                    (clicked)="onViewAllCourses()"
-                  />
-                </div>
-              }
-            </section>
-          } @else {
-            <section class="tp-section" aria-labelledby="courses-heading">
-              <div class="tp-section-header-row">
-                <h2 id="courses-heading" class="tp-section-heading">Classes &amp; courses offered</h2>
-              </div>
-              <div class="tp-no-courses-box">
-                <div class="tp-no-courses-info">
-                  <p class="tp-no-courses-title">Direct Lesson Enquiry</p>
-                  <p class="tp-no-courses-desc">
-                    {{ teacher()!.name }} has not published specific courses yet. You can still reach out directly to inquire about custom lessons and schedule.
-                  </p>
-                </div>
-                <app-custom-primary-button
-                  variant="primary"
-                  size="sm"
-                  label="Send Enquiry"
-                  (clicked)="onOpenBooking('enquiry')"
-                />
-              </div>
-            </section>
-          }
-
-          <!-- Section 3: How Lessons Work -->
-          <section class="tp-section" aria-labelledby="how-lessons-work-heading">
-            <h2 id="how-lessons-work-heading" class="tp-section-heading">How lessons work</h2>
-            <div class="tp-lesson-cards-grid">
-              @if (teacher()!.teachingMode === 'online' || teacher()!.teachingMode === 'both') {
-                <div class="tp-lesson-card">
-                  <div class="tp-lesson-card__icon-box" aria-hidden="true">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect width="20" height="14" x="2" y="3" rx="2" />
-                      <line x1="8" x2="16" y1="21" y2="21" />
-                      <line x1="12" x2="12" y1="17" y2="21" />
-                    </svg>
-                  </div>
-                  <h3 class="tp-lesson-card__title">Online lessons</h3>
-                  <p class="tp-lesson-card__desc">
-                    One-on-one video sessions with notes and practice exercises after every class.
-                  </p>
-                  <span class="tp-lesson-card__tag">Available worldwide</span>
-                </div>
-              }
-
-              @if (teacher()!.teachingMode === 'offline' || teacher()!.teachingMode === 'both') {
-                <div class="tp-lesson-card">
-                  <div class="tp-lesson-card__icon-box" aria-hidden="true">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <h3 class="tp-lesson-card__title">In-person lessons</h3>
-                  <p class="tp-lesson-card__desc">
-                    At a studio or home visits in {{ teacher()!.city }} and nearby areas.
-                  </p>
-                  <span class="tp-lesson-card__tag">Local to {{ teacher()!.city }}</span>
-                </div>
-              }
-            </div>
-          </section>
-
-          <!-- Section 4: Qualifications & Credentials -->
-          @if (teacher()!.qualifications; as quals) {
-            <section class="tp-section" aria-labelledby="quals-heading">
-              <h2 id="quals-heading" class="tp-section-heading">Qualifications & credentials</h2>
-              <ul class="tp-credentials-list">
-                @for (q of quals; track q) {
-                  <li>
-                    <span class="tp-cred-check-circle" aria-hidden="true">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    </span>
-                    <span>{{ q }}</span>
-                  </li>
-                }
-              </ul>
-            </section>
-          }
-
-          <!-- Section 5: Student Reviews -->
-          @if (teacher()!.reviews; as reviews) {
-            <section class="tp-section" aria-labelledby="reviews-heading">
-              <h2 id="reviews-heading" class="tp-section-heading">Student reviews</h2>
-
-              @if (teacher()!.rating; as r) {
-                <div class="tp-rating-summary-card">
-                  <span class="tp-rating-large-score">{{ r.value.toFixed(1) }}</span>
-                  <div class="tp-rating-meta-block">
-                    <div class="tp-rating-stars-row" [attr.aria-label]="r.value + ' stars rating'">
-                      @for (star of [1, 2, 3, 4, 5]; track star) {
-                        <span class="tp-star" [class.tp-star--filled]="star <= getStarCount(r.value)" [class.tp-star--empty]="star > getStarCount(r.value)">★</span>
-                      }
-                    </div>
-                    <span class="tp-rating-reviews-count">Based on {{ r.count }} reviews</span>
-                  </div>
-                </div>
-              }
-
-              <div class="tp-reviews-feed">
-                @for (rev of reviews; track rev.id) {
-                  <article class="tp-review-entry">
-                    <div class="tp-review-entry__user">
-                      <span class="tp-review-avatar" aria-hidden="true">
-                        {{ rev.studentName.charAt(0) }}
-                      </span>
-                      <div class="tp-review-author-info">
-                        <div class="tp-review-author-top">
-                          <h4 class="tp-review-name">{{ rev.studentName }}</h4>
-                          <div class="tp-review-stars" aria-label="Rating">
-                            @for (star of [1, 2, 3, 4, 5]; track star) {
-                              <span class="tp-review-star" [class.tp-review-star--filled]="star <= getStarCount(rev.rating)">★</span>
-                            }
-                          </div>
-                        </div>
-                        <span class="tp-review-time">{{ rev.date }}</span>
-                      </div>
-                    </div>
-                    <p class="tp-review-comment">{{ rev.comment }}</p>
-                  </article>
-                }
-              </div>
-
-              <p class="tp-reviews-disclaimer">
-                Sample reviews for demonstration, not real platform data.
-              </p>
-            </section>
-          }
-
-          <!-- Section 6: Frequently Asked Questions -->
-          @if (teacher()!.faqs; as faqs) {
-            <section class="tp-section" aria-labelledby="faqs-heading">
-              <h2 id="faqs-heading" class="tp-section-heading">Frequently asked questions</h2>
-              <div class="tp-faq-card">
-                @for (faq of faqs; track faq.question; let idx = $index) {
-                  <div class="tp-faq-row" [class.tp-faq-row--open]="openFaqIndex() === idx">
-                    <button
-                      type="button"
-                      class="tp-faq-trigger"
-                      (click)="toggleFaq(idx)"
-                      [attr.aria-expanded]="openFaqIndex() === idx"
-                    >
-                      <span>{{ faq.question }}</span>
-                      <svg class="tp-faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="m6 9 6 6 6-6" />
-                      </svg>
-                    </button>
-                    @if (openFaqIndex() === idx) {
-                      <div class="tp-faq-answer">
-                        <p>{{ faq.answer }}</p>
-                      </div>
-                    }
-                  </div>
-                }
-              </div>
-            </section>
-          }
-        </main>
       </div>
 
-      <!-- More Teachers You May Like Section -->
-      @if (similarTeachers().length > 0) {
-        <section class="tp-more-teachers-section" aria-labelledby="more-teachers-heading">
-          <div class="tp-more-teachers-header">
-            <h2 id="more-teachers-heading" class="tp-more-teachers-title">
-              More teachers you may like
-            </h2>
-            <app-custom-primary-button
-              variant="outline"
-              trailingIcon="arrow-right"
-              [label]="'Browse all ' + teacher()!.category + ' teachers'"
-              routerLink="/teachers"
-              [queryParams]="{ category: teacher()!.categoryId }"
-            />
+      <!-- Bottom Stats Strip (4 columns) -->
+      <div class="tp-hero-stats">
+        <div class="tp-stat-col">
+          <div class="tp-stat-col__label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
+              <rect width="20" height="14" x="2" y="6" rx="2" />
+              <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+            </svg>
+            <span>EXPERIENCE</span>
           </div>
+          <div class="tp-stat-col__value">{{ teacher()!.experienceYears }} years</div>
+        </div>
 
-          <div class="tp-more-teachers-grid">
-            @for (sim of similarTeachers(); track sim.id) {
-              <app-custom-teacher-card
-                [teacher]="sim"
-                (viewProfile)="onViewTeacher($event)"
-              />
+        <div class="tp-stat-col">
+          <div class="tp-stat-col__label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>LOCATION</span>
+          </div>
+          <div class="tp-stat-col__value">{{ teacher()!.location }}</div>
+        </div>
+
+        <div class="tp-stat-col">
+          <div class="tp-stat-col__label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" x2="22" y1="12" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span>LANGUAGES</span>
+          </div>
+          <div class="tp-stat-col__value">
+            {{ teacher()!.languages ? teacher()!.languages!.join(', ') : 'English, Hindi' }}
+          </div>
+        </div>
+
+        <div class="tp-stat-col">
+          <div class="tp-stat-col__label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>RESPONSE</span>
+          </div>
+          <div class="tp-stat-col__value">within 2 hours</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Two-Column Layout -->
+    <div class="tp-content-layout">
+      <!-- Left Content Column -->
+      <main class="tp-main-content">
+        <!-- Section 1: About [Teacher] -->
+        <section class="tp-section" aria-labelledby="about-heading">
+          <h2 id="about-heading" class="tp-section-heading">About {{ teacherFirstName() }}</h2>
+          <p class="tp-section-paragraph">{{ teacher()!.about }}</p>
+        </section>
+
+        <!-- Section 2: Skills & Topics -->
+        <section class="tp-section" aria-labelledby="skills-heading">
+          <h2 id="skills-heading" class="tp-section-heading">Skills & topics</h2>
+          <div class="tp-skills-pill-list">
+            @for (skill of teacher()!.skills; track skill) {
+            <span class="tp-skill-pill">{{ skill }}</span>
             }
           </div>
         </section>
-      }
+
+        <!-- Section: Offered Classes & Courses -->
+        @if (teacher()!.listings && teacher()!.listings!.length > 0) {
+        <section class="tp-section" aria-labelledby="courses-heading">
+          <div class="tp-section-header-row">
+            <h2 id="courses-heading" class="tp-section-heading">Classes &amp; courses offered</h2>
+            <span class="tp-section-badge">{{ teacher()!.listings!.length }} classes</span>
+          </div>
+          <div class="tp-courses-grid">
+            @for (listing of displayedCourses(); track listing.id) {
+            <app-custom-course-card [course]="listing" [isSelected]="selectedListingId() === listing.id"
+              (enquire)="onEnquireForListing($event)" />
+            }
+          </div>
+
+          @if ((teacher()!.listings?.length || 0) > 3) {
+          <div class="tp-courses-view-all">
+            <app-custom-primary-button type="button" variant="outline" size="sm" trailingIcon="arrow-right"
+              [label]="'View all ' + teacher()!.listings!.length + ' courses'" (clicked)="onViewAllCourses()" />
+          </div>
+          }
+        </section>
+        } @else {
+        <section class="tp-section" aria-labelledby="courses-heading">
+          <div class="tp-section-header-row">
+            <h2 id="courses-heading" class="tp-section-heading">Classes &amp; courses offered</h2>
+          </div>
+          <div class="tp-no-courses-box">
+            <div class="tp-no-courses-info">
+              <p class="tp-no-courses-title">Direct Lesson Enquiry</p>
+              <p class="tp-no-courses-desc">
+                {{ teacher()!.name }} has not published specific courses yet. You can still reach out directly to
+                inquire about custom lessons and schedule.
+              </p>
+            </div>
+            <app-custom-primary-button variant="primary" size="sm" label="Send Enquiry"
+              (clicked)="onOpenBooking('enquiry')" />
+          </div>
+        </section>
+        }
+
+        <!-- Section 3: How Lessons Work -->
+        <section class="tp-section" aria-labelledby="how-lessons-work-heading">
+          <h2 id="how-lessons-work-heading" class="tp-section-heading">How lessons work</h2>
+          <div class="tp-lesson-cards-grid">
+            @if (teacher()!.teachingMode === 'online' || teacher()!.teachingMode === 'both') {
+            <div class="tp-lesson-card">
+              <div class="tp-lesson-card__icon-box" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="14" x="2" y="3" rx="2" />
+                  <line x1="8" x2="16" y1="21" y2="21" />
+                  <line x1="12" x2="12" y1="17" y2="21" />
+                </svg>
+              </div>
+              <h3 class="tp-lesson-card__title">Online lessons</h3>
+              <p class="tp-lesson-card__desc">
+                One-on-one video sessions with notes and practice exercises after every class.
+              </p>
+              <span class="tp-lesson-card__tag">Available worldwide</span>
+            </div>
+            }
+
+            @if (teacher()!.teachingMode === 'offline' || teacher()!.teachingMode === 'both') {
+            <div class="tp-lesson-card">
+              <div class="tp-lesson-card__icon-box" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <h3 class="tp-lesson-card__title">In-person lessons</h3>
+              <p class="tp-lesson-card__desc">
+                At a studio or home visits in {{ teacher()!.city }} and nearby areas.
+              </p>
+              <span class="tp-lesson-card__tag">Local to {{ teacher()!.city }}</span>
+            </div>
+            }
+          </div>
+        </section>
+
+        <!-- Section 4: Qualifications & Credentials -->
+        @if (teacher()!.qualifications; as quals) {
+        <section class="tp-section" aria-labelledby="quals-heading">
+          <h2 id="quals-heading" class="tp-section-heading">Qualifications & credentials</h2>
+          <ul class="tp-credentials-list">
+            @for (q of quals; track q) {
+            <li>
+              <span class="tp-cred-check-circle" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <span>{{ q }}</span>
+            </li>
+            }
+          </ul>
+        </section>
+        }
+
+        <!-- Section 5: Student Reviews -->
+        @if (teacher()!.reviews; as reviews) {
+        <section class="tp-section" aria-labelledby="reviews-heading">
+          <h2 id="reviews-heading" class="tp-section-heading">Student reviews</h2>
+
+          @if (teacher()!.rating; as r) {
+          <div class="tp-rating-summary-card">
+            <span class="tp-rating-large-score">{{ r.value.toFixed(1) }}</span>
+            <div class="tp-rating-meta-block">
+              <div class="tp-rating-stars-row" [attr.aria-label]="r.value + ' stars rating'">
+                @for (star of [1, 2, 3, 4, 5]; track star) {
+                <span class="tp-star" [class.tp-star--filled]="star <= getStarCount(r.value)"
+                  [class.tp-star--empty]="star > getStarCount(r.value)">★</span>
+                }
+              </div>
+              <span class="tp-rating-reviews-count">Based on {{ r.count }} reviews</span>
+            </div>
+          </div>
+          }
+
+          <div class="tp-reviews-feed">
+            @for (rev of reviews; track rev.id) {
+            <article class="tp-review-entry">
+              <div class="tp-review-entry__user">
+                <span class="tp-review-avatar" aria-hidden="true">
+                  {{ rev.studentName.charAt(0) }}
+                </span>
+                <div class="tp-review-author-info">
+                  <div class="tp-review-author-top">
+                    <h4 class="tp-review-name">{{ rev.studentName }}</h4>
+                    <div class="tp-review-stars" aria-label="Rating">
+                      @for (star of [1, 2, 3, 4, 5]; track star) {
+                      <span class="tp-review-star"
+                        [class.tp-review-star--filled]="star <= getStarCount(rev.rating)">★</span>
+                      }
+                    </div>
+                  </div>
+                  <span class="tp-review-time">{{ rev.date }}</span>
+                </div>
+              </div>
+              <p class="tp-review-comment">{{ rev.comment }}</p>
+            </article>
+            }
+          </div>
+
+          <p class="tp-reviews-disclaimer">
+            Sample reviews for demonstration, not real platform data.
+          </p>
+        </section>
+        }
+
+        <!-- Section 6: Frequently Asked Questions -->
+        @if (teacher()!.faqs; as faqs) {
+        <section class="tp-section" aria-labelledby="faqs-heading">
+          <h2 id="faqs-heading" class="tp-section-heading">Frequently asked questions</h2>
+          <div class="tp-faq-card">
+            @for (faq of faqs; track faq.question; let idx = $index) {
+            <div class="tp-faq-row" [class.tp-faq-row--open]="openFaqIndex() === idx">
+              <button type="button" class="tp-faq-trigger" (click)="toggleFaq(idx)"
+                [attr.aria-expanded]="openFaqIndex() === idx">
+                <span>{{ faq.question }}</span>
+                <svg class="tp-faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              @if (openFaqIndex() === idx) {
+              <div class="tp-faq-answer">
+                <p>{{ faq.answer }}</p>
+              </div>
+              }
+            </div>
+            }
+          </div>
+        </section>
+        }
+      </main>
     </div>
 
-    <!-- Enquiry Modal using reusable CustomModal -->
-    <app-custom-modal
-      [open]="isBookingOpen()"
-      [title]="'Send Enquiry to ' + teacher()!.name"
-      (closed)="onCloseBooking()"
-    >
-      @if (bookingSuccess()) {
-        <div class="tp-modal-success" role="status">
-          <div class="tp-modal-success__icon" aria-hidden="true">✓</div>
-          <h3>Enquiry Sent!</h3>
-          <p>
-            {{ teacher()!.name }} has received your enquiry. You will be notified with details within 2 hours.
-          </p>
-        </div>
-      } @else {
-        <div class="tp-modal-form">
-          <p class="tp-modal-form__intro">
-            Send an enquiry or lesson request to <strong>{{ teacher()!.name }}</strong>.
-          </p>
+    <!-- More Teachers You May Like Section -->
+    @if (similarTeachers().length > 0) {
+    <section class="tp-more-teachers-section" aria-labelledby="more-teachers-heading">
+      <div class="tp-more-teachers-header">
+        <h2 id="more-teachers-heading" class="tp-more-teachers-title">
+          More teachers you may like
+        </h2>
+        <app-custom-primary-button variant="outline" trailingIcon="arrow-right"
+          [label]="'Browse all ' + teacher()!.category + ' teachers'" routerLink="/teachers"
+          [queryParams]="{ category: teacher()!.categoryId }" />
+      </div>
 
-          @if (teacher()!.listings && teacher()!.listings!.length > 0) {
-            <div class="tp-modal-form__group">
-              <label for="booking-listing" class="tp-modal-form__label">Select Class or Subject:</label>
-              <select
-                id="booking-listing"
-                class="tp-modal-form__select"
-                [value]="selectedListingId() ?? ''"
-                (change)="onSelectListing($event)"
-              >
-                <option value="">General Teacher Enquiry</option>
-                @for (l of teacher()!.listings!; track l.id) {
-                  <option [value]="l.id">{{ l.title }} (₹{{ l.priceAmount }}/{{ l.priceUnit }})</option>
-                }
-              </select>
-            </div>
+      <div class="tp-more-teachers-grid">
+        @for (sim of similarTeachers(); track sim.id) {
+        <app-custom-teacher-card [teacher]="sim" (viewProfile)="onViewTeacher($event)" />
+        }
+      </div>
+    </section>
+    }
+  </div>
+
+  <!-- Enquiry Modal using reusable CustomModal -->
+  <app-custom-modal [open]="isBookingOpen()" [title]="'Send Enquiry to ' + teacher()!.name" (closed)="onCloseBooking()">
+    @if (bookingSuccess()) {
+    <div class="tp-modal-success" role="status">
+      <div class="tp-modal-success__icon" aria-hidden="true">✓</div>
+      <h3>Enquiry Sent!</h3>
+      <p>
+        {{ teacher()!.name }} has received your enquiry. You will be notified with details within 2 hours.
+      </p>
+    </div>
+    } @else {
+    <div class="tp-modal-form">
+      <p class="tp-modal-form__intro">
+        Send an enquiry or lesson request to <strong>{{ teacher()!.name }}</strong>.
+      </p>
+
+      @if (teacher()!.listings && teacher()!.listings!.length > 0) {
+      <div class="tp-modal-form__group">
+        <label for="booking-listing" class="tp-modal-form__label">Select Class or Subject:</label>
+        <select id="booking-listing" class="tp-modal-form__select" [value]="selectedListingId() ?? ''"
+          (change)="onSelectListing($event)">
+          <option value="">General Teacher Enquiry</option>
+          @for (l of teacher()!.listings!; track l.id) {
+          <option [value]="l.id">{{ l.title }} (₹{{ l.priceAmount }}/{{ l.priceUnit }})</option>
           }
-
-          <div class="tp-modal-form__group">
-            <label class="tp-modal-form__label">Choose Teaching Mode:</label>
-            <div class="tp-modal-modes">
-              @if (teacher()!.teachingMode === 'online' || teacher()!.teachingMode === 'both') {
-                <button
-                  type="button"
-                  class="tp-modal-mode-btn"
-                  [class.tp-modal-mode-btn--active]="selectedBookingMode() === 'online'"
-                  (click)="selectedBookingMode.set('online')"
-                >
-                  💻 Online (Google Meet)
-                </button>
-              }
-              @if (teacher()!.teachingMode === 'offline' || teacher()!.teachingMode === 'both') {
-                <button
-                  type="button"
-                  class="tp-modal-mode-btn"
-                  [class.tp-modal-mode-btn--active]="selectedBookingMode() === 'offline'"
-                  (click)="selectedBookingMode.set('offline')"
-                >
-                  📍 In-Person ({{ teacher()!.city }})
-                </button>
-              }
-            </div>
-          </div>
-
-          <div class="tp-modal-form__group">
-            <label for="booking-date" class="tp-modal-form__label">Preferred Date:</label>
-            <input
-              id="booking-date"
-              type="date"
-              class="tp-modal-form__input"
-              [min]="minDate()"
-              [value]="preferredDate()"
-              (input)="onDateChange($event)"
-            />
-          </div>
-
-          <div class="tp-modal-form__group">
-            <label for="booking-note" class="tp-modal-form__label">Message or learning goal (optional):</label>
-            <textarea
-              id="booking-note"
-              rows="3"
-              class="tp-modal-form__textarea"
-              [value]="bookingMessage()"
-              (input)="onMessageChange($event)"
-              placeholder="Hi {{ teacher()!.name }}, I'm interested in starting lessons as a beginner..."
-            ></textarea>
-          </div>
-
-          @if (bookingError()) {
-            <div class="tp-modal-error" role="alert" style="color: #b91c1c; font-size: 13px; margin-bottom: 12px; background: #fef2f2; padding: 8px 12px; border-radius: 6px; border: 1px solid #fecaca;">
-              {{ bookingError() }}
-            </div>
-          }
-
-          <div class="tp-modal-form__actions">
-            <app-custom-primary-button
-              variant="outline"
-              size="md"
-              label="Cancel"
-              (clicked)="onCloseBooking()"
-            />
-            <app-custom-primary-button
-              variant="primary"
-              size="md"
-              [disabled]="isSubmittingBooking()"
-              [label]="isSubmittingBooking() ? 'Sending...' : 'Send Enquiry'"
-              (clicked)="onConfirmBooking()"
-            />
-          </div>
-        </div>
+        </select>
+      </div>
       }
-    </app-custom-modal>
+
+      <div class="tp-modal-form__group">
+        <label class="tp-modal-form__label">Choose Teaching Mode:</label>
+        <div class="tp-modal-modes">
+          @if (teacher()!.teachingMode === 'online' || teacher()!.teachingMode === 'both') {
+          <button type="button" class="tp-modal-mode-btn"
+            [class.tp-modal-mode-btn--active]="selectedBookingMode() === 'online'"
+            (click)="selectedBookingMode.set('online')">
+            💻 Online (Google Meet)
+          </button>
+          }
+          @if (teacher()!.teachingMode === 'offline' || teacher()!.teachingMode === 'both') {
+          <button type="button" class="tp-modal-mode-btn"
+            [class.tp-modal-mode-btn--active]="selectedBookingMode() === 'offline'"
+            (click)="selectedBookingMode.set('offline')">
+            📍 In-Person ({{ teacher()!.city }})
+          </button>
+          }
+        </div>
+      </div>
+
+      <div class="tp-modal-form__group">
+        <label for="booking-date" class="tp-modal-form__label">Preferred Date:</label>
+        <input id="booking-date" type="date" class="tp-modal-form__input" [min]="minDate()" [value]="preferredDate()"
+          (input)="onDateChange($event)" />
+      </div>
+
+      <div class="tp-modal-form__group">
+        <label for="booking-note" class="tp-modal-form__label">Message or learning goal (optional):</label>
+        <textarea id="booking-note" rows="3" class="tp-modal-form__textarea" [value]="bookingMessage()"
+          (input)="onMessageChange($event)"
+          placeholder="Hi {{ teacher()!.name }}, I'm interested in starting lessons as a beginner..."></textarea>
+      </div>
+
+      @if (bookingError()) {
+      <div class="tp-modal-error" role="alert">
+        {{ bookingError() }}
+      </div>
+      }
+
+      <div class="tp-modal-form__actions">
+        <app-custom-primary-button variant="outline" size="md" label="Cancel" (clicked)="onCloseBooking()" />
+        <app-custom-primary-button variant="primary" size="md" [disabled]="isSubmittingBooking()"
+          [label]="isSubmittingBooking() ? 'Sending...' : 'Send Enquiry'" (clicked)="onConfirmBooking()" />
+      </div>
+    </div>
+    }
+  </app-custom-modal>
   }
 </div>

@@ -11,6 +11,10 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {
+  BreadcrumbItem,
+  CustomBreadcrumb,
+} from '../../../../../shared/components/custom-breadcrumb/custom-breadcrumb';
 import { CustomCloseOutlinedButton } from '../../../../../shared/components/custom-close-outlined-button/custom.close.outlined.button';
 import {
   CourseCardData,
@@ -34,6 +38,7 @@ import { SendTeacherEnquiryUseCase } from '../../../domain/use-cases/send-teache
   selector: 'app-teacher-profile-page',
   imports: [
     RouterLink,
+    CustomBreadcrumb,
     CustomCloseOutlinedButton,
     CustomPrimaryButton,
     CustomStatusPill,
@@ -94,6 +99,15 @@ export class TeacherProfilePage implements OnInit {
   protected readonly teacherFirstName = computed(() => {
     const name = this.teacher()?.name;
     return name ? name.split(' ')[0] : 'Instructor';
+  });
+
+  protected readonly profileCrumbs = computed((): readonly BreadcrumbItem[] => {
+    const t = this.teacher();
+    return [
+      { label: 'Home', route: '/' },
+      { label: 'Teachers', route: '/teachers' },
+      { label: t?.name ?? 'Profile' },
+    ];
   });
 
   protected readonly modeBadge = computed(() => {
