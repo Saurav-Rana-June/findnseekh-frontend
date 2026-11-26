@@ -554,7 +554,7 @@
 
 .tp-review-comment {
   font-size: var(--text-md);
-  line-height: var(--leading-relaxed, 1.68);
+  line-height: var(--leading-relaxed, 1.6);
   color: #4b5563;
   margin: 0;
 }
@@ -1060,8 +1060,7 @@
   }
 
   .tp-section-paragraph,
-  .tp-credentials-list li,
-  .tp-review-comment {
+  .tp-credentials-list li {
     font-size: var(--text-sm);
     line-height: var(--leading-relaxed, 1.55);
   }
