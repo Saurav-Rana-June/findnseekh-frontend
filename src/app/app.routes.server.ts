@@ -10,6 +10,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server,
   },
   {
+    path: 'teachers/:id/reviews',
+    renderMode: RenderMode.Server,
+  },
+  {
     path: 'listings/:id/edit',
     renderMode: RenderMode.Server,
   },

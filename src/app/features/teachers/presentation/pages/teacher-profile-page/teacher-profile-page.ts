@@ -90,14 +90,8 @@ export class TeacherProfilePage implements OnInit {
   });
 
   // Reviews state
-  protected readonly isAllReviewsExpanded = signal<boolean>(false);
-
   protected readonly displayedReviews = computed<readonly TeacherReview[]>(() => {
-    const revs = this.teacher()?.reviews || [];
-    if (this.isAllReviewsExpanded()) {
-      return revs;
-    }
-    return revs.slice(0, 2);
+    return (this.teacher()?.reviews || []).slice(0, 2);
   });
 
   // Save & Share states
@@ -279,8 +273,11 @@ export class TeacherProfilePage implements OnInit {
     }
   }
 
-  protected onToggleAllReviews(): void {
-    this.isAllReviewsExpanded.update((expanded) => !expanded);
+  protected onViewAllReviews(): void {
+    const t = this.teacher();
+    if (t) {
+      this.router.navigate(['/teachers', t.id, 'reviews']);
+    }
   }
 
   protected onSelectListing(event: Event): void {
@@ -353,7 +350,6 @@ export class TeacherProfilePage implements OnInit {
 
   protected onViewTeacher(t: TeacherCardData): void {
     this.router.navigate(['/teachers', t.id]);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
 

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { TeachersRepository } from '../../../domain/repositories/teachers.repository';
 import { GetTeacherByIdUseCase } from '../../../domain/use-cases/get-teacher-by-id.use-case';
@@ -147,9 +147,8 @@ describe('TeacherProfilePage', () => {
     expect(component['bookingSuccess']()).toBe(true);
   });
 
-  it('toggles reviews expansion between top 2 and all reviews', () => {
+  it('limits displayed reviews to top 2 reviews', () => {
     expect(component['displayedReviews']().length).toBe(1);
-    expect(component['isAllReviewsExpanded']()).toBe(false);
 
     const teacherWith3Reviews = {
       ...MOCK_TEACHER,
@@ -163,13 +162,14 @@ describe('TeacherProfilePage', () => {
     fixture.detectChanges();
 
     expect(component['displayedReviews']().length).toBe(2);
-    component['onToggleAllReviews']();
-    expect(component['isAllReviewsExpanded']()).toBe(true);
-    expect(component['displayedReviews']().length).toBe(3);
+  });
 
-    component['onToggleAllReviews']();
-    expect(component['isAllReviewsExpanded']()).toBe(false);
-    expect(component['displayedReviews']().length).toBe(2);
+  it('navigates to reviews page when onViewAllReviews is invoked', () => {
+    const router = TestBed.inject(Router);
+    const navSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+
+    component['onViewAllReviews']();
+    expect(navSpy).toHaveBeenCalledWith(['/teachers', 'ananya-verma', 'reviews']);
   });
 });
 

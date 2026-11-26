@@ -326,8 +326,9 @@
   }
 
   &__value {
-    font-size: var(--text-md);
+    font-size: var(--text-sm);
     font-weight: 600;
+    line-height: var(--leading-normal, 1.45);
     color: #111827;
   }
 }
@@ -684,12 +685,6 @@ h4.tp-review-name {
   gap: 24px;
 }
 
-.tp-more-teachers-footer {
-  display: flex;
-  justify-content: center;
-  margin-top: 32px;
-}
-
 /* Modal Form Styles */
 .tp-modal-success {
   display: flex;
@@ -857,7 +852,8 @@ h4.tp-review-name {
 }
 
 .tp-courses-view-all,
-.tp-reviews-view-all {
+.tp-reviews-view-all,
+.tp-more-teachers-footer {
   display: flex;
   justify-content: center;
   margin-top: 18px;
@@ -1140,15 +1136,6 @@ h4.tp-review-name {
   .tp-more-teachers-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
-  }
-
-  .tp-more-teachers-footer {
-    margin-top: 24px;
-    width: 100%;
-
-    app-custom-primary-button {
-      width: 100%;
-    }
   }
 
   .tp-not-found__card {

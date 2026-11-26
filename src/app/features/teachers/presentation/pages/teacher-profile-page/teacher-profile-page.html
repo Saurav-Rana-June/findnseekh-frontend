@@ -361,8 +361,8 @@
           @if (reviews.length > 2) {
           <div class="tp-reviews-view-all">
             <app-custom-primary-button type="button" variant="outline" size="sm" trailingIcon="arrow-right"
-              [label]="isAllReviewsExpanded() ? 'Show fewer reviews' : ('View all ' + reviews.length + ' reviews')"
-              (clicked)="onToggleAllReviews()" />
+              [label]="'View all ' + reviews.length + ' reviews'"
+              (clicked)="onViewAllReviews()" />
           </div>
           }
 
@@ -421,7 +421,7 @@
       </div>
 
       <div class="tp-more-teachers-footer">
-        <app-custom-primary-button variant="outline" size="md" trailingIcon="arrow-right"
+        <app-custom-primary-button type="button" variant="outline" size="sm" trailingIcon="arrow-right"
           label="Browse all teachers" routerLink="/teachers" />
       </div>
     </section>

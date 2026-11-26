@@ -48,6 +48,14 @@ export const TEACHERS_ROUTES: Routes = [
           ),
         title: 'Courses & Classes — FindnSeekh',
       },
+      {
+        path: ':id/reviews',
+        loadComponent: () =>
+          import('./pages/teacher-reviews-page/teacher-reviews-page').then(
+            (m) => m.TeacherReviewsPage,
+          ),
+        title: 'Student Reviews — FindnSeekh',
+      },
     ],
   },
 ];

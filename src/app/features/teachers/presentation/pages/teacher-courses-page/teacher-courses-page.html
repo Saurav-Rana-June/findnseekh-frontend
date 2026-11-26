@@ -76,12 +76,6 @@
           </svg>
           <h3>No Courses Listed Yet</h3>
           <p>{{ teacher()!.name }} has not published any specific courses yet. You can still reach out via direct enquiry.</p>
-          <app-custom-primary-button
-            variant="outline"
-            size="sm"
-            label="Back to Teacher Profile"
-            (clicked)="onBackToProfile()"
-          />
         </div>
       } @else {
         <div class="courses-list">
