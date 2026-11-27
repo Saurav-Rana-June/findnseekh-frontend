@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbItem, CustomBreadcrumb } from '../../../../../shared/components/custom-breadcrumb/custom-breadcrumb';
 import { ComboFieldComponent } from '../../../../../shared/components/combo-field/combo-field';
 import { CustomDropdown, CustomDropdownOption } from '../../../../../shared/components/custom-dropdown/custom-dropdown';
+import { CustomPagination } from '../../../../../shared/components/custom-pagination/custom.pagination';
 import { CustomPrimaryButton } from '../../../../../shared/components/custom-primary-button/custom.primary.button';
 import { CustomStatusPill } from '../../../../../shared/components/custom-status-pill/custom.status.pill';
 import {
@@ -32,6 +33,7 @@ import { TeachersStore } from '../../state/teachers.store';
     CustomTeacherCard,
     ComboFieldComponent,
     CustomDropdown,
+    CustomPagination,
     CustomPrimaryButton,
     CustomStatusPill,
   ],
@@ -53,15 +55,17 @@ export class TeacherListPage implements OnInit {
   protected readonly localSkill = signal<string>('');
   protected readonly localLocation = signal<string>('');
 
-  // Pagination / slice count
-  protected readonly visibleCount = signal<number>(9);
+  // Pagination state
+  protected readonly currentPage = signal<number>(1);
+  protected readonly pageSize = signal<number>(9);
 
   // Filters drawer toggle
   protected readonly showFilterDrawer = signal<boolean>(false);
 
-  // Sliced teachers for display
+  // Sliced teachers for current page display
   protected readonly displayedTeachers = computed(() => {
-    return this.store.filteredTeachers().slice(0, this.visibleCount());
+    const start = (this.currentPage() - 1) * this.pageSize();
+    return this.store.filteredTeachers().slice(start, start + this.pageSize());
   });
 
   protected readonly modeOptions: readonly { readonly id: TeachingMode | 'all'; readonly label: string }[] = [
@@ -111,46 +115,51 @@ export class TeacherListPage implements OnInit {
     if (event) {
       event.preventDefault();
     }
-    this.visibleCount.set(9);
+    this.currentPage.set(1);
     this.store.setSearchQuery(this.localSkill());
     this.store.setLocationQuery(this.localLocation());
     this.updateUrlParams();
   }
 
   protected onCategorySelect(categoryId: string): void {
-    this.visibleCount.set(9);
+    this.currentPage.set(1);
     this.store.setSelectedCategory(categoryId);
     this.updateUrlParams();
   }
 
   protected onModeSelect(mode: TeachingMode | 'all'): void {
-    this.visibleCount.set(9);
+    this.currentPage.set(1);
     this.store.setSelectedMode(mode);
     this.updateUrlParams();
   }
 
   protected onExperienceChange(value: number): void {
-    this.visibleCount.set(9);
+    this.currentPage.set(1);
     this.store.setSelectedExperience(value);
   }
 
   protected onSortChange(value: TeacherSortOption): void {
+    this.currentPage.set(1);
     this.store.setSortBy(value);
   }
 
   protected onExperienceSelect(event: Event): void {
     const value = Number((event.target as HTMLSelectElement).value);
-    this.visibleCount.set(9);
+    this.currentPage.set(1);
     this.store.setSelectedExperience(value);
   }
 
   protected onSortSelect(event: Event): void {
     const value = (event.target as HTMLSelectElement).value as TeacherSortOption;
+    this.currentPage.set(1);
     this.store.setSortBy(value);
   }
 
-  protected onShowMore(): void {
-    this.visibleCount.update((count) => count + 9);
+  protected onPageChange(page: number): void {
+    this.currentPage.set(page);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   protected toggleFilterDrawer(): void {
@@ -160,7 +169,7 @@ export class TeacherListPage implements OnInit {
   protected onResetFilters(): void {
     this.localSkill.set('');
     this.localLocation.set('');
-    this.visibleCount.set(9);
+    this.currentPage.set(1);
     this.showFilterDrawer.set(false);
     this.store.resetFilters();
     this.router.navigate([], {
@@ -171,14 +180,14 @@ export class TeacherListPage implements OnInit {
 
   protected onClearSkill(): void {
     this.localSkill.set('');
-    this.visibleCount.set(9);
+    this.currentPage.set(1);
     this.store.setSearchQuery('');
     this.updateUrlParams();
   }
 
   protected onClearLocation(): void {
     this.localLocation.set('');
-    this.visibleCount.set(9);
+    this.currentPage.set(1);
     this.store.setLocationQuery('');
     this.updateUrlParams();
   }

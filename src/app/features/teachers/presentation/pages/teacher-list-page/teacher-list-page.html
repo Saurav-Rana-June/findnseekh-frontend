@@ -196,17 +196,12 @@
 
       <!-- Bottom Pagination & Disclaimer -->
       <footer class="teachers-pagination-footer">
-        <p class="pagination-info">Showing {{ displayedTeachers().length }} of {{ store.totalCount() }}</p>
-
-        @if (displayedTeachers().length < store.totalCount()) {
-          <app-custom-primary-button
-            variant="outline"
-            size="md"
-            shape="pill"
-            label="Show more teachers"
-            (clicked)="onShowMore()"
-          />
-        }
+        <app-custom-pagination
+          [currentPage]="currentPage()"
+          [pageSize]="pageSize()"
+          [totalItems]="store.totalCount()"
+          (pageChange)="onPageChange($event)"
+        />
 
         <p class="sample-disclaimer">
           Sample teachers for demonstration. Ratings and verification badges are illustrative.

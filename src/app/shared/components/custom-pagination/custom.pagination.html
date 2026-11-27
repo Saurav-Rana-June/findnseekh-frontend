@@ -1,0 +1,91 @@
+@if (totalItems() > 0) {
+  <nav
+    class="custom-pagination"
+    [class.custom-pagination--card]="variant() === 'card'"
+    [class.custom-pagination--inline]="variant() === 'inline'"
+    aria-label="Pagination Navigation"
+  >
+    @if (showItemCount()) {
+      <div class="custom-pagination__info-wrap">
+        <p class="custom-pagination__info">
+          Showing <strong>{{ startItem() }}</strong>&ndash;<strong>{{ endItem() }}</strong> of
+          <strong>{{ totalItems() }}</strong> {{ itemLabel() }}
+        </p>
+      </div>
+    }
+
+    @if (totalPages() > 1) {
+      <div class="custom-pagination__controls" role="group" aria-label="Page controls">
+        <!-- Previous Page Button -->
+        <button
+          type="button"
+          class="custom-pagination__btn custom-pagination__btn--nav custom-pagination__btn--prev"
+          [disabled]="!hasPrev()"
+          (click)="prevPage()"
+          aria-label="Go to previous page"
+        >
+          <svg
+            class="custom-pagination__icon"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          <span class="custom-pagination__nav-label">Previous</span>
+        </button>
+
+        <!-- Page Numbers & Ellipses -->
+        <div class="custom-pagination__pages">
+          @for (item of pageItems(); track (item.type === 'page' ? 'p-' + item.page : item.id)) {
+            @if (item.type === 'page') {
+              <button
+                type="button"
+                class="custom-pagination__btn custom-pagination__btn--page"
+                [class.is-active]="item.page === currentPage()"
+                [attr.aria-current]="item.page === currentPage() ? 'page' : null"
+                [attr.aria-label]="'Page ' + item.page"
+                (click)="goToPage(item.page)"
+              >
+                {{ item.page }}
+              </button>
+            } @else {
+              <span class="custom-pagination__ellipsis" aria-hidden="true">&hellip;</span>
+            }
+          }
+        </div>
+
+        <!-- Next Page Button -->
+        <button
+          type="button"
+          class="custom-pagination__btn custom-pagination__btn--nav custom-pagination__btn--next"
+          [disabled]="!hasNext()"
+          (click)="nextPage()"
+          aria-label="Go to next page"
+        >
+          <span class="custom-pagination__nav-label">Next</span>
+          <svg
+            class="custom-pagination__icon"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+    }
+  </nav>
+}

@@ -293,25 +293,20 @@
 
 /* Bottom Pagination & Disclaimer Footer */
 .teachers-pagination-footer {
-  margin-top: 56px;
+  margin-top: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: 14px;
-}
-
-.pagination-info {
-  font-size: 0.88rem;
-  color: var(--color-muted, #6b7280);
-  margin: 0;
+  width: 100%;
 }
 
 .sample-disclaimer {
-  font-size: 0.8rem;
+  font-size: var(--text-xs, 0.8rem);
   color: #9ca3af;
-  margin: 18px 0 0;
+  margin: 20px 0 0;
   max-width: 600px;
+  text-align: center;
+  line-height: var(--leading-normal, 1.5);
 }
 
 /* Empty State */
