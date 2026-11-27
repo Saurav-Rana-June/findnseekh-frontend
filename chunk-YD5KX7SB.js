@@ -1,1 +1,0 @@
-import{q as a,t as n}from"./chunk-ALVTNBGF.js";var t=class{};var s=class e{repository=n(t);execute(r){return this.repository.createLearningRequest(r)}static \u0275fac=function(i){return new(i||e)};static \u0275prov=a({token:e,factory:e.\u0275fac})};export{t as a,s as b};
