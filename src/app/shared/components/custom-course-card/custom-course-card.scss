@@ -131,13 +131,25 @@
     }
 
     &__footer {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 10px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    &__price {
+      min-width: 0;
+      flex: 1;
     }
 
     &__price-amount {
       font-size: var(--text-sm);
+    }
+
+    &__actions-group {
+      flex-shrink: 0;
+      margin-left: auto;
+      justify-content: flex-end;
     }
   }
 }

@@ -1,7 +1,7 @@
 <div class="teacher-courses-page">
-  <div class="page-container">
+  <div class="page-container teacher-courses-page__container">
     @if (isLoading()) {
-      <div class="loading-state">
+      <div class="loading-state" role="status">
         <div class="spinner" aria-hidden="true"></div>
         <p>Loading teacher's courses...</p>
       </div>
@@ -10,6 +10,7 @@
         <h2>Teacher Profile Not Found</h2>
         <p>The instructor you are looking for does not exist or may have been removed.</p>
         <app-custom-primary-button
+          class="not-found-state__cta"
           variant="primary"
           size="sm"
           label="Browse All Teachers"
@@ -17,7 +18,6 @@
         />
       </div>
     } @else {
-      <!-- Top Navigation: Circular Back Button & Breadcrumbs -->
       <div class="courses-page-top-nav">
         <app-custom-close-outlined-button
           icon="back"
@@ -28,70 +28,118 @@
         <app-custom-breadcrumb [flush]="true" [items]="courseCrumbs()" />
       </div>
 
-      <!-- Instructor Summary Header -->
-      <header class="courses-header">
-        <div class="courses-header__instructor">
-          <div class="courses-header__avatar">
-            <app-teacher-avatar [spec]="teacher()!.avatar" />
-          </div>
-          <div class="courses-header__meta">
-            <div class="courses-header__instructor-row">
-              <a [routerLink]="['/teachers', teacher()!.id]" class="courses-header__instructor-name">
-                {{ teacher()!.name }}
-              </a>
-              @if (teacher()!.verified) {
-                <span class="verified-pill" title="Verified Instructor">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10" stroke="#174e38" stroke-width="2" fill="#eef4f0" />
-                    <path d="m8.5 12 2.5 2.5 4.5-5" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  <span>Verified</span>
-                </span>
-              }
-            </div>
-            <p class="courses-header__specialty">{{ teacher()!.specialty }} &bull; {{ teacher()!.location }}</p>
-          </div>
+      <header class="courses-header" aria-labelledby="courses-page-title">
+        <div class="courses-header__accent" aria-hidden="true">
+          <div class="courses-header__accent-pattern"></div>
         </div>
 
-        <div class="courses-header__title-block">
-          <div class="courses-header__title-row">
-            <h1 class="courses-header__title">All Courses &amp; Classes</h1>
-            <span class="courses-header__badge">
-              {{ courses().length }} {{ courses().length === 1 ? 'Course' : 'Courses' }} Available
-            </span>
+        <div class="courses-header__inner">
+          <div class="courses-header__title-block section-head">
+            <div class="courses-header__title-row">
+              <h1 id="courses-page-title" class="courses-header__title section-title">
+                All Courses &amp; Classes
+              </h1>
+              <span class="courses-header__badge">
+                {{ courses().length }} {{ courses().length === 1 ? 'course' : 'courses' }}
+              </span>
+            </div>
+            <p class="courses-header__subtitle section-lead">
+              Pick a listing below to send an enquiry.
+            </p>
           </div>
-          <p class="courses-header__subtitle">
-            Choose from all structured courses, skill workshops, and 1-on-1 personalized lessons offered by {{ teacherFirstName() }}.
-          </p>
+
+          <div class="courses-header__instructor">
+            <a
+              [routerLink]="['/teachers', teacher()!.id]"
+              class="courses-header__instructor-link"
+            >
+              <div class="courses-header__avatar">
+                <app-teacher-avatar [spec]="teacher()!.avatar" />
+              </div>
+              <div class="courses-header__meta">
+                <div class="courses-header__instructor-row">
+                  <span class="courses-header__instructor-name">{{ teacher()!.name }}</span>
+                  @if (teacher()!.verified) {
+                    <span class="verified-pill" title="Verified Instructor">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" stroke="#174e38" stroke-width="2" fill="#eef4f0" />
+                        <path
+                          d="m8.5 12 2.5 2.5 4.5-5"
+                          stroke="#174e38"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                      <span class="verified-pill__label">Verified</span>
+                    </span>
+                  }
+                </div>
+                <p class="courses-header__specialty">
+                  {{ teacher()!.specialty }} &bull; {{ teacher()!.location }}
+                </p>
+                <span class="courses-header__instructor-action">View full profile</span>
+              </div>
+              <svg
+                class="courses-header__instructor-chevron"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </a>
+          </div>
         </div>
       </header>
 
-      <!-- Courses List -->
       @if (courses().length === 0) {
-        <div class="empty-courses-state">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-            <rect width="20" height="14" x="2" y="3" rx="2" />
-            <line x1="8" x2="16" y1="21" y2="21" />
-            <line x1="12" x2="12" y1="17" y2="21" />
-          </svg>
+        <div class="empty-courses-state" role="status">
+          <div class="empty-courses-state__icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+          </div>
           <h3>No Courses Listed Yet</h3>
-          <p>{{ teacher()!.name }} has not published any specific courses yet. You can still reach out via direct enquiry.</p>
+          <p>
+            {{ teacher()!.name }} has not published any specific courses yet. You can still reach out via direct
+            enquiry.
+          </p>
+          <app-custom-primary-button
+            class="empty-courses-state__cta"
+            variant="outline"
+            size="md"
+            label="View Teacher Profile"
+            (clicked)="onBackToProfile()"
+          />
         </div>
       } @else {
-        <div class="courses-list">
-          @for (course of courses(); track course.id) {
-            <app-custom-course-card
-              [course]="course"
-              [isSelected]="selectedListingId() === course.id"
-              (enquire)="onEnquireForListing($event)"
-            />
-          }
-        </div>
+        <section class="courses-section" aria-labelledby="courses-page-title">
+          <p class="courses-section__count" aria-live="polite">
+            Showing {{ courses().length }} {{ courses().length === 1 ? 'listing' : 'listings' }}
+          </p>
+          <div class="courses-list">
+            @for (course of courses(); track course.id) {
+              <app-custom-course-card
+                [course]="course"
+                [isSelected]="selectedListingId() === course.id"
+                (enquire)="onEnquireForListing($event)"
+              />
+            }
+          </div>
+        </section>
       }
     }
   </div>
 
-  <!-- Interactive Enquiry Modal -->
   @if (isBookingOpen()) {
     <app-custom-modal
       [open]="isBookingOpen()"
@@ -103,15 +151,26 @@
       @if (bookingSuccess()) {
         <div class="booking-success-box">
           <div class="booking-success-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#174e38" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#174e38"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
           <h3>Enquiry Sent Successfully!</h3>
           <p>
-            {{ teacherFirstName() }} has received your enquiry and usually responds within 2 hours. Check your email and notifications for updates.
+            {{ teacherFirstName() }} has received your enquiry and usually responds within 2 hours. Check your email
+            and notifications for updates.
           </p>
           <app-custom-primary-button
+            class="booking-success-box__cta"
             variant="primary"
             size="md"
             label="Close &amp; Return"
@@ -126,7 +185,6 @@
             </div>
           }
 
-          <!-- Selected Class Banner -->
           @if (selectedListing(); as listing) {
             <div class="selected-class-banner">
               <div class="selected-class-banner__left">
@@ -139,7 +197,6 @@
             </div>
           }
 
-          <!-- Lesson Mode -->
           <div class="modal-form-group">
             <label class="modal-label">Lesson Mode</label>
             <div class="mode-options-row">
@@ -149,7 +206,7 @@
                 [class.is-selected]="selectedBookingMode() === 'online'"
                 (click)="onSelectBookingMode('online')"
               >
-                💻 Online
+                Online
               </button>
               <button
                 type="button"
@@ -157,12 +214,11 @@
                 [class.is-selected]="selectedBookingMode() === 'offline'"
                 (click)="onSelectBookingMode('offline')"
               >
-                📍 In-Person
+                In-Person
               </button>
             </div>
           </div>
 
-          <!-- Preferred Date -->
           <div class="modal-form-group">
             <label class="modal-label" for="tc-booking-date">Preferred Starting Date</label>
             <input
@@ -175,7 +231,6 @@
             />
           </div>
 
-          <!-- Note / Message -->
           <div class="modal-form-group">
             <label class="modal-label" for="tc-booking-msg">Message for {{ teacherFirstName() }}</label>
             <textarea

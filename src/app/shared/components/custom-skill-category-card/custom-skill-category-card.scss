@@ -39,6 +39,11 @@
         background: var(--color-primary);
         color: var(--color-cream);
         transform: scale(1.06) rotate(-4deg);
+
+        .skill-cat-card__glyph {
+          filter: brightness(0) saturate(100%) invert(97%) sepia(11%) saturate(384%)
+            hue-rotate(63deg);
+        }
       }
     }
   }
@@ -94,9 +99,12 @@
       background-color var(--dur) var(--ease),
       color var(--dur) var(--ease);
 
-    svg {
+    .skill-cat-card__glyph {
+      display: block;
       width: 34px;
       height: 34px;
+      object-fit: contain;
+      transition: filter var(--dur) var(--ease);
     }
   }
 

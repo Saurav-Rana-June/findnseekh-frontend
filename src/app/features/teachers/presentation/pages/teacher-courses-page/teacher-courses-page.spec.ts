@@ -123,7 +123,7 @@ describe('TeacherCoursesPage', () => {
     expect(component.courses().length).toBe(4);
     const hostEl: HTMLElement = fixture.nativeElement;
     expect(hostEl.textContent).toContain('All Courses & Classes');
-    expect(hostEl.textContent).toContain('4 Courses Available');
+    expect(hostEl.textContent).toContain('4 courses');
 
     const courseCards = hostEl.querySelectorAll('app-custom-course-card');
     expect(courseCards.length).toBe(4);

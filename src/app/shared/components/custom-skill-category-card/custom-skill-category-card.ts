@@ -10,6 +10,13 @@ export type SkillCategoryIcon =
   | 'technology'
   | 'languages';
 
+/** Static skill category glyphs served from `assets/icons/skill-categories/`. */
+export const SKILL_CATEGORY_ICON_BASE = 'assets/icons/skill-categories';
+
+export function skillCategoryIconUrl(id: SkillCategoryIcon): string {
+  return `${SKILL_CATEGORY_ICON_BASE}/${id}.svg`;
+}
+
 export interface SkillCategoryCardData {
   readonly id: SkillCategoryIcon;
   readonly title: string;
@@ -32,6 +39,10 @@ export interface SkillCategoryCardData {
 export class CustomSkillCategoryCard {
   readonly category = input.required<SkillCategoryCardData>();
   readonly clicked = output<SkillCategoryCardData>();
+
+  protected iconSrc(): string {
+    return skillCategoryIconUrl(this.category().id);
+  }
 
   protected onClick(): void {
     this.clicked.emit(this.category());

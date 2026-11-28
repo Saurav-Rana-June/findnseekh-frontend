@@ -28,7 +28,7 @@
         <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
-      <span>Online & in person</span>
+      <span>Both modes</span>
       }
     </div>
     }
@@ -42,24 +42,33 @@
         <app-teacher-avatar [spec]="teacher().avatar" />
       </div>
     </div>
-    <!-- Top Row: Name + Verified Checkmark & Rating Pill -->
-    <div class="t-card__top">
-      <div class="t-card__name-wrapper">
-        <h3 class="t-card__name" [title]="teacher().name">{{ teacher().name }}</h3>
-        @if (teacher().verified) {
-        <span class="t-card__verified" title="Verified Teacher">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" stroke="#174e38" stroke-width="2" fill="#eef4f0" />
-            <path d="m8.5 12 2.5 2.5 4.5-5" stroke="#174e38" stroke-width="2.5" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </span>
+    <header class="t-card__head">
+      <div class="t-card__title-block">
+        <div class="t-card__name-wrapper">
+          <h3 class="t-card__name" [title]="teacher().name">{{ teacher().name }}</h3>
+          @if (teacher().verified) {
+          <span class="t-card__verified" title="Verified Teacher">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" stroke="#174e38" stroke-width="2" fill="#eef4f0" />
+              <path d="m8.5 12 2.5 2.5 4.5-5" stroke="#174e38" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </span>
+          }
+        </div>
+
+        @if (showCategory() && teacher().category) {
+        <p class="t-card__category">{{ teacher().category }}</p>
+        }
+
+        @if (showSpecialty()) {
+        <p class="t-card__specialty">{{ teacher().specialty }}</p>
         }
       </div>
 
       @if (showRating() && teacher().rating; as rating) {
-      <div class="t-card__rating">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="#174e38" aria-hidden="true">
+      <div class="t-card__rating" [attr.aria-label]="rating.value + ' stars from ' + rating.count + ' reviews'">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <polygon
             points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
@@ -67,12 +76,7 @@
         <span class="t-card__rating-count">({{ rating.count }})</span>
       </div>
       }
-    </div>
-
-    <!-- Specialty -->
-    @if (showSpecialty()) {
-    <p class="t-card__specialty">{{ teacher().specialty }}</p>
-    }
+    </header>
 
     <!-- Bio Snippet -->
     @if (showBio() && teacher().bio) {
@@ -121,8 +125,11 @@
     <div class="t-card__footer">
       @if (showPrice() && teacher().hourlyRate) {
       <div class="t-card__price">
-        <span class="t-card__price-val">₹{{ teacher().hourlyRate }}</span>
-        <span class="t-card__price-unit">/ hour</span>
+        <span class="t-card__price-label">Hourly rate</span>
+        <span class="t-card__price-amount">
+          <span class="t-card__price-val">₹{{ teacher().hourlyRate }}</span>
+          <span class="t-card__price-unit">/ hour</span>
+        </span>
       </div>
       }
 
